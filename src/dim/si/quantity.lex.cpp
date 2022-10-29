@@ -656,7 +656,7 @@ static const flex_int16_t yy_chk[37] =
 #line 6 "quantity.l"
 
 #include "dim/si/parse_unit.hpp"
-#include "dim/si/io.hpp"
+#include "dim/si/si_io.hpp"
 #include "quantity.tab.hpp"
 #include <cstdlib>
 #include <cstring>

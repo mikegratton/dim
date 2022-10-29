@@ -4,6 +4,7 @@
 
 using namespace dim::si::literal;
 
+
 TEST_CASE("EquivalentLiteralTest") {
     auto x = 1_m;
     auto y = 1.0_m;
@@ -13,6 +14,7 @@ TEST_CASE("EquivalentLiteralTest") {
     CHECK(x == z);
     CHECK(x == w);
 }
+
 
 TEST_CASE("SiLiterals") {
     using namespace dim::si;
@@ -42,4 +44,5 @@ TEST_CASE("SiLiterals") {
     CHECK(1_Im == 1.0*dim::si::lumen);
     CHECK(1_Ix == 1.0*dim::si::lux);
     CHECK(1_kat == 1.0*dim::si::katal);
+    
 }

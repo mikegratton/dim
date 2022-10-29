@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+
 using namespace dim::si;
 
 void doParseCheck(char const* text, double value, dim::dynamic_unit const& unit) {
@@ -25,44 +26,6 @@ void doParseFailCheck(char const* text) {
     CHECK(q.is_bad() == true);
 }
 
-TEST_CASE("ProblemParse") {
-    {
-        // const char* s = "1_m^(2)*s^-1";
-        const char* s = "1_m^((2))*s^-1";
-        double vt = 1.0;
-        dim::dynamic_unit ut{2,-1,0,0,0,0,0};
-        char* endptr;
-        double v = strtod(s, &endptr);
-        using namespace dim::detail;
-        auto q = v * dim::detail::parse_standard_rep<dim::si::system, double>(endptr, strlen(endptr));
-        CHECK(q.value == doctest::Approx(vt));
-        CHECK(q.unit == ut);
-    }
-    {
-        const char* s = "1_Pa";
-        double vt = 1.0;
-        dim::dynamic_unit ut{-1,-2,1,0,0,0,0};
-        char* endptr;
-        double v = strtod(s, &endptr);
-        using namespace dim::detail;
-        auto q = v * dim::detail::parse_standard_rep<dim::si::system, double>(endptr, strlen(endptr));
-        CHECK(q.value == doctest::Approx(vt));
-        CHECK(q.unit == ut);
-    }
-    {
-        const char* s = "1_m^2*s^(-1)";
-        double vt = 1.0;
-        dim::dynamic_unit ut{2,-1,0,0,0,0,0};
-        char* endptr;
-        double v = strtod(s, &endptr);
-        using namespace dim::detail;
-        auto q = v * dim::detail::parse_standard_rep<dim::si::system, double>(endptr, strlen(endptr));
-        printf("Parse: v=%g, u={%hd,%hd,%hd,%hd,%hd,%hd,%hd,%hd}\n", v, q.unit[0], q.unit[1], q.unit[2], q.unit[3], q.unit[4], q.unit[5], q.unit[6], q.unit[7]);
-        CHECK(q.value == doctest::Approx(vt));
-        CHECK(q.unit == ut);
-    }
-}
-
 
 TEST_CASE("SiParse") {
     // Base units
@@ -77,9 +40,9 @@ TEST_CASE("SiParse") {
 
     // Operators, exponents, and parens
     doParseCheck("1_m^2*s^-1", 1.0, {2,-1,0,0,0,0,0});
-    printf("HERE1\n");
+    
     doParseCheck("1_m^2*s^(-1)", 1.0, {2,-1,0,0,0,0,0});
-    printf("HERE2\n");
+    
     doParseCheck("1_(m^2*s^-1)", 1.0, {2,-1,0,0,0,0,0});
     doParseCheck("1 m^2 s^-1", 1.0, {2,-1,0,0,0,0,0});
     doParseCheck("1 m^2/s", 1.0, {2,-1,0,0,0,0,0});
@@ -182,14 +145,15 @@ TEST_CASE("Formatter") {
     CHECK(l2.value == doctest::Approx(l.value));
 }
 
+
 TEST_CASE("OStream") {
     using namespace dim::si::literal;
     std::stringstream ss;
     std::locale loc = std::locale(std::locale::classic(), dim::si::system::make_default_facet(0));
-    ss.imbue(loc);
+    ss.imbue(loc);    
+    
     ss << 5.0_m;
     CHECK(ss.str() == "5_m");
-
     ss.str("");
     ss << 5.0_s;
     CHECK(ss.str() == "5_s");
@@ -288,7 +252,6 @@ TEST_CASE("OStream") {
     ss << 5.0*poiseuille;
     CHECK(ss.str() == "5_Pl");
 }
-
 
 TEST_CASE("LengthFormat") {
 }

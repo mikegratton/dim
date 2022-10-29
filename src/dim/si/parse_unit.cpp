@@ -2,6 +2,7 @@
 #include "definition.hpp"
 #include <map>
 
+/*
 #include <iostream>
 
 namespace 
@@ -15,6 +16,7 @@ std::ostream& operator<<(std::ostream& os, dim::si::dynamic_quantity const& dq) 
     return os;
 }
 }
+*/
 
 namespace dim {
 namespace si {

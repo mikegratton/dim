@@ -5,7 +5,7 @@
 %{
 
 #include "dim/si/parse_unit.hpp"
-#include "dim/si/io.hpp"
+#include "dim/si/si_io.hpp"
 #include "quantity.tab.hpp"
 #include <cstdlib>
 #include <cstring>

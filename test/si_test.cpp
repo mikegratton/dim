@@ -6,11 +6,12 @@
 using namespace dim::si;
 
 namespace {
-template<class Q> void doCheck(typename Q::unit u, std::string symbol) {
+template<class Q, class Qp> void doCheck(Qp u, std::string symbol) {
     using ut = typename Q::unit;
-    dim::check_dimensions<ut, decltype(u)>();
-    CHECK(ut::system::id == dim::si::system::id);
-    CHECK(symbol == system::specialized_symbol<ut>());
+    using qt = typename Qp::unit;
+    dim::check_dimensions<ut, qt>();
+    CHECK(qt::system::id == dim::si::system::id);
+    CHECK(symbol == system::specialized_symbol<qt>());
 }
 }
 

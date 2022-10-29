@@ -1658,9 +1658,11 @@ yyreturn:
  
  int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
  {
+    /*
     QUANTITYSTYPE* lval = (QUANTITYSTYPE*) yylval;
     char* as_str = lval->unit;
     int as_int = lval->integer;
     printf("Parse error... %s, %d \n", as_str, as_int);
+    */
     return 1;
  }

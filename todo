@@ -1,0 +1,5 @@
+Improve cmake install to hide private headers
+
+Use C++11 conventions where possible
+
+Tutorial

@@ -1,4 +1,6 @@
-#include "io.hpp"
+#include "si_io.hpp"
+
+/*
 #include <iostream>
 #include <string>
 
@@ -10,6 +12,8 @@ std::ostream& operator<<(std::ostream& os, ::dim::dynamic_quantity<double, ::dim
     os << "]";
     return os;
 }
+*/
+
 
 namespace dim {
 
@@ -286,8 +290,7 @@ template<>
     YY_BUFFER_STATE buf = quantity_scan_bytes(unit_str, nend, scanner);
     
     // Scan it
-    if (int r = quantityparse(scanner, &result); r != 0) {
-        std::cout << "Parse returned " << r << "\n";
+    if (int r = quantityparse(scanner, &result); r != 0) {        
         result = ::dim::si::dynamic_quantity::bad_quantity();
     }
     
