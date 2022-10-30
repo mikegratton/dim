@@ -4,6 +4,8 @@ project (dimlib VERSION 1.0.0.0)
 add_subdirectory(src)
 add_subdirectory(test)
 
+add_subdirectory(example)
+
 ######################################################
 # Installation instructions
 ######################################################

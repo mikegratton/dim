@@ -6,6 +6,7 @@ set(source
     dim/si/quantity.lex.cpp
     dim/si/quantity.tab.cpp
     dim/si/parse_unit.cpp
+    dim/si/definition.cpp
 )
 
 if (BUILD_SHARED_LIBS)
@@ -22,5 +23,5 @@ target_include_directories(dim
       ${CMAKE_CURRENT_SOURCE_DIR}
    )
 
-set_target_properties(dim PROPERTIES CXX_STANDARD 17)
+set_target_properties(dim PROPERTIES CXX_STANDARD 11)
 

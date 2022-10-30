@@ -10,6 +10,8 @@
 
 namespace dim
 {
+    
+#define DIM_MAX_SYMBOL 64
 
 /*
  * Basic formatting of a quantity's unit
@@ -67,7 +69,7 @@ public:
 private:
     const char* m_symbol;
     scalar m_value;
-    char m_dyn_symbol[128];
+    char m_dyn_symbol[DIM_MAX_SYMBOL];
 };
 
 /*

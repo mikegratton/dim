@@ -290,7 +290,8 @@ template<>
     YY_BUFFER_STATE buf = quantity_scan_bytes(unit_str, nend, scanner);
     
     // Scan it
-    if (int r = quantityparse(scanner, &result); r != 0) {        
+    int r = quantityparse(scanner, &result); 
+    if (r != 0) {        
         result = ::dim::si::dynamic_quantity::bad_quantity();
     }
     

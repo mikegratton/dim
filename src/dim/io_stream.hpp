@@ -5,6 +5,18 @@
 #include "io.hpp"
 #include "dynamic_quantity.hpp"
 
+
+#if __cplusplus < 201402L
+namespace std
+{
+template<class T, class... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+}
+#endif
+
 namespace dim
 {
 
@@ -120,13 +132,23 @@ public:
     template<class Q, DIM_IS_QUANTITY(Q)>
     void output_formatter(formatter<Q> const& f)
     {
-        output_symbol.insert_or_assign(f.index(), std::make_unique<formatter<Q>>(f));
+        auto it = output_symbol.find(f.index());
+        if (it == output_symbol.end()) {
+            output_symbol.insert({f.index(), std::make_unique<formatter<Q>>(f)});
+        } else {
+            it->second = std::make_unique<formatter<Q>>(f);
+        }
     }
     
     template<class S, class System>
     void output_formatter(dynamic_formatter<S, System> const& f)
     {
-        dynamic_output_symbol.insert_or_assign(f.index(), std::make_unique<dynamic_formatter<S,System>>(f));
+        auto it = dynamic_output_symbol.find(f.index());
+        if (it == dynamic_output_symbol.end()) {
+            dynamic_output_symbol.insert({f.index(), std::make_unique<dynamic_formatter<S,System>>(f)});
+        } else {
+            it->second = std::make_unique<dynamic_formatter<S,System>>(f);
+        }
     }
 
     /*

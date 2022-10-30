@@ -1,13 +1,25 @@
 #include "dim/io_stream.hpp"
 #include "si_io.hpp"
 
-namespace dim
-{
-namespace si
-{
-quantity_facet* system::make_default_facet(int ref)
-{
-    quantity_facet* facet = new quantity_facet(ref);
+namespace dim {
+namespace si {
+
+void add_to_global_locale(quantity_facet* specialized) {
+    std::locale base_locale; // Initialized to current global
+    if (nullptr == specialized) {
+        specialized = system::make_default_facet();
+    }
+    std::locale enhanced_locale(base_locale, specialized);
+    std::locale::global(enhanced_locale);
+    // Install the locale in the default streams
+    std::cout.imbue(enhanced_locale);
+    std::cerr.imbue(enhanced_locale);
+    std::clog.imbue(enhanced_locale);
+    std::cin.imbue(enhanced_locale);
+}
+
+quantity_facet* system::make_default_facet() {
+    quantity_facet* facet = new quantity_facet();
     facet->input_formatter(get_default_format<Temperature>());
     facet->input_formatter(get_default_format<Length>());
     facet->input_formatter(get_default_format<Time>());

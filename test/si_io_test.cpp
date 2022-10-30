@@ -149,7 +149,7 @@ TEST_CASE("Formatter") {
 TEST_CASE("OStream") {
     using namespace dim::si::literal;
     std::stringstream ss;
-    std::locale loc = std::locale(std::locale::classic(), dim::si::system::make_default_facet(0));
+    std::locale loc = std::locale(std::locale::classic(), dim::si::system::make_default_facet());
     ss.imbue(loc);    
     
     ss << 5.0_m;
@@ -188,7 +188,7 @@ TEST_CASE("OStream") {
     CHECK(ss.str() == "5_N");
 
     ss.str("");
-    ss << 5.0/second;
+    ss << 5.0/second;dim::si::Length L = 5.0_m;
     CHECK(ss.str() == "5_Hz");
 
     ss.str("");

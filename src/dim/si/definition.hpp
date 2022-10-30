@@ -18,9 +18,9 @@ constexpr const char* specialized_symbol() { return "\0"; }
 
 struct system : system_tag {
     constexpr static const long id = 26980L;
+    static const char* SYMBOL[];
     constexpr static const char* symbol_for(int dimension)
     {
-        const char* SYMBOL[] = {"m", "s", "kg", "rad", "K", "mol", "A", "cd"};
         return SYMBOL[dimension];
     }
 
@@ -29,8 +29,14 @@ struct system : system_tag {
     {
         return symbol::specialized_symbol<U>();
     }
-    static quantity_facet* make_default_facet(int ref=0);
+    static quantity_facet* make_default_facet();
 };
+
+/*
+ * Install the facet into the global locale. If specialized is nullptr,
+ * then install the default facet for si.
+ */
+void add_to_global_locale(quantity_facet* specialized = nullptr);
 
 // Fundamental dimensions to types and base unit definitions
 DEFINE_QUANTITY_S(Length,      meter,     system, double, 1, 0, 0, 0, 0, 0, 0, 0, "m")

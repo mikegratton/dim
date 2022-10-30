@@ -7,11 +7,11 @@ using namespace dim::si;
 
 namespace {
 template<class Q, class Qp> void doCheck(Qp u, std::string symbol) {
-    using ut = typename Q::unit;
-    using qt = typename Qp::unit;
-    dim::check_dimensions<ut, qt>();
-    CHECK(qt::system::id == dim::si::system::id);
-    CHECK(symbol == system::specialized_symbol<qt>());
+    using U1 = typename Q::unit;
+    using U2 = typename Qp::unit;
+    DIM_CHECK_DIMENSIONS;
+    CHECK(U2::system::id == dim::si::system::id);
+    CHECK(symbol == system::specialized_symbol<U2>());
 }
 }
 
@@ -80,7 +80,7 @@ TEST_CASE("FpsUnits") {
     CHECK(rankine/(5./9. * kelvin) == doctest::Approx(1.0));
     CHECK(inch / (0.0254*meter) == doctest::Approx(1.0));
     CHECK(yard / (3.0*foot) == doctest::Approx(1.0));
-    CHECK(mile / (5280*foot) == doctest::Approx(1.0));
+    CHECK(mile / (5280.0*foot) == doctest::Approx(1.0));
     CHECK(pound_mass/(0.453592*kilogram) == doctest::Approx(1.0));
     CHECK(poundal/(pound_mass*foot/second/second) == doctest::Approx(1.0));
     CHECK(acre/(4046.86*meter2) == doctest::Approx(1.0));
