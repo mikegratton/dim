@@ -51,7 +51,7 @@ struct unit;
  * A quantity marries a scalar value with a unit
  */
 template<class Unit, class Scalar = double>
-struct quantity;
+class quantity;
 
 
 /*
@@ -182,8 +182,7 @@ using unit_multiply_t = typename unit_multiply<Unit1, Unit2>::type;
 
 //////////////////////////////////////////////////////////////////////////////
 // For C++11, these can't be constexpr void function templates
-// Requires units defined in context as U1 and U2
-#define DIM_CHECK_DIMENSIONS \
+#define DIM_CHECK_DIMENSIONS(U1, U2) \
 static_assert(U1::length() == U2::length(), "Length dimensions do not match.");\
 static_assert(U1::time() == U2::time(), "Time dimensions do not match.");\
 static_assert(U1::mass() == U2::mass(), "Mass dimensions do not match.");\
@@ -193,8 +192,7 @@ static_assert(U1::amount() == U2::amount(), "Amount (mole) dimensions do not mat
 static_assert(U1::current() == U2::current(), "Current dimensions do not match.");\
 static_assert(U1::luminosity() == U2::luminosity(), "Luminosity dimensions do not match.");
 
-// Requires units defined in context as U1 and U2
-#define DIM_CHECK_SYSTEMS \
+#define DIM_CHECK_SYSTEMS(U1, U2) \
 static_assert(std::is_same<typename U1::system, typename U2::system>::value,\
                   "Systems of units do not match. Explicit conversion is required.");
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,14 +234,14 @@ template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_multiply_t<U1, U2>
 operator* (unit_base<U1> const&, unit_base<U2> const&)
 {
-    DIM_CHECK_SYSTEMS;
+    DIM_CHECK_SYSTEMS(U1, U2);;
     return unit_multiply_t<U1, U2>();
 }
 template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_divide_t<U1, U2>
 operator/ (unit_base<U1> const&, unit_base<U2> const&)
 {
-    DIM_CHECK_SYSTEMS;
+    DIM_CHECK_SYSTEMS(U1, U2);
     return unit_divide_t<U1, U2>();
 }
 template<class U, int P, DIM_IS_UNIT(U)>
@@ -253,15 +251,15 @@ pow(unit_base<U> const&)
     return unit_pow_t<U, P>();
 }
 
-/*
- * Special isnan to operate when in non IEEE compliant mode
- */
-
 constexpr inline double bad_double__() 
 {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
+/*
+ * Special isnan to operate when in non-IEEE compliant mode
+ */
+#ifdef __FAST_MATH__
 #if __cplusplus < 201402L
 inline bool isbad__(double val)
 {
@@ -277,33 +275,66 @@ constexpr inline bool isbad__(double val)
     return (c.i & BAD) == BAD;
 }
 #endif
+#else
+constexpr inline bool isbad__(double val) { return std::isnan(val); }
+#endif
 
 
 template<class Unit, class Scalar>
-struct quantity : public quantity_tag {
+class quantity : public quantity_tag {
 
+protected: 
+    Scalar value;
+
+public:
     using scalar = Scalar;
     using unit = Unit;
     using type = quantity<unit, scalar>;
     using dimensionless = dimensionless_unit<typename Unit::system>;
 
-    scalar value;
-
-    constexpr bool is_bad() const { return isbad__(value); }
-
     constexpr quantity() noexcept { }
     constexpr explicit quantity(Scalar s) noexcept : value(s) { }
     constexpr quantity(unit const&) noexcept : value(static_cast<scalar>(1.0)) { }
+    
+    template<class Q2, DIM_IS_QUANTITY(Q2)>
+    constexpr quantity(Q2 const& q) noexcept : value(dimensionless_cast(q))
+    {
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
+    }
+    
+    template<class U2, DIM_IS_UNIT(U2)>
+    constexpr quantity(unit const&) noexcept : value(static_cast<scalar>(1.0)) 
+    { 
+        DIM_CHECK_DIMENSIONS(unit, U2)
+        DIM_CHECK_SYSTEMS(unit, U2)
+    }
+    
     static constexpr type bad_quantity() noexcept { return type(bad_double__()); }
-
-    type& operator=(unit const& u) noexcept { value = static_cast<scalar>(1); return *this; }
+    constexpr bool is_bad() const { return isbad__(value); }
+    
+    template<class U2, DIM_IS_UNIT(U2)>
+    type& operator=(U2 const&) noexcept 
+    { 
+        DIM_CHECK_DIMENSIONS(unit, U2)
+        DIM_CHECK_SYSTEMS(unit, U2)
+        value = static_cast<scalar>(1); return *this;         
+    }
+    
+    template<class Q2, DIM_IS_QUANTITY(Q2)>
+    type& operator=(Q2 const& rhs) noexcept 
+    { 
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
+        value = dimensionless_cast(rhs);
+        return *this;         
+    }
+    
     constexpr type operator-() const noexcept { return type(-value); }
 
     constexpr operator Scalar() const
     {
-        using U1 = unit;
-        using U2 = dimensionless;
-        DIM_CHECK_DIMENSIONS;        
+        DIM_CHECK_DIMENSIONS(unit, dimensionless)       
         return value;
     }
 
@@ -312,40 +343,34 @@ struct quantity : public quantity_tag {
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend type& operator+= (type& lhs, Q2 const& rhs)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
         lhs.value += rhs.value;
         return lhs;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend type& operator-= (type& lhs, Q2 const& rhs)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
         lhs.value -= rhs.value;
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
     friend type& operator+= (type& lhs, unit_base<U> const&)
     {
-        using U1 = unit;
         using U2 =  typename unit_base<U>::type;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;        
+        DIM_CHECK_DIMENSIONS(unit, U2)
+        DIM_CHECK_SYSTEMS(unit, U2)
         lhs.value += static_cast<Scalar>(1.0);
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
     friend type& operator-= (type& lhs, unit_base<U> const&)
     {
-        using U1 = unit;
         using U2 =  typename unit_base<U>::type;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;
+        DIM_CHECK_DIMENSIONS(unit, U2)
+        DIM_CHECK_SYSTEMS(unit, U2)
         lhs.value -= static_cast<Scalar>(1.0);
         return lhs;
     }
@@ -366,19 +391,15 @@ struct quantity : public quantity_tag {
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr bool operator== (type const& lhs, Q2 const& rhs)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;        
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)      
         return lhs.value == rhs.value;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr bool operator< (type const& lhs, Q2 const& rhs)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
         return lhs.value < rhs.value;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -402,56 +423,51 @@ struct quantity : public quantity_tag {
         return !(lhs < rhs);
     }
 
+    friend constexpr Scalar const& dimensionless_cast(type const& r) { return r.value; }
+    friend constexpr Scalar& dimensionless_cast(type& r) { return r.value; }
+    
     // Quantity-on-quantity operators
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr quantity<unit_multiply_t<unit, typename Q2::unit>, scalar>
     operator* (type const& q1, Q2 const& q2)
-    {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;        
-        DIM_CHECK_SYSTEMS;        
+    {    
+        DIM_CHECK_SYSTEMS(unit, Q2::unit);     
         return quantity<unit_multiply_t<unit, typename Q2::unit>, scalar>
-               (q1.value * q2.value);
+               (dimensionless_cast(q1) * dimensionless_cast(q2));
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr quantity<unit_divide_t<unit, typename Q2::unit>, scalar>
     operator/ (type const& q1, Q2 const& q2)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;        
-        DIM_CHECK_SYSTEMS;        
+        DIM_CHECK_SYSTEMS(unit, Q2::unit);       
         return quantity<unit_divide_t<unit, typename Q2::unit>, scalar>
-               (q1.value / q2.value);
+               (q1.value / dimensionless_cast(q2));
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr type operator+ (type const& q1, Q2 const& q2)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;        
-        return type(q1.value + q2.value);
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)
+        return type(dimensionless_cast(q1) + dimensionless_cast(q2));
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr type operator- (type const& q1, Q2 const& q2)
     {
-        using U1 = unit;
-        using U2 =  typename Q2::unit;
-        DIM_CHECK_DIMENSIONS;
-        DIM_CHECK_SYSTEMS;        
-        return type(q1.value - q2.value);
+        DIM_CHECK_DIMENSIONS(unit, Q2::unit)
+        DIM_CHECK_SYSTEMS(unit, Q2::unit)       
+        return type(dimensionless_cast(q1) - dimensionless_cast(q2));
     }
 
     // Mult/divide leading to a scalar
     friend constexpr scalar
     operator* (type const& q1, quantity<inverse_t<unit>, scalar> const& q2)
     {
-        return q1.value * q2.value;
+        return dimensionless_cast(q1) * dimensionless_cast(q2);
     }
     friend constexpr scalar
     operator/ (type const& q1, type const& q2)
     {
-        return (q1.value / q2.value);
+        return (dimensionless_cast(q1) / dimensionless_cast(q2));
     }
 
     // Quantity/scalar ops (requires scalar matches this template's scalar)
@@ -481,9 +497,7 @@ struct quantity : public quantity_tag {
     friend constexpr quantity<unit_multiply_t<unit, U>, scalar>
     operator* (type const& q, unit_base<U> const&)
     {
-        using U1 = unit;
-        using U2 =  U;        
-        DIM_CHECK_SYSTEMS;        
+        DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_multiply_t<unit, U>, scalar>(q.value);
     }
     template<class U, DIM_IS_UNIT(U)>
@@ -496,18 +510,14 @@ struct quantity : public quantity_tag {
     friend constexpr quantity<unit_divide_t<unit, U>, scalar>
     operator/ (type const& q, unit_base<U> const&)
     {
-        using U1 = unit;
-        using U2 =  U;        
-        DIM_CHECK_SYSTEMS; 
+        DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_divide_t<unit, U>, scalar> (q.value);
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_divide_t<U, unit>, scalar>
     operator/ (unit_base<U> const&, type const& q)
     {
-        using U1 = unit;
-        using U2 =  U;        
-        DIM_CHECK_SYSTEMS; 
+        DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_divide_t<U, unit>, scalar> (q.value);
     }
 
@@ -557,7 +567,7 @@ namespace dim
 template<class Q, DIM_IS_QUANTITY(Q)>
 constexpr Q abs(Q const& q)
 {
-    return Q(std::abs(q.value));
+    return Q(std::abs(dimensionless_cast(q)));
 }
 
 template<int Root, class Q, DIM_IS_QUANTITY(Q)>
@@ -573,7 +583,7 @@ root(Q const& q)
     static_assert(Q::unit::current() % Root == 0, "Dimension not divisble by root");
     static_assert(Q::unit::luminosity() % Root == 0, "Dimension not divisble by root");
     return quantity<unit_root_t<typename Q::unit, Root>, typename Q::scalar>
-           (std::pow(q.value, static_cast<typename Q::scalar>(1) / static_cast<typename Q::scalar>(Root)));
+           (std::pow(dimensionless_cast(q), static_cast<typename Q::scalar>(1) / static_cast<typename Q::scalar>(Root)));
 }
 
 template<class Q, DIM_IS_QUANTITY(Q)>
@@ -588,7 +598,7 @@ sqrt(Q const& q)
     static_assert(Q::unit::amount() % 2 == 0, "Dimension not divisble by root");
     static_assert(Q::unit::current() % 2 == 0, "Dimension not divisble by root");
     static_assert(Q::unit::luminosity() % 2 == 0, "Dimension not divisble by root");
-    return quantity<unit_root_t<typename Q::unit, 2>, typename Q::scalar> (std::sqrt(q.value));
+    return quantity<unit_root_t<typename Q::unit, 2>, typename Q::scalar> (std::sqrt(dimensionless_cast(q)));
 }
 
 
@@ -599,7 +609,7 @@ std::enable_if_t<std::is_base_of<quantity_tag, Q>::value,
     pow(Q const& q)
 {
     return quantity<unit_pow_t<typename Q::unit, Exponent>, typename Q::scalar>
-           (std::pow(q.value, Exponent));
+           (std::pow(dimensionless_cast(q), Exponent));
 }
 
 template<int Exponent, class U>
@@ -626,7 +636,7 @@ ratpow(Q const& q)
     static_assert(Q::unit::current() * Num % Denom == 0, "Dimension not divisble by root");
     static_assert(Q::unit::luminosity() * Num % Denom == 0, "Dimension not divisble by root");
     return quantity<unit_pow_t<unit_root_t<typename Q::unit, Denom>, Num>, typename Q::scalar>
-           (std::pow(q.value, static_cast<typename Q::scalar>(Num) / static_cast<typename Q::scalar>(Denom)));
+           (std::pow(dimensionless_cast(q), static_cast<typename Q::scalar>(Num) / static_cast<typename Q::scalar>(Denom)));
 }
 }
 

@@ -40,8 +40,8 @@ Here's a basic annotated program
 #include <iostream>
 #include <dim/si.hpp> // 1
 ### Rationale
-using namespace dim::si; // 2
-using namespace dim::si::literal; // 3
+using namespace si; // 2
+using namespace si::literal; // 3
 
 Length compute_distance(Time t, Speed v) { return t*v; }
 
@@ -60,7 +60,7 @@ Notes:
 
   1. Use the SI system with stream operators
   
-  2. Not required, but move the dim::si symbols into this namespace
+  2. Not required, but move the si:: symbols into this namespace
   
   3. To use literals (see 4), you need to have this `using` statement
   
@@ -91,9 +91,29 @@ match the dimensions of Speed * Time * Time.
 
 ## Design
 
-### Rationale
-
 ### Understanding Dimensional Analysis
+
+In the standard low-energy physics model, there are seven dimensions to the unit:
+
+1. Length
+2. Time
+3. Mass
+4. Amount of substance
+5. Luminous intensity
+6. Temperature
+7. Electrical current
+
+Note this library adds an eigth dimension of angle, discussed below. For each of these eight 
+dimensions, a quantity may have an integer multiplier. For example, acceleration has
+dimensions of L/T^2 or one length, minus two time dimensions.
+
+Dimensional analysis is best understood in analogy to vectors. Just as a vector can be broken down 
+into a magnitude and a direction, a dimensional quantity is the product of a nondimensional scalar
+and a dimensional unit.  The name is suggestive, and it should be: the direction for a vector
+is itself a vector with unit magnitude. The "direction" of a dimensional quantity is itself a 
+dimensional quantity with a unit scalar -- i.e., a "unit" dimension.  Dimensional quantities obey
+a simple algebra: q1 and q2 can be summed if their units match. The product q1*q2 is
+s1 * s2 * (u1+u2), where qi has scalar si and unit ui.  Here, unit addition obeys vector rules.
 
 
 ### Types and Templates
@@ -149,21 +169,73 @@ The units of torque are N m / rad, so that
 if you apply this torque through a full revolution, you see the work done is (N m / rad) * (2 * pi * rad) = 2 * pi * W.
 Likewise the  lumen now has base units of candela * steradian = candela * radian^2.
 
-### The `value` Escape Hatch
+### Type Definitions Attached to Quantity
+Every quantity class holds the typedefs 
+
+* `scalar` -- the scalar type, e.g. double
+* `unit` -- the underlying unit array (it is a type all of whose instances are the same)
+* `type` -- the type of this quantity
+* `dimensionless` -- the unit in this system that is all zero
+
+### The `dimensionless_cast` Escape Hatch
 Dim allows you to "escape" from the confines of the library at will.  The magnitude of a quantity
-is stored as a public scalar `value`.  Accessing the magnitude in this way means potentially
-having dimensional mismatch (that is, the library cannot check you), but allows for type-punning
-of the form
+is available via `dimensionless_cast()`.  Accessing the magnitude in this way means potentially
+having dimensional mismatch (that is, the library cannot check you), but this is very useful when 
+serializing or deserializing data.
+
+## Guard Values, NaN, and `bad_quantity`
+Dim uses NaN as a guard value in several places. You can construct a "bad" version of a type
+via
 ```
-double came_from_elsewhere = 5.0;
-Length* l = reinterpret_cast<Length*>(&came_from_elsewhere);
+Length its_bad = Length::bad_quantity();
 ```
-This is very useful when serializing or deserializing data, though it may cause difficulty at
-your next code review.
+and you can check for badness with `is_bad()`.  See [Bad Quantities and NaN](#Bad-Quantities-and-NaN) 
+for details.
+
+
+### Math with Quantities
+Quantities overload the arithemetic operators "+", "-", "*", "/", the assignment operators 
+"=", "+=", "-=", "*=", "/=", and the full set of comparison operators. In short, they behave just 
+like doubles except for the restrictions regarding dimensions.  In addition, the following overoads
+are defined:
+
+* `abs()`: Computes the absolute value.
+* `sqrt()`: Computes the square root *provided* all of the dimensions are divisible by two.
+* `pow<n>()` : Computes the nth power where n is an integer.
+* `ratpow<p,q>()` Computes the quantity to the p/q power, provided all of the resulting dimensions
+  are integers.
+
+In addition, Angle types have the related trigonometric functions defined:
+
+* `double sin(Angle const& q)`
+* `double cos(Angle const& q)`
+* `double tan(Angle const& q)`
+* `Angle asin(double const& x)`
+* `Angle acos(double const& x)`
+* `Angle atan(double const& x)`
+* `Angle atan2(double const& x, double const& y)`
+* `template<class Q> Angle atan2(Q const& x, Q const& y)`
+
+Note the actual definition of the last is slightly different so that it is only available if Q
+is a quantity.
+
 
 ### Understanding Errors
 
-TODO
+Dim uses static assertions to improve most compile errors. As Dim is a template library, there's
+a lot of "angry template error" messages to wade through, but you should be able to find a more
+helpful error in the spew, such as
+```
+... error: static assertion failed: Length dimensions do not match.
+```
+
+In some cases, the compiler will give errors of the form
+```
+... error: conversion from ‘quantity<unit<1,[...],[...],[...],[...],[...],[...],[...],[...]>,[...]>’ to non-scalar type ‘quantity<unit<2,[...],[...],[...],[...],[...],[...],[...],[...]>,[...]>’ requested
+    8 |     si::Area A2 = L;
+```
+To decode this, we've tried to assign a length to an area.  You can see in the template that the RHS has 
+a length dimension of 1 while the LHS has a length dimension of 2.
 
 # Input and Output
 
@@ -172,14 +244,14 @@ TODO
 The formatter is a simple class that associates a string symbol with information on how 
 to nondimensionalize a quantity. For example
 ```
-dim::formatter<si::Angle> degree_formatter("deg", si::degree);
+si::formatter<si::Angle> degree_formatter("deg", si::degree);
 ```
 will format angles as degrees. The template parameter is the quantity
 type (`si::Angle`), the first argument is the symbol string (`deg`), and the second argument gives
 what you would multiply 1.0 by to obtain a quantity of the indicated symbol (`si::degree`).  There's
 an optional third argument that is used for temperature conversion as an additive offset:
 ```
-dim::formatter<si::Temperature> fahrenheit_format("F", 5./9.*kelvin, 255.37*kelvin);
+si::formatter<si::Temperature> fahrenheit_format("F", 5./9.*kelvin, 255.37*kelvin);
 ```
 Hey, no one ever said thermodynamics was easy.  
 
@@ -189,7 +261,7 @@ si::Angle x = degree_formatter.input(90.0);
 ```
 while output is
 ```
-dim::formatted_quantity<double> fmt = degree_formatter.output(2_rad);
+si::formatted_quantity<double> fmt = degree_formatter.output(2_rad);
 ```
 which divides the output into a scalar (double) part `value()` and a `char const*` symbol part `symbol()`.
 This allows you to do
@@ -214,7 +286,7 @@ int main(int argc, char** argv)
 {
     // Let's format angles as degrees
     auto* facet = si::system::make_default_facet(); // obtain the default si facet    
-    dim::formatter<si::Angle> degree_formatter("deg", si::degree);
+    si::formatter<si::Angle> degree_formatter("deg", si::degree);
     facet->output_formatter(degree_formatter); // Set a new output format for angles    
     si::add_to_global_locale(facet); // Install the updated facet in the global locale
     
@@ -412,10 +484,162 @@ library provides this feature.
 
 ## Bad Quantities and NaN 
 
-Dim uses an expanded notion of a "bad" floating point number that includes numbers that are
-Inf, -Inf, and NaN in IEEE 754 floating point. The rationale is that on embedded systems (ARM in 
-particular), you need to compile `-Ofast` to obtain access to SIMD instructions. When you do this,
-`std::isnan()` always evaluates to false.  Dim uses its own `is_bad` function to work around this.
-The trade-off is that algorithms relying on correct behavior with Inf will see values as "bad".
-But such algorithms are usually limited to specialized scientific codes rather than the more general 
-robotics and engineering codes Dim is intended for.
+When `__FAST_MATH__` is defined, Dim uses an expanded notion of a "bad" floating point number that 
+includes numbers that are Inf, -Inf, and NaN in IEEE 754 floating point. The rationale is that on 
+embedded systems (ARM in particular), you need to compile `-Ofast` to obtain access to SIMD 
+instructions. When you do this, `std::isnan()` always evaluates to false.  Dim uses its own 
+`is_bad` function to work around this. The trade-off is that algorithms relying on correct 
+behavior with Inf will see values as "bad". But such algorithms are usually limited to specialized 
+scientific codes rather than the more general robotics and engineering codes Dim is intended for.
+
+Note if `__FAST_MATH__` isn't defined, then is_bad() is just checking if the value is NaN.
+
+# Appendix A: Default Quantity Input Symbols
+For non-SI quantities, Dim provides a default override map for typical unit abbreviations.
+See [Stream-based Parsing](#Stream-based-Parsing) for information on changing these lists.
+Note that standard SI notation doesn't appear below as the parser handles it just fine.
+
+## Temperature
+* "F" : Fahrenheit
+* "R" : Rankine
+* "C" : Celsius
+
+## Length
+* "in" : Inch
+* "inch" : Inch
+* "ft" : Foor
+* "foot" : Foot
+* "yd" : Yard
+* "yard" : Yard
+* "mi" : Mile
+* "mile" : Mile
+* "nmi" : Nautical Mile
+* "nautical_mile" : Nautical Mile
+
+## Time
+* "min" : Minute
+* "h" : Hour
+* "hr" : Hour
+* "minute" : Minute
+* "hour" : Hour
+
+
+## Mass
+* "oz" : Ounce (mass)
+* "lb" : Pound (mass)
+* "lbm" : Pound (mass)
+* "slug" : Slug
+* "ounce" : Ounce (mass)
+* "pound" : Pound (mass)
+* "pound_mass" : Pound (mass)
+
+
+## Angle
+* "radian" : Radian
+* "deg" : Degree
+* "mil" : Mil
+* "mrad" : Milliradian
+* "milliradian" : Milliradian
+* "turn" : Turn 
+* "'" : Minute (angle)
+* "min" : Minute (angle)
+* "minute" : Minute (angle)
+* "\"" : Second (angle)
+* "s" : Second (angle)
+* "second" : Second (angle)
+
+
+## SolidAngle
+* "steradian" : Steradian
+* "sp" : Spat
+* "spat" : Spat
+
+
+## Force
+* "dyn" : Dyne
+* "lb" : Pound (force)
+* "lbf" : Pound (force)
+* "pound" : Pound (force)
+* "pound_force" : Pound (force)
+
+## Pressure
+* "lbf/in^2" : Pound (force) per Square Inch
+* "lbf_in^-2" : Pound (force) per Square Inch
+* "lb/in^2" : Pound (force) per Square Inch
+* "lb_in^-2" : Pound (force) per Square Inch
+* "pounds_per_inch2" : Pound (force) per Square Inch
+* "pounds_per_square_inch" : Pound (force) per Square Inch
+* "torr" : Torr
+* "atm" : Standard Atmosphere
+* "atmosphere" : Standard Atmosphere
+
+## Energy
+* "kW_hr" : Kilowatt Hour
+* "kW*hr" : Kilowatt Hour
+* "kWhr" : Kilowatt Hour
+* "erg" : Erg
+* "foot_pound" : Foot Pound (force)
+* "ft_lb" : Foot Pound (force)
+* "ft_lbf" : Foot Pound (force)
+* "BTU" : British Thermal Unit
+
+## Power
+* "hp" : Horsepower
+
+## Area
+* "acre" : Acre
+* "sq_mi" : Square Mile
+* "mi^2" : Square Mile
+* "mile2" : Square Mile
+* "sq_ft" : Square Foot
+* "ft^2" : Square Foot
+* "foot2" : Square Foot
+
+## Volume
+* "cc" : Cubic Centimeter
+* "gal" : Gallon
+* "gallon" : Gallon
+* "acre_ft" : Acre Foot
+* "acre_foot" : Acre Foot
+* "cu_ft" : Cubic Foot
+* "ft^3" : Cubic Foot
+* "cubic_foot" : Cubic Foot
+* "cu_in" : Cubic Inch
+* "in^3" : Cubic Inch
+* "cubic_inch" : Cubic Inch
+* "cu_yd" : Cubic Inch
+* "yd^3" : Cubic Inch
+* "cubic_yard" : Cubic Inch
+
+## FlowRate
+* "gal/s" : Gallon per Second
+* "gal/min" : Gallon per Minute
+* "meter3/second" : Cubic Meter per Second
+* "liter/second" : Liter per Second
+* "gallon/second" : Gallon per Second
+* "gallon/minute" : Gallon per Minute
+
+## Speed
+* "mps" : Meter per Second
+* "kph" : Kilometer per Hour
+* "mph" : Mile per Hour
+* "miles_per_hour" : Mile per Hour
+* "knot" : Knot
+* "kn" : Knot
+* "kt" : Knot
+* "ft/s" : Foot per Second
+* "feet_per_second" : Foot per Second
+
+## Acceleration
+* "ft/s^2" : Foot per Squared Second
+* "feet_per_second2" : Foot per Squared Second
+
+## AngularRate
+* "deg/s" : Degree per Second
+* "degrees_per_second" : Degree per Second
+* "radians_per_second" : Radian per Second
+
+## AngularAcceleration
+* "deg/s^2" : Degree per Squared Second
+* "degrees_per_second2" : Degree per Squared Second
+* "radians_per_second2" : Radian per Squared Second

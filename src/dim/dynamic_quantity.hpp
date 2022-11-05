@@ -53,6 +53,7 @@ template<class S, class System, DIM_IS_SCALAR(S)>
 struct dynamic_quantity : public dynamic_quantity_tag {
     using scalar = S;
     using system = System;
+    using type = dynamic_quantity<S, System>;
     scalar value;
     dynamic_unit unit;
 
@@ -88,6 +89,10 @@ struct dynamic_quantity : public dynamic_quantity_tag {
 
     constexpr bool dimensionless() const { return (index(unit) == 0L); }
 
+    scalar const& dimensionless_cast(type const& q) { return q.value; }
+    scalar& dimensionless_cast(type& q) { return q.value; }
+    
+    
     template<class S2>
     dynamic_quantity<S, System>& operator=(dynamic_quantity<S2, System> const& rhs) 
     {

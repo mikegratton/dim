@@ -1,4 +1,4 @@
-#undef DIMENION_NO_MATH
+#undef DIM_NO_MATH
 
 #include "doctest.h"
 #include "dim/si.hpp"
@@ -9,7 +9,7 @@ namespace {
 template<class Q, class Qp> void doCheck(Qp u, std::string symbol) {
     using U1 = typename Q::unit;
     using U2 = typename Qp::unit;
-    DIM_CHECK_DIMENSIONS;
+    DIM_CHECK_DIMENSIONS(U1, U2)
     CHECK(U2::system::id == dim::si::system::id);
     CHECK(symbol == system::specialized_symbol<U2>());
 }
@@ -125,4 +125,11 @@ TEST_CASE("Math") {
     CHECK(dim::si::atan2(0.0, 1.0)/radian == doctest::Approx(0.0));
     CHECK(dim::si::atan2(0.0*meter, 1.0*meter)/radian == doctest::Approx(0.0));
 
+}
+
+TEST_CASE("Namespace")
+{
+    si::Length L = 5.0*si::meter;
+    si::Area A = L*L;
+    si::Length L2 = si::sqrt(A);
 }

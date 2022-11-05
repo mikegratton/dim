@@ -1,5 +1,5 @@
 Improve cmake install to hide private headers
 
-Tutorial
-- dimensional analysis
-- making a unit system
+Document #define options
+DIM_NO_STREAM
+

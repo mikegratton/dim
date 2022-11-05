@@ -152,14 +152,14 @@ namespace dim
 {
 namespace si
 {
-inline double sin(Angle const& q) { return ::std::sin(q.value); }
-inline double cos(Angle const& q) { return ::std::cos(q.value); }
-inline double tan(Angle const& q) { return ::std::tan(q.value); }
+inline double sin(Angle const& q) { return ::std::sin(dimensionless_cast(q)); }
+inline double cos(Angle const& q) { return ::std::cos(dimensionless_cast(q)); }
+inline double tan(Angle const& q) { return ::std::tan(dimensionless_cast(q)); }
 inline Angle asin(double const& x) { return ::std::asin(x)*radian; }
 inline Angle acos(double const& x) { return ::std::acos(x)*radian; }
 inline Angle atan(double const& x) { return ::std::atan(x)*radian; }
 template<class Q, DIM_IS_QUANTITY(Q)>
-inline Angle atan2(Q const& x, Q const& y) { return ::std::atan2(x.value, y.value)*radian; }
+inline Angle atan2(Q const& x, Q const& y) { return ::std::atan2(dimensionless_cast(x), dimensionless_cast(y))*radian; }
 inline Angle atan2(double const& x, double const& y) { return ::std::atan2(x, y)*radian; }
 }
 }

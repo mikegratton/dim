@@ -63,7 +63,7 @@ public:
         if(it != output_symbol.end()) {
             return static_cast<formatter<Q> const*>(it->second.get())->output(q);
         }
-        formatted_quantity<typename Q::scalar> fq(nullptr, q.value);
+        formatted_quantity<typename Q::scalar> fq(nullptr, dimensionless_cast(q));
         bool spaceit = false;
         detail::print_unit<typename Q::unit>(fq.set_symbol(), typename Q::unit(), spaceit);
         return fq;
@@ -80,7 +80,7 @@ public:
         if (it != dynamic_output_symbol.end()) {
             return static_cast<dynamic_formatter<S, System>>(it->second.get())->output(q);
         }
-        formatted_quantity<S> fq(nullptr, q.value);
+        formatted_quantity<S> fq(nullptr, dimensionless_cast(q));
         bool spaceit = false;
         detail::print_unit<System>(fq.set_symbol(), q.unit, spaceit);
         return fq;
@@ -122,7 +122,7 @@ public:
             }
         }        
         auto result = detail::parse_standard_rep<System, S>(symbol);
-        result.value *= s;
+        dimensionless_cast(result) *= s;
         return result;        
     }
     
@@ -284,7 +284,7 @@ std::ostream& operator<< (std::ostream& os, Q const& q)
     if(std::has_facet<quantity_facet> (os.getloc())) {
         os << std::use_facet<quantity_facet> (os.getloc()).format<Q>(q);
     } else {
-        os << q.value << "_" << typename Q::unit();
+        os << dimensionless_cast(q) << "_" << typename Q::unit();
     }
     return os;
 }

@@ -4,6 +4,21 @@
 namespace dim {
 namespace si {
 
+/*
+ * Install the default facet to the global locale
+ * before main()
+ */
+namespace {
+int internal_install_facet()
+{
+    add_to_global_locale();
+    return 0;
+}
+
+const int __dummy = internal_install_facet();
+    
+}
+    
 void add_to_global_locale(quantity_facet* specialized) {
     std::locale base_locale; // Initialized to current global
     if (nullptr == specialized) {

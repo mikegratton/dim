@@ -30,7 +30,7 @@ char* print_unit(char* o_unit_str, Q const& q)
 template<class Q, DIM_IS_QUANTITY(Q)>
 char* print_quantity(char* o_quant_str, Q const& q)
 {
-    int offset = sprintf(o_quant_str, "%g_", static_cast<double>(q.value));
+    int offset = sprintf(o_quant_str, "%g_", dimensionless_cast(q));
     print_unit(o_quant_str+offset, q);
     return o_quant_str;
 }
@@ -136,7 +136,7 @@ struct dynamic_formatter : public detail::container_base {
             add = dynamic(0, scale.unit);
         }
     }
-    scalar non_dim(dynamic const& q) const { return ((q + add) / scale).value; }
+    scalar non_dim(dynamic const& q) const { return dimensionless_cast((q + add) / scale); }
     formatted_quantity<scalar> output(dynamic const& q) const
     {
         return formatted_quantity<scalar>(symbol, non_dim(q));

@@ -5,6 +5,7 @@
 #include <cstdlib>
 
 using namespace dim::si;
+using namespace dim;
 
 void doParseCheck(char const* text, double value, dim::dynamic_unit const& unit) {
     char* endptr;
@@ -142,7 +143,7 @@ TEST_CASE("Formatter") {
     sprintf(ff.set_symbol(), "%s", "moose");
     CHECK(strcmp(ff.symbol(), "moose") == 0);
     dim::si::Length l2 = f.input(in_inch);
-    CHECK(l2.value == doctest::Approx(l.value));
+    CHECK(dimensionless_cast(l2) == doctest::Approx(dimensionless_cast(l)));
 }
 
 
