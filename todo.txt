@@ -1,5 +1,7 @@
 Improve cmake install to hide private headers
 
+Make a release!
+
 Document #define options
 DIM_NO_STREAM
 

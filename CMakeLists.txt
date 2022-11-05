@@ -6,22 +6,14 @@ add_subdirectory(test)
 
 add_subdirectory(example)
 
-######################################################
-# Installation instructions
-######################################################
 install(TARGETS dim
     EXPORT DimTargets
-    ARCHIVE 
-        DESTINATION lib
-        COMPONENT Development EXCLUDE_FROM_ALL
+    ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
-    PUBLIC_HEADER 
-        DESTINATION include
-        COMPONENT Development EXCLUDE_FROM_ALL
     )
  
 install(EXPORT DimTargets 
-    NAMESPACE met::
+    NAMESPACE dim::
     DESTINATION lib/cmake
     COMPONENT Development EXCLUDE_FROM_ALL
     )

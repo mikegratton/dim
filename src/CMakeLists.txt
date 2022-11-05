@@ -15,6 +15,7 @@ else()
     add_library(dim STATIC ${source} )
 endif()
 
+
 target_include_directories(dim
    INTERFACE
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
@@ -25,3 +26,6 @@ target_include_directories(dim
 
 set_target_properties(dim PROPERTIES CXX_STANDARD 11)
 
+
+install(DIRECTORY dim TYPE INCLUDE 
+    FILES_MATCHING PATTERN *.hpp)
