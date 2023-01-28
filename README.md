@@ -88,6 +88,19 @@ the program would not compile.  The error is
 More on what all this template business is is below, but suffice to say that Length does not 
 match the dimensions of Speed * Time * Time.
 
+## Building Dim 
+
+Dim is written in C++11 and has no dependencies. If C++14 or higher is available, a few extra
+`constexpr` features are enabled.
+
+The easiest way to use Dim is to put the code in a subdirectory of your project and add 
+```
+add_subdirectory(dim)
+```
+to your `CMakelists.txt` file. This will give you a target `dim` that you can depend on.  There 
+isn't much to compile in Dim, so the additional build time should be small.
+
+Alternatively, you can run the install target to install Dim per usual.
 
 ## Design
 

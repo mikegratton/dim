@@ -17,7 +17,7 @@ constexpr const char* specialized_symbol() { return "\0"; }
 }
 
 struct system : system_tag {
-    constexpr static const long id = 26980L;
+    static const long id = 26980L;
     static const char* SYMBOL[];
     constexpr static const char* symbol_for(int dimension)
     {
