@@ -254,6 +254,16 @@ TEST_CASE("OStream") {
     CHECK(ss.str() == "5_Pl");
 }
 
+TEST_CASE("StringFormat")
+{
+    std::string text = "5.2_deg";
+    dim::si::Angle angle;
+    CHECK(from_string(angle, text));
+    CHECK(angle/dim::si::degree == doctest::Approx(5.2));
+    auto text2 = to_string(angle);
+    CHECK(text2 == "0.090757_rad");
+}
+
 TEST_CASE("LengthFormat") {
 }
 // ...

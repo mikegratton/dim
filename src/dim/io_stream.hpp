@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <string>
 #include "io.hpp"
 #include "dynamic_quantity.hpp"
 
@@ -371,6 +372,40 @@ std::istream& operator>>(std::istream& is, dynamic_quantity<S, system_tag>& o_q)
         is.setstate(std::ios_base::failbit);
     }
     return is;
+}
+
+template<class Q, DIM_IS_QUANTITY(Q)>
+std::string to_string(Q i_quantity)
+{
+    std::locale loc; // Get the global locale
+    if(std::has_facet<quantity_facet>(loc)) {
+        auto formatted = std::use_facet<quantity_facet>(loc).format(i_quantity);
+        return std::to_string(formatted.value()) + '_' + formatted.symbol();
+    }
+    char raw[64];
+    print_quantity(raw, i_quantity);
+    return std::string(raw);
+}
+
+template<class Q, DIM_IS_QUANTITY(Q)>
+bool from_string(Q& o_quantity, std::string const& i_string)
+{
+    typename Q::scalar value;    
+    std::size_t endOfNumber;
+    value = std::stod(i_string, &endOfNumber);
+    if (i_string[endOfNumber] == '_') { endOfNumber++; }
+    std::string unit_string = i_string.substr(endOfNumber, i_string.find(","));    
+    
+    std::locale loc; // Get the global locale
+    if(std::has_facet<quantity_facet>(loc)) {        
+     o_quantity = std::use_facet<quantity_facet>(loc).format<Q>(value, unit_string.c_str());        
+        if(o_quantity.is_bad()) {
+            return false;
+        }
+    } else if(!parse_quantity<Q> (o_quantity, value, unit_string.c_str())) {        
+        return false;
+    }
+    return true;
 }
 
 } // end of namespace dim

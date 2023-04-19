@@ -277,7 +277,9 @@ namespace dim {
 namespace detail {
 template<>
 ::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend) {
-    
+    if (unit_str == nullptr || unit_str[0] <= 31 || unit_str[0] >= 126) {
+        return ::dim::si::dynamic_quantity::bad_quantity();
+    }
     ::dim::si::dynamic_quantity result; // Our return value
     
     // Construct the flex scanner
@@ -287,7 +289,12 @@ template<>
     }
     
     // Make a buffer with the text to scan
-    YY_BUFFER_STATE buf = quantity_scan_bytes(unit_str, nend, scanner);
+    YY_BUFFER_STATE buf;
+    if (nend > 0) {
+        buf = quantity_scan_bytes(unit_str, nend, scanner);
+    } else {
+        buf = quantity_scan_string(unit_str, scanner);
+    }
     
     // Scan it
     int r = quantityparse(scanner, &result); 
