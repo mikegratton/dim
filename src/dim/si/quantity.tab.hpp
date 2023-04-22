@@ -62,8 +62,8 @@ extern int quantitydebug;
     EXPONENT = 260,
     OPEN_PARENS = 261,
     CLOSE_PARENS = 262,
-    INTEGER = 263,
-    SCALAR = 264,
+    BAD_INPUT = 263,
+    INTEGER = 264,
     UNIT = 265
   };
 #endif
@@ -74,12 +74,11 @@ union QUANTITYSTYPE
 {
 #line 9 "quantity.y"
 
-  int integer;
-  double scalar;
+  int integer;  
   char* unit;
   ::dim::si::dynamic_quantity quantity;
 
-#line 83 "../quantity.tab.hpp"
+#line 82 "../quantity.tab.hpp"
 
 };
 typedef union QUANTITYSTYPE QUANTITYSTYPE;

@@ -2,26 +2,12 @@
 #include "definition.hpp"
 #include <map>
 
-/*
-#include <iostream>
-
-namespace 
-{
-std::ostream& operator<<(std::ostream& os, dim::si::dynamic_quantity const& dq) {
-    os << dq.value << " [ ";
-    for (int i=0; i<dq.unit.size(); i++) {
-        os << (int) dq.unit[i] << " ";
-    }
-    os << "]";
-    return os;
-}
-}
-*/
-
 namespace dim {
 namespace si {
 namespace detail {
 
+constexpr double PREFIX_NOT_FOUND = 0.0;
+    
 const std::pair<char, double> si_prefix[] {
     {'y',  1e-24},
     {'z',  1e-21},
@@ -94,7 +80,7 @@ double find_si_prefix(int& start, const char* buf)
         }
     }
     start = 0;
-    double val = 1.0;
+    double val = PREFIX_NOT_FOUND;
     if(buf[0] == 'd' && buf[1] == 'a') {
         val = 1e1;
         start = 2;
@@ -105,7 +91,6 @@ double find_si_prefix(int& start, const char* buf)
         val = it->second;
         start = 1;
     }
-    // std::cout << "scale is " << val << ", start = " << start << "\n";
     return val;
 }
 
@@ -123,13 +108,14 @@ dynamic_quantity parse_known_quantity(const char* buf)
     }
     auto it = s_SYMBOL.find(buf);
     if(it != s_SYMBOL.end()) {
-        // std::cout << "result of " << buf << " is " << it->second << "\n";
         return it->second;
     } else {
         // Try again with a prefix 
         int start = 0;
         double prefix = find_si_prefix(start, buf);
-        // std::cout << "result of " << buf << " is " << prefix  << " * " << parse_known_quantity(buf+start) << "\n";
+        if (prefix == PREFIX_NOT_FOUND) {
+            return dynamic_quantity::bad_quantity();
+        }
         return prefix * parse_known_quantity(buf + start);                
     }    
 }

@@ -138,8 +138,8 @@ extern int quantitydebug;
     EXPONENT = 260,
     OPEN_PARENS = 261,
     CLOSE_PARENS = 262,
-    INTEGER = 263,
-    SCALAR = 264,
+    BAD_INPUT = 263,
+    INTEGER = 264,
     UNIT = 265
   };
 #endif
@@ -150,12 +150,11 @@ union QUANTITYSTYPE
 {
 #line 9 "quantity.y"
 
-  int integer;
-  double scalar;
+  int integer;  
   char* unit;
   ::dim::si::dynamic_quantity quantity;
 
-#line 159 "../quantity.tab.cpp"
+#line 158 "../quantity.tab.cpp"
 
 };
 typedef union QUANTITYSTYPE QUANTITYSTYPE;
@@ -171,12 +170,12 @@ int quantityparse (void* scanner, ::dim::si::dynamic_quantity* result);
 
 
 /* Unqualified %code blocks.  */
-#line 22 "quantity.y"
+#line 21 "quantity.y"
 
     int quantityerror(void* lval, ::dim::si::dynamic_quantity* val, void const* scanner);
     int quantitylex(YYSTYPE* lval, void* scanner);
 
-#line 180 "../quantity.tab.cpp"
+#line 179 "../quantity.tab.cpp"
 
 #ifdef short
 # undef short
@@ -478,18 +477,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  13
+#define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   26
+#define YYLAST   25
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  11
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  5
+#define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  13
+#define YYNRULES  12
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  25
+#define YYNSTATES  21
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   265
@@ -537,8 +536,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    47,    47,    51,    52,    53,    57,    58,    59,    60,
-      61,    62,    66,    67
+       0,    46,    46,    47,    51,    52,    53,    54,    55,    56,
+      60,    61,    62
 };
 #endif
 
@@ -548,8 +547,8 @@ static const yytype_int8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "MULTIPLY", "DIVIDE", "EXPONENT",
-  "OPEN_PARENS", "CLOSE_PARENS", "INTEGER", "SCALAR", "UNIT", "$accept",
-  "output", "quantity", "unit_group", "exponent_group", YY_NULLPTR
+  "OPEN_PARENS", "CLOSE_PARENS", "BAD_INPUT", "INTEGER", "UNIT", "$accept",
+  "output", "unit_group", "exponent_group", YY_NULLPTR
 };
 #endif
 
@@ -563,7 +562,7 @@ static const yytype_int16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF (-2)
+#define YYPACT_NINF (-3)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -577,9 +576,9 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       1,     2,     2,     2,     2,    -2,     6,    -2,    17,    13,
-      12,    17,    17,    -2,     2,     2,    18,    -2,    13,    13,
-      18,    -2,    -2,    16,    -2
+      -1,    -3,    12,    -3,    15,    -2,     9,    -3,    12,    12,
+      14,    -3,    -3,    16,    16,    14,    -3,    11,     0,    -3,
+      -3
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -587,21 +586,21 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,    11,     0,     2,     5,    10,
-       0,     4,     3,     1,     0,     0,     0,     6,     9,     8,
-       0,    13,     7,     0,    12
+       0,     3,     0,     8,     0,     2,     0,     1,     0,     0,
+       0,     9,     4,     7,     6,     0,    11,     5,     0,    12,
+      10
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -2,    -2,    -2,    -1,     5
+      -3,    -3,     2,    10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     6,     7,     8,    22
+      -1,     4,     5,    17
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -609,39 +608,39 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       9,    10,    11,    12,     1,     1,    13,     2,     2,     3,
-       4,     5,     5,    18,    19,    14,    15,    16,    16,    17,
-      14,    15,    16,    24,    20,    23,    21
+       1,     8,     9,    10,     6,     2,    11,    20,    19,     3,
+      13,    14,     8,     9,    10,     7,    12,    11,     2,    19,
+      15,    10,     3,    16,    11,    18
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,     2,     3,     4,     3,     3,     0,     6,     6,     8,
-       9,    10,    10,    14,    15,     3,     4,     5,     5,     7,
-       3,     4,     5,     7,     6,    20,     8
+       1,     3,     4,     5,     2,     6,     8,     7,     8,    10,
+       8,     9,     3,     4,     5,     0,     7,     8,     6,     8,
+       6,     5,    10,     9,     8,    15
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     6,     8,     9,    10,    12,    13,    14,    14,
-      14,    14,    14,     0,     3,     4,     5,     7,    14,    14,
-       6,     8,    15,    15,     7
+       0,     1,     6,    10,    12,    13,    13,     0,     3,     4,
+       5,     8,     7,    13,    13,     6,     9,    14,    14,     8,
+       7
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    11,    12,    13,    13,    13,    14,    14,    14,    14,
-      14,    14,    15,    15
+       0,    11,    12,    12,    13,    13,    13,    13,    13,    13,
+      14,    14,    14
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     2,     1,     3,     3,     3,     3,
-       2,     1,     3,     1
+       0,     2,     1,     1,     3,     3,     3,     3,     1,     2,
+       3,     1,     2
 };
 
 
@@ -1081,9 +1080,9 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, void* scanner, ::d
   switch (yytype)
     {
     case 10: /* UNIT  */
-#line 42 "quantity.y"
+#line 41 "quantity.y"
             { free(((*yyvaluep).unit)); }
-#line 1087 "../quantity.tab.cpp"
+#line 1086 "../quantity.tab.cpp"
         break;
 
       default:
@@ -1355,73 +1354,67 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 47 "quantity.y"
-            { *result = (yyval.quantity) = (yyvsp[0].quantity); return 0; }
-#line 1361 "../quantity.tab.cpp"
+#line 46 "quantity.y"
+              { *result = (yyval.quantity) = (yyvsp[0].quantity); return 0; }
+#line 1360 "../quantity.tab.cpp"
     break;
 
   case 3:
-#line 51 "quantity.y"
-                     { (yyval.quantity) = (yyvsp[-1].scalar) * (yyvsp[0].quantity); }
-#line 1367 "../quantity.tab.cpp"
+#line 47 "quantity.y"
+           { return 1; }
+#line 1366 "../quantity.tab.cpp"
     break;
 
   case 4:
-#line 52 "quantity.y"
-                        { (yyval.quantity) = static_cast<double>((yyvsp[-1].integer)) * (yyvsp[0].quantity); }
-#line 1373 "../quantity.tab.cpp"
+#line 51 "quantity.y"
+                                       { (yyval.quantity) = (yyvsp[-1].quantity); }
+#line 1372 "../quantity.tab.cpp"
     break;
 
   case 5:
-#line 53 "quantity.y"
-                { (yyval.quantity) = (yyvsp[0].quantity); }
-#line 1379 "../quantity.tab.cpp"
+#line 52 "quantity.y"
+                                        { (yyval.quantity) = power((yyvsp[-2].quantity), (yyvsp[0].integer)); }
+#line 1378 "../quantity.tab.cpp"
     break;
 
   case 6:
-#line 57 "quantity.y"
-                                       { (yyval.quantity) = (yyvsp[-1].quantity); }
-#line 1385 "../quantity.tab.cpp"
+#line 53 "quantity.y"
+                                  { (yyval.quantity) = divide((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
+#line 1384 "../quantity.tab.cpp"
     break;
 
   case 7:
-#line 58 "quantity.y"
-                                        { (yyval.quantity) = power((yyvsp[-2].quantity), (yyvsp[0].integer)); }
-#line 1391 "../quantity.tab.cpp"
+#line 54 "quantity.y"
+                                    { (yyval.quantity) = multiply((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
+#line 1390 "../quantity.tab.cpp"
     break;
 
   case 8:
-#line 59 "quantity.y"
-                                  { (yyval.quantity) = divide((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
-#line 1397 "../quantity.tab.cpp"
+#line 55 "quantity.y"
+          { (yyval.quantity) = dim::si::detail::parse_known_quantity((yyvsp[0].unit)); }
+#line 1396 "../quantity.tab.cpp"
     break;
 
   case 9:
-#line 60 "quantity.y"
-                                    { (yyval.quantity) = multiply((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
-#line 1403 "../quantity.tab.cpp"
+#line 56 "quantity.y"
+                          { return 1; }
+#line 1402 "../quantity.tab.cpp"
     break;
 
   case 10:
-#line 61 "quantity.y"
-                         { (yyval.quantity) = (yyvsp[0].quantity); }
-#line 1409 "../quantity.tab.cpp"
-    break;
-
-  case 11:
-#line 62 "quantity.y"
-          { (yyval.quantity) = dim::si::detail::parse_known_quantity((yyvsp[0].unit)); }
-#line 1415 "../quantity.tab.cpp"
+#line 60 "quantity.y"
+                                           { (yyval.integer) = (yyvsp[-1].integer); }
+#line 1408 "../quantity.tab.cpp"
     break;
 
   case 12:
-#line 66 "quantity.y"
-                                            { (yyval.integer) = (yyvsp[-1].integer); }
-#line 1421 "../quantity.tab.cpp"
+#line 62 "quantity.y"
+                              { return 1; }
+#line 1414 "../quantity.tab.cpp"
     break;
 
 
-#line 1425 "../quantity.tab.cpp"
+#line 1418 "../quantity.tab.cpp"
 
       default: break;
     }
@@ -1653,16 +1646,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 70 "quantity.y"
+#line 65 "quantity.y"
 
  
- int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
- {
-    /*
-    QUANTITYSTYPE* lval = (QUANTITYSTYPE*) yylval;
-    char* as_str = lval->unit;
-    int as_int = lval->integer;
-    printf("Parse error... %s, %d \n", as_str, as_int);
-    */
-    return 1;
- }
+int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
+{
+   return 1;
+}

@@ -277,34 +277,32 @@ namespace dim {
 namespace detail {
 template<>
 ::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend) {
-    if (unit_str == nullptr || unit_str[0] <= 31 || unit_str[0] >= 126) {
-        return ::dim::si::dynamic_quantity::bad_quantity();
+    // Construct the flex scanner for re-use throughout the program   
+    static thread_local yyscan_t s_scanner;
+    static thread_local bool s_init = false;
+    if (s_init == false) {
+        quantitylex_init(&s_scanner);
+        s_init = true;
     }
+    
     ::dim::si::dynamic_quantity result; // Our return value
     
-    // Construct the flex scanner
-    yyscan_t scanner;
-    if (quantitylex_init(&scanner)) {
-        return ::dim::si::dynamic_quantity::bad_quantity();
-    }
-    
     // Make a buffer with the text to scan
-    YY_BUFFER_STATE buf;
-    if (nend > 0) {
-        buf = quantity_scan_bytes(unit_str, nend, scanner);
+    YY_BUFFER_STATE buf;    
+    if (nend == -1) {
+        buf = quantity_scan_string(unit_str, s_scanner);
     } else {
-        buf = quantity_scan_string(unit_str, scanner);
+        buf = quantity_scan_bytes(unit_str, nend, s_scanner);
     }
     
     // Scan it
-    int r = quantityparse(scanner, &result); 
+    int r = quantityparse(s_scanner, &result); 
     if (r != 0) {        
         result = ::dim::si::dynamic_quantity::bad_quantity();
     }
     
     // Clean up
-    quantity_delete_buffer(buf, scanner);
-    quantitylex_destroy(scanner);
+    quantity_delete_buffer(buf, s_scanner);    
     return result;
 }
 }

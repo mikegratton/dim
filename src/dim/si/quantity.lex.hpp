@@ -712,7 +712,7 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 35 "quantity.l"
+#line 39 "quantity.l"
 
 
 #line 719 "../quantity.lex.hpp"

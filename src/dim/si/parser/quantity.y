@@ -7,8 +7,7 @@
 }
 
 %union {
-  int integer;
-  double scalar;
+  int integer;  
   char* unit;
   ::dim::si::dynamic_quantity quantity;
 }
@@ -29,12 +28,12 @@
 %token EXPONENT
 %token OPEN_PARENS
 %token CLOSE_PARENS
+%token BAD_INPUT
 %token <integer> INTEGER
-%token <scalar> SCALAR
 %token <unit> UNIT
-
-%type <quantity> output quantity unit_group
 %type <integer> exponent_group
+%type <quantity> unit_group
+%type <quantity> output
 
 %left MULTIPLY DIVIDE
 %right EXPONENT
@@ -44,38 +43,28 @@
 %%
 
 output :
-   quantity { *result = $$ = $1; return 0; }
-   ;
-
-quantity:
-   SCALAR unit_group { $$ = $1 * $2; }
-   | INTEGER unit_group { $$ = static_cast<double>($1) * $2; }
-   | unit_group { $$ = $1; }
+   unit_group { *result = $$ = $1; return 0; }
+   | error { return 1; }
    ;
    
 unit_group:   
    OPEN_PARENS unit_group CLOSE_PARENS { $$ = $2; }
    | unit_group EXPONENT exponent_group { $$ = power($1, $3); }
    | unit_group DIVIDE unit_group { $$ = divide($1, $3); }
-   | unit_group MULTIPLY unit_group { $$ = multiply($1, $3); }   
-   | MULTIPLY unit_group { $$ = $2; } 
-   | UNIT { $$ = dim::si::detail::parse_known_quantity($1); }
+   | unit_group MULTIPLY unit_group { $$ = multiply($1, $3); }      
+   | UNIT { $$ = dim::si::detail::parse_known_quantity($1); }      
+   | unit_group BAD_INPUT { return 1; }
    ;
    
- exponent_group:
-    OPEN_PARENS exponent_group CLOSE_PARENS { $$ = $2; }
-    | INTEGER 
-    ;
+exponent_group:
+   OPEN_PARENS exponent_group CLOSE_PARENS { $$ = $2; }
+   | INTEGER         
+   | exponent_group BAD_INPUT { return 1; }
+   ;
     
- %%
+%%
  
- int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
- {
-    /*
-    QUANTITYSTYPE* lval = (QUANTITYSTYPE*) yylval;
-    char* as_str = lval->unit;
-    int as_int = lval->integer;
-    printf("Parse error... %s, %d \n", as_str, as_int);
-    */
-    return 1;
- }
+int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
+{
+   return 1;
+}

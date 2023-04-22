@@ -18,9 +18,11 @@
 
 [-+]?[0-9]+ { yylval->integer = atoi(yytext); return INTEGER; }
 
-[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)? { yylval->scalar = atof(yytext); return SCALAR; }
+"*" { return MULTIPLY; }
 
-[[:space:]_*] { return MULTIPLY; }
+"_" { return MULTIPLY; }
+
+" " { return MULTIPLY; }
 
 "/" { return DIVIDE; }
 
@@ -31,5 +33,7 @@
 ")" { return CLOSE_PARENS; }
 
 [a-zA-Z]+ { yylval->unit = strdup(yytext); return UNIT; }
+
+. { return BAD_INPUT; }
 
 %%

@@ -3,6 +3,7 @@ add_executable(dimTest
     literal_test.cpp
     si_test.cpp
     si_io_test.cpp    
+    parser_test.cpp
     )
 target_link_libraries(dimTest PUBLIC dim)
 
