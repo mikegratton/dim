@@ -1,8 +1,10 @@
 #pragma once
 #include <cmath>
-#include <limits>
 #include <cstdint>
+#include <limits>
 #include <type_traits>
+
+/* clang-format off */
 
 #if __cplusplus < 201103L
 #error "C++11 or higher is required for dim"
@@ -16,23 +18,39 @@ using enable_if_t = typename ::std::enable_if<B,T>::type;
 }
 #endif
 
-
+/// The dim namespace encloses all dim symbols
 namespace dim
 {
 
 /*
  * Tag types for dispatch/enable_if
  */
+
+/// Tag type for units
 struct unit_tag { };
+
+/// Tag type for quantities
 struct quantity_tag { };
+
+/// Tag type for systems
 struct system_tag { };
-// enable_if boilerplate for templates
+
+
+// SFINAE macros that can be used as template parameters
+
+/// Use as a template parameter to check if TYPE has been tagged TAG
 #define DIM_IS_TAGGED_FOR(TAG, TYPE) typename std::enable_if_t<std::is_base_of<TAG, TYPE>::value>* = nullptr
+
+/// Use as a template parameter to check if U is a unit
 #define DIM_IS_UNIT(U) DIM_IS_TAGGED_FOR(::dim::unit_tag, U)
+
+/// Use as a template parameter to check if Q is a quantity
 #define DIM_IS_QUANTITY(Q) DIM_IS_TAGGED_FOR(::dim::quantity_tag, Q)
+
+/// Use as a template parameter to check if T is a system
 #define DIM_IS_SYSTEM(T) DIM_IS_TAGGED_FOR(::dim::system_tag, T)
 
-// This could be improved to handle e.g. rational types later
+/// Check if S is a scalar type (float, double, etc)
 #define DIM_IS_SCALAR(S) typename std::enable_if_t<std::is_arithmetic<S>::value>* = nullptr
 
 // Macros for dimension list
@@ -54,8 +72,8 @@ template<class Unit, class Scalar = double>
 class quantity;
 
 
-/*
- * Unifying base class template for units
+/**
+ * @brief Unifying base class template for units
  */
 template<class T>
 struct unit_base : unit_tag {
@@ -63,6 +81,7 @@ struct unit_base : unit_tag {
 };
 
 /********************************************************************************************/
+/// Models the base units in a system (i.e. quantities where the magnitude is 1)
 template<DIM_ARRAY, class System>
 struct unit : public unit_base<unit<DIM_D_ARRAY, System>> {
     using system = System;
@@ -104,11 +123,12 @@ struct unit : public unit_base<unit<DIM_D_ARRAY, System>> {
     }
 };
 
+/// Obtain the inverse of U (i.e. if U is L, inverse_t<U> is 1/L)
 template<class U, DIM_IS_UNIT(U)>
 using inverse_t = typename U::inverse;
 
-/*
- * Struct templates to perform dimensional arithmetic at compile time
+/**
+ * @brief Struct template to perform roots (squareroot, etc)
  */
 template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
 struct unit_root {
@@ -124,9 +144,11 @@ struct unit_root {
                  typename Unit1::system >;
 };
 
+/// Convenience typedef for roots
 template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
 using unit_root_t = typename unit_root<Unit1, root>::type;
 
+/// Struct template to perform powers on units
 template<class Unit1, int pow, DIM_IS_UNIT(Unit1)>
 struct unit_pow {
     using type = ::dim::unit <
@@ -141,10 +163,11 @@ struct unit_pow {
                  typename Unit1::system >;
 };
 
-
+/// Convenience typedef for powers
 template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
 using unit_pow_t = typename unit_pow<Unit1, root>::type;
 
+/// Struct template to perform unit division
 template<class Unit1, class Unit2, DIM_IS_UNIT(Unit1), DIM_IS_UNIT(Unit2)>
 struct unit_divide {
     using type = ::dim::unit <
@@ -159,10 +182,11 @@ struct unit_divide {
                  typename Unit1::system >;
 };
 
-
+/// Convenience typedef for division
 template<class Unit1, class Unit2>
 using unit_divide_t = typename unit_divide<Unit1, Unit2>::type;
 
+/// Struct template to perform unit multiplication
 template<class Unit1, class Unit2, DIM_IS_UNIT(Unit1), DIM_IS_UNIT(Unit2)>
 struct unit_multiply {
     using type = ::dim::unit <
@@ -177,11 +201,13 @@ struct unit_multiply {
                  typename Unit1::system >;
 };
 
+/// Convenience typedef for multiplication
 template<class Unit1, class Unit2>
 using unit_multiply_t = typename unit_multiply<Unit1, Unit2>::type;
 
 //////////////////////////////////////////////////////////////////////////////
 // For C++11, these can't be constexpr void function templates
+/// Check that U1 and U2 have the same dimensions
 #define DIM_CHECK_DIMENSIONS(U1, U2) \
 static_assert(U1::length() == U2::length(), "Length dimensions do not match.");\
 static_assert(U1::time() == U2::time(), "Time dimensions do not match.");\
@@ -192,13 +218,14 @@ static_assert(U1::amount() == U2::amount(), "Amount (mole) dimensions do not mat
 static_assert(U1::current() == U2::current(), "Current dimensions do not match.");\
 static_assert(U1::luminosity() == U2::luminosity(), "Luminosity dimensions do not match.");
 
+/// Check that U1 and U2 use the same system
 #define DIM_CHECK_SYSTEMS(U1, U2) \
 static_assert(std::is_same<typename U1::system, typename U2::system>::value,\
                   "Systems of units do not match. Explicit conversion is required.");
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
- * Conversion to the underlying scalar type is done by recognizing this type:
+/**
+ * @brief Conversion to the underlying scalar type is done by recognizing this type:
  */
 template<class System>
 using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, System>;
@@ -230,6 +257,7 @@ constexpr Other operator/ (dimensionless_unit<System> const& unit, Other const& 
 /*
  * Unit on unit operators
  */
+ /// Unit/unit multiplication operator
 template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_multiply_t<U1, U2>
 operator* (unit_base<U1> const&, unit_base<U2> const&)
@@ -237,6 +265,8 @@ operator* (unit_base<U1> const&, unit_base<U2> const&)
     DIM_CHECK_SYSTEMS(U1, U2);;
     return unit_multiply_t<U1, U2>();
 }
+
+/// unit/unit division operator
 template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_divide_t<U1, U2>
 operator/ (unit_base<U1> const&, unit_base<U2> const&)
@@ -244,6 +274,8 @@ operator/ (unit_base<U1> const&, unit_base<U2> const&)
     DIM_CHECK_SYSTEMS(U1, U2);
     return unit_divide_t<U1, U2>();
 }
+
+/// unit/unit power function
 template<class U, int P, DIM_IS_UNIT(U)>
 constexpr unit_pow_t<U, P>
 pow(unit_base<U> const&)
@@ -251,13 +283,14 @@ pow(unit_base<U> const&)
     return unit_pow_t<U, P>();
 }
 
+/// Obtain a quiet nan even in fastmath mode
 constexpr inline double bad_double__() 
 {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-/*
- * Special isnan to operate when in non-IEEE compliant mode
+/**
+ * @brief Special isnan to operate when in non-IEEE compliant mode
  */
 #ifdef __FAST_MATH__
 #if __cplusplus < 201402L
@@ -280,6 +313,7 @@ constexpr inline bool isbad__(double val) { return std::isnan(val); }
 #endif
 
 
+/// Combination of a scalar and a unit. Most dim types are typedefs for template instatiations of this 
 template<class Unit, class Scalar>
 class quantity : public quantity_tag {
 
@@ -310,7 +344,10 @@ public:
         DIM_CHECK_SYSTEMS(unit, U2)
     }
     
+    /// Obtain a bad quantity with these units.
     static constexpr type bad_quantity() noexcept { return type(bad_double__()); }
+
+    /// Detect if this is a bad quantity
     constexpr bool is_bad() const { return isbad__(value); }
     
     template<class U2, DIM_IS_UNIT(U2)>
@@ -423,7 +460,10 @@ public:
         return !(lhs < rhs);
     }
 
+    /// Cast away the units to access the raw scalar
     friend constexpr Scalar const& dimensionless_cast(type const& r) { return r.value; }
+
+    /// Cast away the units to access the raw scalar
     friend constexpr Scalar& dimensionless_cast(type& r) { return r.value; }
     
     // Quantity-on-quantity operators
@@ -563,13 +603,14 @@ constexpr quantity<U, S> operator/ (unit_base<U> const& unit, S const& value)
 // Math operations
 namespace dim
 {
-
+/// Absolute value of the scalar part
 template<class Q, DIM_IS_QUANTITY(Q)>
 constexpr Q abs(Q const& q)
 {
     return Q(std::abs(dimensionless_cast(q)));
 }
 
+/// Take the root of the scalar and the units
 template<int Root, class Q, DIM_IS_QUANTITY(Q)>
 constexpr quantity<typename unit_root<typename Q::unit, Root>::type, typename Q::scalar>
 root(Q const& q)
@@ -586,6 +627,7 @@ root(Q const& q)
            (std::pow(dimensionless_cast(q), static_cast<typename Q::scalar>(1) / static_cast<typename Q::scalar>(Root)));
 }
 
+/// Take the squareroot of the scalar and the units
 template<class Q, DIM_IS_QUANTITY(Q)>
 constexpr quantity<typename unit_root<typename Q::unit, 2>::type, typename Q::scalar>
 sqrt(Q const& q)
@@ -601,7 +643,7 @@ sqrt(Q const& q)
     return quantity<unit_root_t<typename Q::unit, 2>, typename Q::scalar> (std::sqrt(dimensionless_cast(q)));
 }
 
-
+/// Exponentiate the quantity
 template<int Exponent, class Q>
 constexpr
 std::enable_if_t<std::is_base_of<quantity_tag, Q>::value,
@@ -620,8 +662,8 @@ std::enable_if_t<std::is_base_of<unit_tag, U>::value, unit_pow_t<U, Exponent>>
     return unit_pow_t<U, Exponent>();
 }
 
-/*
- * Rational powers
+/**
+ * @brief Rational powers of a quantity
  */
 template<int Num, int Denom, class Q, DIM_IS_QUANTITY(Q)>
 constexpr quantity<unit_pow_t<unit_root_t<typename Q::unit, Denom>, Num>, typename Q::scalar>
@@ -640,3 +682,4 @@ ratpow(Q const& q)
 }
 }
 
+/* clang-format on*/

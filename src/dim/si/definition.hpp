@@ -1,12 +1,13 @@
 #pragma once
 #include "dim/base.hpp"
 #include "dim/system_creation_helper.hpp"
-
+/* clang-format off */
 namespace dim
 {
 
 class quantity_facet;
 
+/// Namespace forthe International System (SI) of units
 namespace si
 {
 
@@ -32,8 +33,8 @@ struct system : system_tag {
     static quantity_facet* make_default_facet();
 };
 
-/*
- * Install the facet into the global locale. If specialized is nullptr,
+/**
+ * @brief Install the facet into the global locale. If specialized is nullptr,
  * then install the default facet for si.
  */
 void add_to_global_locale(quantity_facet* specialized = nullptr);
@@ -165,3 +166,4 @@ inline Angle atan2(double const& x, double const& y) { return ::std::atan2(x, y)
 }
 #endif
 
+/* clang-format on */

@@ -1,0 +1,6 @@
+<map id="dim::unit_tag" name="dim::unit_tag">
+<area shape="rect" id="node1" title="Tag type for units." alt="" coords="165,5,273,32"/>
+<area shape="rect" id="node2" href="$structdim_1_1unit__base.html" title=" " alt="" coords="5,80,223,121"/>
+<area shape="rect" id="node4" href="$structdim_1_1unit__base.html" title="Unifying base class template for units." alt="" coords="247,87,403,114"/>
+<area shape="rect" id="node3" href="$structdim_1_1unit.html" title="Models the base units in a system (i.e. quantities where the magnitude is 1)" alt="" coords="27,169,201,211"/>
+</map>

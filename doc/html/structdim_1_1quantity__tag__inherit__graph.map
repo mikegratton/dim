@@ -1,0 +1,4 @@
+<map id="dim::quantity_tag" name="dim::quantity_tag">
+<area shape="rect" id="node1" title="Tag type for quantities." alt="" coords="14,5,151,32"/>
+<area shape="rect" id="node2" href="$classdim_1_1quantity.html" title="Combination of a scalar and a unit. Most dim types are typedefs for template instatiations of this." alt="" coords="5,80,160,121"/>
+</map>

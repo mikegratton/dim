@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$structdim_1_1unit__tag.html" title="Tag type for units." alt="" coords="5,42,113,69"/>
+<area shape="rect" id="node2" href="$structdim_1_1unit__base.html" title=" " alt="" coords="161,5,379,47"/>
+<area shape="rect" id="node4" href="$structdim_1_1unit__base.html" title="Unifying base class template for units." alt="" coords="192,71,348,98"/>
+<area shape="rect" id="node3" href="$structdim_1_1unit.html" title="Models the base units in a system (i.e. quantities where the magnitude is 1)" alt="" coords="427,5,601,47"/>
+</map>
