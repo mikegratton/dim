@@ -1,5 +1,9 @@
 # Dim: A Library for Compile-time Dimensional Analysis
 
+* [GitHub Repository](https://github.com/mikegratton/dim)
+* [Documentation](https://mikegratton.github.io/dim/)
+
+
 ## Overview
 
 When working with dimension quantities like length and time in code,
