@@ -28,14 +28,14 @@ a different type. This shifts the burden of dimension checking and many conversi
 to *compile time* rather than run time, making it very efficient.  Dim is aimed at
 robotics and engineering applications, where calculations with dimensional quantities and 
 especially quantities of *different dimensions* are common.  Still, for scientific codes
-that rely on nondimensional values, it can still be helpful to read and write dimensional 
-values at the start and end of the code.
+that typically work with nondimensional values, it can still be helpful to read and write 
+dimensional values at the start and end of a calculation.
 
 In addition, one often must print a quantity to a string or parse a string into a 
-quantity. Dim provides extensive IO support. The main path uses the iostream facet/locale
-system to stash your preferred formats and have them be applied wherever `operator<<` is 
-used.  However, for programs that do not wish to use iostreams, Dim provides a simple system
-based on c-strings for IO.
+quantity. Dim provides extensive IO support through a layered approach. The easiest to use path 
+uses the iostream facet/locale system to stash preferred formats and have them be applied 
+wherever `operator<<` is used.  However, for programs that do not wish to use iostreams, Dim 
+provides a simple system based on c-strings for IO.
 
 ## Quickstart
 Here's a basic annotated program
@@ -43,7 +43,6 @@ Here's a basic annotated program
 #include <cassert>
 #include <iostream>
 #include <dim/si.hpp> // 1
-### Rationale
 using namespace si; // 2
 using namespace si::literal; // 3
 
@@ -104,13 +103,13 @@ add_subdirectory(dim)
 to your `CMakelists.txt` file. This will give you a target `dim` that you can depend on.  There 
 isn't much to compile in Dim, so the additional build time should be small.
 
-Alternatively, you can run the install target to install Dim per usual.
+Alternatively, you can run the install target to install Dim to a directory per usual cmake practice.
 
 ## Design
 
 ### Understanding Dimensional Analysis
 
-In the standard low-energy physics model, there are seven dimensions to the unit:
+In the standard low-energy physics model, there are seven dimensions:
 
 1. Length
 2. Time
@@ -120,7 +119,7 @@ In the standard low-energy physics model, there are seven dimensions to the unit
 6. Temperature
 7. Electrical current
 
-Note this library adds an eigth dimension of angle, discussed below. For each of these eight 
+To these Dim adds an eighth: angle, discussed below. For each of these eight 
 dimensions, a quantity may have an integer multiplier. For example, acceleration has
 dimensions of L/T^2 or one length, minus two time dimensions.
 
@@ -137,18 +136,18 @@ s1 * s2 * (u1+u2), where qi has scalar si and unit ui.  Here, unit addition obey
 Dim fundamentally works with a class template of `quantity`.  This in turn depends on three
 parameters:
 
-  1. The scalar type (double for the SI system)
+  1. The scalar type (`double` by default)
   2. The unit
   3. The system (e.g. SI)
   
-The system is effectively a tag type to prevent quantities from different systems from being
+(The system is effectively a tag type to prevent quantities from different systems from being
 mixed.  Dim only ships with the SI system, so this only matters if you are building your own
-system.
+system.)
 
 The unit is the core of Dim.  It is a set of eight short int template parameters representing
-the seven fundamental dimension of the standard model plus an angle dimension (see below).
-These are template parameters, not class members.  All operations on the unit are performed
-at compile time, and a quantity has a size exactly equal to its scalar type.  The unit type
+the seven fundamental dimension of the standard model plus an angle dimension, but these are
+treated as template parameters, not class members.  All operations on the unit are performed
+at compile time, so a `quantity` uses exactly as many bytes as its scalar type.  The unit type
 is actually a separate template class that acts like a quantity with scalar value of one, though
 Dim goes to some length to hide the unit type from you.  For the SI system, the fundamental 
 dimensions have unit types defined as `meter_`, `second_`, `radian_`, and so on, while the 
@@ -174,17 +173,17 @@ so that `1_deg` and `1.2_deg` are both recognized as Angle constexprs. See the c
 
 
 ### NIST SP 811 Standard and the Angle Unit
-[The National Institute of Standards and Technology Special Publication 881](https://www.nist.gov/pml/special-publication-811)
-is the most complete guide to SI units. Wherever possible, Dim uses the NIST SP 881 unit names, abbreviations,
-and so on. Note that in this standard, plurals are generally avoided, so it is "meter" and not "meters."
+[The National Institute of Standards and Technology Special Publication 811](https://www.nist.gov/pml/special-publication-811)
+is the most complete guide to SI units. Wherever possible, Dim uses the NIST SP 811 unit names, abbreviations,
+and so on. Note that in this standard, plurals are generally avoided, so we write "meter" and not "meters."
 
 There is one major exception: Dim considers Angle to be a fundamental dimension. This choice resolves
 a lot of ambiguities in the standard system.  For instance, the bedevilment caused by wondering if
 a frequency is Hz or is a *rotational frequency* is resolved. These have different units: Hz is 1/s while
-rotational frequency is rad/s. Other notable changes are that the units of torque ang luminous flox.
-The units of torque are N m / rad, so that
-if you apply this torque through a full revolution, you see the work done is (N m / rad) * (2 * pi * rad) = 2 * pi * W.
-Likewise the  lumen now has base units of candela * steradian = candela * radian^2.
+rotational frequency is rad/s. Other notable changes are that the units of torque ang luminous flux.
+The units of torque are N m / rad, so that if you apply this torque through a full revolution, you see the 
+work done is (N m / rad) * (2 * pi * rad) = 2 * pi * W. Likewise the  lumen now has base units of 
+candela * steradian = candela * radian^2. 
 
 ### Type Definitions Attached to Quantity
 Every quantity class holds the typedefs 
@@ -192,7 +191,7 @@ Every quantity class holds the typedefs
 * `scalar` -- the scalar type, e.g. double
 * `unit` -- the underlying unit array (it is a type all of whose instances are the same)
 * `type` -- the type of this quantity
-* `dimensionless` -- the unit in this system that is all zero
+* `dimensionless` -- the unit in this system that has zero for all dimension powers
 
 ### The `dimensionless_cast` Escape Hatch
 Dim allows you to "escape" from the confines of the library at will.  The magnitude of a quantity
@@ -216,7 +215,7 @@ Quantities overload the arithemetic operators "+", "-", "*", "/", the assignment
 like doubles except for the restrictions regarding dimensions.  In addition, the following overoads
 are defined:
 
-* `abs()`: Computes the absolute value.
+* `abs()`: Computes the absolute value, returning the same type of quantity.
 * `sqrt()`: Computes the square root *provided* all of the dimensions are divisible by two.
 * `pow<n>()` : Computes the nth power where n is an integer.
 * `ratpow<p,q>()` Computes the quantity to the p/q power, provided all of the resulting dimensions
@@ -233,15 +232,12 @@ In addition, Angle types have the related trigonometric functions defined:
 * `Angle atan2(double const& x, double const& y)`
 * `template<class Q> Angle atan2(Q const& x, Q const& y)`
 
-Note the actual definition of the last is slightly different so that it is only available if Q
-is a quantity.
-
 
 ### Understanding Errors
 
-Dim uses static assertions to improve most compile errors. As Dim is a template library, there's
-a lot of "angry template error" messages to wade through, but you should be able to find a more
-helpful error in the spew, such as
+Dim uses static assertions to improve the legibility of most compile errors. As Dim is a template library, there's
+a lot of "angry template error" messages to wade through, but you should be able to find a more helpful error in 
+the spew, such as
 ```
 ... error: static assertion failed: Length dimensions do not match.
 ```
@@ -257,14 +253,13 @@ a length dimension of 1 while the LHS has a length dimension of 2.
 # Input and Output
 
 ## Formatters, Facets, and Locales
-
-The formatter is a simple class that associates a string symbol with information on how 
-to nondimensionalize a quantity. For example
+Input/output in Dim rests on the `formatter` class. The formatter is a simple class that associates 
+a string "symbol" with information on how to nondimensionalize a quantity. For example
 ```
 si::formatter<si::Angle> degree_formatter("deg", si::degree);
 ```
 will format angles as degrees. The template parameter is the quantity
-type (`si::Angle`), the first argument is the symbol string (`deg`), and the second argument gives
+type (`si::Angle`), the first argument is the symbol string ("deg"), and the second argument gives
 what you would multiply 1.0 by to obtain a quantity of the indicated symbol (`si::degree`).  There's
 an optional third argument that is used for temperature conversion as an additive offset:
 ```
@@ -272,7 +267,7 @@ si::formatter<si::Temperature> fahrenheit_format("F", 5./9.*kelvin, 255.37*kelvi
 ```
 Hey, no one ever said thermodynamics was easy.  
 
-Formatters can be used directly, providing `input` and `output` methods.  Input takes the form
+Formatters provide `input` and `output` methods.  Input takes the form
 ```
 si::Angle x = degree_formatter.input(90.0);
 ```
@@ -285,16 +280,17 @@ This allows you to do
 ```
 printf("My angle is %g_%s\n", fmt.value(), fmt.symbol());
 ```
-or put the result into structured XML, etc.  If you are using streams, you can just do
+or put the result into structured XML, etc.  An overload for `operator<<` allows for interaction with
+`ostream` objects:
 ```
 std::cout << "My angle is " << degree_formatter.output(2_rad) << "\n";
 ```
 
-Dim taps into the facet/locale system of std::iostream to make these formatters available 
-transparently to streaming operators. The facet allows `operator<<` and `operator>>` to look 
-up the appropriate formatter for the quantity and apply it. To use this system, you need to
-install it into the global locale.  You probably want to adjust the format to your tastes.  
-Here's an example of setting up angles to be output in degrees by default:
+Formatters are nice, but keeping track of them is often a bother. Dim taps into the facet/locale system of 
+`std::iostream` to make these formatters available transparently to stream operators. The facet allows 
+`operator<<` and `operator>>` to look up the appropriate formatter for the quantity and apply it. To use 
+this system, you need to install the Dim facet into the global locale.  You also will probably want to adjust 
+the format to your taste.  Here's an example of setting up angles to be output in degrees by default:
 ```
 #include <dim/si.hpp>
 namespace si = ::dim::si;
@@ -320,13 +316,13 @@ for our case? Dim provides fallback options in these cases described below.
 
 Printing takes advantage of the fact that each quantity can only have one default way to print it.
 Thus the facet maintains a map indexed by the quantity's dimension to the formatter to use.  When
-you call `facet->output_formatter()`, you are replacing the default format.  If you want to override
-the format only in certain places, you can construct and use the formatter as shown above.
+you call `facet->output_formatter()`, you are replacing the default format.  (If you want to override
+the format only in certain places, you can construct and use the formatter as shown above.)
 
 ### Basic Format
 But what if there's no format? Well, Dim has a basic fallback output format. A symbol is associated
-with each dimension so a unit symbol can be reconstructed. This is correct, but it isn't pretty.
-Thus suppose we had a torque we wanted to print:
+with each dimension in a system, so a unit symbol can be reconstructed. This is correct, but it isn't 
+usually very pretty. Thus suppose we had a torque we wanted to print:
 ```
 si::Torque T = 3_N * 2_m / 1.2_rad;
 std::cout << "Torque is " << T << "\n";
@@ -336,15 +332,15 @@ If there's nothing in the facet about `si::Torque`, the output will be "5_rad^-1
 ## Parsing Quantities
 
 Input is a different beast. One interesting part is that because Dim is strongly typed, we know
-the desired destination quantity type.  Really we need to see that the string can be parsed to a 
+the desired destination quantity type.  We need to see that the input string can be parsed to a 
 matching dimension. For example,
 ```
 si::Angle the_angle;
 std::cout << "Enter an angle: ";
 std::cin >> the_angle;
 ```
-If the user enters is `3 rad`, all is well. If the enters `12 ft`, we've got a problem.  Dim doesn't
-use exceptions. Instead `the_angle` will be set to a "bad" quantity -- a silent `NaN`.  The test
+If the user enters is `3 rad`, all is well. If the enters `12 ft`, we've got a problem.  As Dim doesn't
+use exceptions, we treat incompatible input dimensions as a "bad quantity" -- a silent `NaN`.  The test
 `the_angle.is_bad()` can check that a valid input was recieved. 
 
 ### Stream-based Parsing
@@ -353,7 +349,7 @@ since we know the destination quantity type, it looks up the map for that type. 
 then indexed by the symbol string. If an exact string match is found, that formatter is used to parse
 the quantity.  This provides a flexible system where you can provide formatters for whatever 
 domain-specific conventions you work with.  For instance, here's the default map that Dim ships 
-with for lengths:
+with for length:
 ```
     static const format_map<Length> s_known {
         {"in",   formatter<Length>("in", inch) },
@@ -369,10 +365,9 @@ with for lengths:
     };
 ```
 Notice that `m` and `cm` and so on aren't there because they are handled by the fallback parser
-below. (SI units are generally easy to parse). Instead, here are conventions suggested by NIST SP 811.
-But suppose for your domain, you wanted to accept "feet" for "foot" and "nm" for nautical mile (yikes,
-symbol clash with nanometer -- but you know what your users expect).  You could add these to the 
-facet via
+below (SI units are generally easy to parse). Instead, what's here are the conventions suggested by NIST SP 
+811. But suppose for your domain, you wanted to accept "feet" for "foot" and "nm" for nautical mile (yes, that's
+a symbol clash with nanometer -- but you know what your users expect).  You could add these to the facet via
 ```
 auto* facet = si::system::make_default_facet(); // obtain the default si facet    
 facet->input_formatter(formatter<Length>("feet", foot));
@@ -387,7 +382,7 @@ parser understands the SI prefixes and symbols defined in NIST SP 811. The parse
 `_`, `*` and space as multiplication, `/` as division, and `^` as exponentiation, as well as
 parentheses.
 
-The symbol tables differ slightly from the standard:
+The symbol tables differ very slightly from the standard so that only ASCII characters are used.
 
 | Prefix | Magnitude |
 |--------|-----------|
@@ -411,7 +406,7 @@ The symbol tables differ slightly from the standard:
     | k | 1e3 |
     | h | 1e2 |
     
-where mu (&#956;) has been replaced by "u".  The unit symbols are 
+Note mu (&#956;) has been replaced by "u". 
 
 |Symbol|Name|
 |------|----|
@@ -447,17 +442,17 @@ where mu (&#956;) has been replaced by "u".  The unit symbols are
 | a    | acre|
 | bar  | bar |
 
-where Omega (&#937;) has been replaced by "R". 
+Note Omega (&#937;) has been replaced by "R". 
 
 # Advanced Topics
 
 ## Metaprograming with Quantities
-One pitfall for C++ class templates is that each instantiation is a totally separate class at 
-run time from every other one.  Thus `si::Length` and `si::Time` are no more related than
-`std::string` and `double`.  This is often painful for code that wants to handle these types in
-a uniform way.  To aid with this, Dim provides a macro `DIM_IS_QUANTITY` that works with the C++ 
-Substitution Failure is not an Error (SFINAE -- this language has the *worst* jargon).  It works 
-like this
+One pitfall for C++ class templates is that each instantiation is a totally independent class at 
+run time with no relation to any other instantiation.  Thus `si::Length` and `si::Time` are no 
+more related than `std::string` and `double`.  This is often painful for code that wants to handle 
+these types in a uniform way.  To aid with this, Dim provides a macro `DIM_IS_QUANTITY` that works 
+with the C++ Substitution Failure is not an Error (SFINAE -- this language has the *worst* jargon).  
+It works like this
 ```
 template<class Q, DIM_IS_QUANTITY(Q)>
 char* print_quantity(char* o_quant_str, Q const& q)
@@ -468,7 +463,7 @@ char* print_quantity(char* o_quant_str, Q const& q)
 }
 ```
 The print_quantity function template is thus only defined for quantity types, where we know `q` 
-will have a member `value`.
+will have a member `value`. A C++17 `if constexpr` functionality may be added at a later date.
 
 
 ## Micro-Optimization for Nondimensionalization
@@ -478,7 +473,7 @@ all the performance you can while still using the facilities of Dim to catch err
 here are three ways to nondimensionalize a length:
 ```
 Length L = 2_m;
-double v1 = L.value; // 1
+double v1 = dimensionless_cast(L); // 1
 double v1 = L / meter; // 2
 double v2 = L / meter_; // 3
 ```
@@ -493,8 +488,8 @@ at runtime, (1) and (3) produce the same assembly code.
 
 Dim does not support fractional dimension like "m^1/2" that are used in some domains.  Supporting
 these really complicates the metaprogramming and makes your program compile slower.  You can typically
-work with e.g. squared quantities to obtain integer dimensions. (For fractal dimensions, why are 
-you using this library at all?) If this is too much of a burden, the 
+work with e.g. squared quantities to obtain integer dimensions. (If your application has fractal 
+dimensions, why are you using this library at all?) If this is too much of a burden, the 
 [boost::units](https://www.boost.org/doc/libs/1_80_0/doc/html/boost_units.html)
 library provides this feature.
 
@@ -503,7 +498,7 @@ library provides this feature.
 
 When `__FAST_MATH__` is defined, Dim uses an expanded notion of a "bad" floating point number that 
 includes numbers that are Inf, -Inf, and NaN in IEEE 754 floating point. The rationale is that on 
-embedded systems (ARM in particular), you need to compile `-Ofast` to obtain access to SIMD 
+embedded systems (ARM in particular), you often must compile with `-Ofast` to obtain access to SIMD 
 instructions. When you do this, `std::isnan()` always evaluates to false.  Dim uses its own 
 `is_bad` function to work around this. The trade-off is that algorithms relying on correct 
 behavior with Inf will see values as "bad". But such algorithms are usually limited to specialized 
