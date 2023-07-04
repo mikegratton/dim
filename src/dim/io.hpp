@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <cstring>
 #include <limits>
-#include <map>
 
 #include "base.hpp"
 #include "dynamic_quantity.hpp"
@@ -11,7 +10,7 @@
 
 namespace dim {
 
-#define DIM_MAX_SYMBOL 64
+constexpr int kMaxSymbol = 32;
 
 /**
  * @brief Basic formatting of a quantity's unit. Lowest level version
@@ -70,7 +69,7 @@ class formatted_quantity {
    private:
     const char* m_symbol;
     scalar m_value;
-    char m_dyn_symbol[DIM_MAX_SYMBOL];
+    char m_dyn_symbol[kMaxSymbol];
 };
 
 /**
@@ -87,89 +86,59 @@ class formatted_quantity {
  */
 template <class Q, DIM_IS_QUANTITY(Q)>
 struct formatter : public detail::container_base {
-    using scalar = typename Q::scalar;
-    const char* symbol;
+    using quantity = Q;
+    using scalar = typename quantity::scalar;
 
-    formatter(const char* symbol_, Q const& scale_, Q const& add_ = Q(0)) : symbol(symbol_), scale(scale_), add(add_) {}
+    formatter() : scale(Q(1.0)), add(Q(0.0)) { sym[0] = 0; }
+
+    formatter(const char* symbol_, Q const& scale_, Q const& add_ = Q(0)) : scale(scale_), add(add_)
+    {
+        strncpy(sym, symbol_, kMaxSymbol);
+    }
 
     /// Obtain the scalar value of q nondimensionalized by the transform in this formatter
     scalar non_dim(Q const& q) const { return (q - add) / scale; }
 
     /// Perform output formatting
-    formatted_quantity<scalar> output(Q const& q) const { return formatted_quantity<scalar>(symbol, non_dim(q)); }
+    formatted_quantity<scalar> output(Q const& q) const { return formatted_quantity<scalar>(symbol(), non_dim(q)); }
 
     /// Perform input formatting (affine transform)
     Q input(scalar const& s) const { return s * scale + add; }
 
     static long index() { return ::dim::index<typename Q::unit>(); }
 
+    char const* symbol() const { return sym; }
+
    private:
+    char sym[kMaxSymbol];
     const Q scale;
     const Q add;
 };
-
-/// Map from char to a formatter object (for input)
-template <class Q, DIM_IS_QUANTITY(Q)>
-using format_map = std::map<const char*, formatter<Q>, detail::char_less>;
-
-/**
- * @brief Create template specializations of this function for your system to control the
- * default formats available for input
- */
-template <class Q, DIM_IS_QUANTITY(Q)>
-format_map<Q> const& get_default_format()
-{
-    static const format_map<Q> EMPTY;
-    return EMPTY;
-}
 
 /// Format dynamic_quantities
 template <class S, class System>
 struct dynamic_formatter : public detail::container_base {
     using scalar = S;
     using dynamic = dynamic_quantity<S, System>;
-    const char* symbol;
+
     dynamic_formatter(const char* symbol_, dynamic const& scale_, dynamic const& add_ = dynamic::bad())
-        : symbol(symbol_), scale(scale_), add(add_)
+        : scale(scale_), add(add_)
     {
+        strncpy(sym, symbol_, kMaxSymbol);
         if (add.is_bad()) { add = dynamic(0, scale.unit); }
     }
+    dynamic_formatter() = default;
+
     scalar non_dim(dynamic const& q) const { return dimensionless_cast((q + add) / scale); }
     formatted_quantity<scalar> output(dynamic const& q) const { return formatted_quantity<scalar>(symbol, non_dim(q)); }
     dynamic input(scalar const& s) const { return dynamic(scale.value * s, scale.unit) + add; }
     long index() { return ::dim::index(scale.unit); }
+    char const* symbol() const { return sym; }
 
    private:
+    char sym[kMaxSymbol];
     const dynamic scale;
     const dynamic add;
 };
 
-/// Map from char to a formatter object (for input)
-template <class S, class System>
-using dynamic_format_map = std::map<const char*, dynamic_formatter<S, System>, detail::char_less>;
-
-/**
- * @brief Default input parsing for quantities.
- * Returns false if unit_str is wrong for Q.
- * Works in two phases:
- * (1) Look up unit_str in unit_map (backed by the default_format map if not specified)
- * (2) If not found, use Q::system's dynamic quantity parser
- */
-template <class Q, DIM_IS_QUANTITY(Q)>
-bool parse_quantity(Q& o_q, double value, const char* unit_str, format_map<Q> const& unit_map = get_default_format<Q>())
-{
-    auto it = unit_map.find(unit_str);
-    if (it != unit_map.end()) {
-        o_q = it->second.input(value);
-        return true;
-    }
-    using scalar = typename Q::scalar;
-    scalar scale;
-    if (detail::parse_unit_dynamic<typename Q::unit, scalar>(scale, unit_str)) {
-        o_q = Q(value * scale);
-        return true;
-    }
-    o_q = Q::bad_quantity();
-    return false;
-}
 }  // end of namespace dim

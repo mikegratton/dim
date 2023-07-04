@@ -1,6 +1,7 @@
 
-set(source 
+set(source
     dim/io_stream.cpp
+    dim/format_map.cpp
     dim/si/si_io.cpp
     dim/si/si_io_stream.cpp
     dim/si/quantity.lex.cpp
@@ -9,23 +10,21 @@ set(source
     dim/si/definition.cpp
 )
 
-if (BUILD_SHARED_LIBS)
-    add_library(dim SHARED ${source} )
+if(BUILD_SHARED_LIBS)
+    add_library(dim SHARED ${source})
 else()
-    add_library(dim STATIC ${source} )
+    add_library(dim STATIC ${source})
 endif()
 
-
 target_include_directories(dim
-   INTERFACE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-      $<INSTALL_INTERFACE:include>
-   PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}
-   )
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 set_target_properties(dim PROPERTIES CXX_STANDARD 11)
 
-
-install(DIRECTORY dim TYPE INCLUDE 
+install(DIRECTORY dim TYPE INCLUDE
     FILES_MATCHING PATTERN *.hpp)
