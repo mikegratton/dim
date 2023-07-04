@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "dim/base.hpp"
 #include "dynamic_quantity.hpp"
 #include "format_map.hpp"
 #include "io.hpp"
@@ -18,6 +19,20 @@ std::unique_ptr<T> make_unique(Args&&... args)
 #endif
 
 namespace dim {
+
+template <class Map>
+std::unique_ptr<Map> make_unique_map()
+{
+    return std::unique_ptr<Map>(new Map());
+}
+
+template <class Map>
+std::unique_ptr<Map> make_unique_map(Map const& f)
+{
+    std::unique_ptr<Map> mapPtr = make_unique_map<Map>();
+    *mapPtr = f;
+    return mapPtr;
+}
 
 /// An iostream facet for formatting quantities. This is typically used by operator<< and operator>>,
 /// but can be adjusted to change how quantities are formated in a program
@@ -48,7 +63,7 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     formatted_quantity<typename Q::scalar> format(Q const& q) const
     {
-        auto const* base = output_symbol.get(formatter<Q>::index());
+        auto const* base = output_symbol.get(Q::index());
         if (base) { return static_cast<formatter<Q> const*>(base)->output(q); }
         formatted_quantity<typename Q::scalar> fq(nullptr, dimensionless_cast(q));
         bool spaceit = false;
@@ -77,7 +92,7 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     Q format(typename Q::scalar const& s, const char* symbol) const
     {
-        auto const* base = input_symbol.get(formatter<Q>::index());
+        auto const* base = input_symbol.get(Q::index());
         if (base) {
             auto const* formatter = static_cast<format_map<Q> const*>(base)->get(symbol);
             if (formatter) { return formatter->input(s); }
@@ -117,13 +132,26 @@ class quantity_facet : public std::locale::facet {
     }
 
     /**
+     * @brief Attach a new output formatter for Q, replacing the existing formatter
+     *
+     * @param symbol Symbol for format
+     * @param scale  One unit of symbol is this much of Q
+     * @param add    (For affine maps, defaults to zero)
+     */
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    void output_formatter(char const* symbol, Q scale, Q add = Q(0.0))
+    {
+        output_formatter(formatter<Q>(symbol, scale, add));
+    }
+
+    /**
      * @brief Attach a new output formatter for dynamic quantities (all of them)
      * @param f The new output formatter.
      */
     template <class S, class System>
     void output_formatter(dynamic_formatter<S, System> const& f)
     {
-        dynamic_output_symbol.set(f.index(), std::make_unique<dynamic_formatter<S, System>>(f));
+        dynamic_output_symbol.set(f.index(), make_unique_map<dynamic_formatter<S, System>>(f));
     }
 
     /**
@@ -138,7 +166,7 @@ class quantity_facet : public std::locale::facet {
         if (map) {
             map->set(f);
         } else {
-            auto new_map = std::make_unique<format_map<Q>>();
+            auto new_map = make_unique_map<format_map<Q>>();
             new_map->set(f);
             input_symbol.set(f.index(), std::move(new_map));
         }
@@ -150,7 +178,7 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     void input_formatter(format_map<Q> const& map)
     {
-        input_symbol.set(formatter<Q>::index(), std::make_unique<format_map<Q>>(map));
+        input_symbol.set(Q::index(), make_unique_map<format_map<Q>>(map));
     }
 
     /**
@@ -166,7 +194,7 @@ class quantity_facet : public std::locale::facet {
         if (map) {
             map->set(f);
         } else {
-            auto new_map = std::make_unique<dynamic_format_map<S, System>>();
+            auto new_map = make_unique_map<dynamic_format_map<S, System>>();
             new_map->set(f);
             dynamic_input_symbol.set(f.index(), std::move(new_map));
         }
@@ -178,7 +206,7 @@ class quantity_facet : public std::locale::facet {
     template <class S, class System>
     void input_formatter(dynamic_format_map<S, System> const& map)
     {
-        dynamic_input_symbol.set(System::id, std::make_unique<dynamic_format_map<S, System>>(map));
+        dynamic_input_symbol.set(System::id, make_unique_map<dynamic_format_map<S, System>>(map));
     }
 
     /**
@@ -187,7 +215,7 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     void clear_input_formatter()
     {
-        input_symbol.set(formatter<Q>::index(), nullptr);
+        input_symbol.erase(Q::index());
     }
 
     /**
@@ -196,7 +224,7 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     void clear_output_formatter()
     {
-        output_symbol.set(formatter<Q>::index(), nullptr);
+        output_symbol.erase(Q::index());
     }
 
     /**
@@ -290,10 +318,8 @@ std::istream& operator>>(std::istream& is, Q& out_q)
     }
     if (std::has_facet<quantity_facet>(is.getloc())) {
         out_q = std::use_facet<quantity_facet>(is.getloc()).format<Q>(value, unit_start);
-        // std::cout << "Using facet for " << unit_start;
         if (out_q.is_bad()) { is.setstate(std::ios_base::failbit); }
     } else if (!parse_quantity<Q>(out_q, value, unit_start)) {
-        // std::cout << "Parse failed for " << unit_start;
         is.setstate(std::ios_base::failbit);
     }
     return is;

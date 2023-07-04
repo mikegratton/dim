@@ -267,41 +267,43 @@ format_map<Torque> const& get_default_format<Torque>() {
 // Use the Bison/Flex parser. The includes for these are fairly involved,
 // so we put them down here to avoid polluting anything else.
 
+// clang-format off
 // SERIOUSLY??? Flex needs you to tell it this. Include order also matters
 #define YYSTYPE QUANTITYSTYPE
-#include "quantity.lex.hpp"
 #include "quantity.tab.hpp"
+#include "quantity.lex.hpp"
 
 namespace dim {
 namespace detail {
-template <>
-::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend)
-{
-    // Construct the flex scanner for re-use throughout the program
+template<>
+::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend) {
+    // Construct the flex scanner for re-use throughout the program   
     static thread_local yyscan_t s_scanner;
     static thread_local bool s_init = false;
     if (s_init == false) {
         quantitylex_init(&s_scanner);
         s_init = true;
     }
-
-    ::dim::si::dynamic_quantity result;  // Our return value
-
+    
+    ::dim::si::dynamic_quantity result; // Our return value
+    
     // Make a buffer with the text to scan
-    YY_BUFFER_STATE buf;
+    YY_BUFFER_STATE buf;    
     if (nend == -1) {
         buf = quantity_scan_string(unit_str, s_scanner);
     } else {
         buf = quantity_scan_bytes(unit_str, nend, s_scanner);
     }
-
+    
     // Scan it
-    int r = quantityparse(s_scanner, &result);
-    if (r != 0) { result = ::dim::si::dynamic_quantity::bad_quantity(); }
-
+    int r = quantityparse(s_scanner, &result); 
+    if (r != 0) {        
+        result = ::dim::si::dynamic_quantity::bad_quantity();
+    }
+    
     // Clean up
-    quantity_delete_buffer(buf, s_scanner);
+    quantity_delete_buffer(buf, s_scanner);    
     return result;
 }
-}  // namespace detail
-}  // namespace dim
+}
+}

@@ -54,7 +54,7 @@ struct system_tag { };
 #define DIM_IS_SCALAR(S) typename std::enable_if_t<std::is_arithmetic<S>::value>* = nullptr
 
 // Macros for dimension list
-#define DIM_ARRAY int Length, int Time, int Mass, int Angle, int Temperature, int Amount, int Current, int Luminosity
+#define DIM_ARRAY int8_t Length, int8_t Time, int8_t Mass, int8_t Angle, int8_t Temperature, int8_t Amount, int8_t Current, int8_t Luminosity
 #define DIM_D_ARRAY Length, Time, Mass, Angle, Temperature, Amount, Current, Luminosity
 
 /*
@@ -121,7 +121,23 @@ struct unit : public unit_base<unit<DIM_D_ARRAY, System>> {
     {
         return Luminosity;
     }
+
+    /// Obtain a numeric index that represents the unit type.
+    /// NOTE this does not distinguish between systems
+    static constexpr uint64_t index()
+    {
+        return 
+          static_cast<uint64_t>((uint8_t) Length) 
+        | static_cast<uint64_t>((uint8_t) Time)        << 8 
+        | static_cast<uint64_t>((uint8_t) Mass)        << 16 
+        | static_cast<uint64_t>((uint8_t) Angle)       << 24 
+        | static_cast<uint64_t>((uint8_t) Temperature) << 32
+        | static_cast<uint64_t>((uint8_t) Amount)      << 40 
+        | static_cast<uint64_t>((uint8_t) Current)     << 48 
+        | static_cast<uint64_t>((uint8_t) Luminosity)  << 56;
+    }
 };
+
 
 /// Obtain the inverse of U (i.e. if U is L, inverse_t<U> is 1/L)
 template<class U, DIM_IS_UNIT(U)>
@@ -343,6 +359,10 @@ public:
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
     }
+
+    /// Obtain a numeric index that represents the unit type.
+    /// NOTE this does not distinguish between systems
+    static constexpr uint64_t index() { return unit::index(); }
     
     /// Obtain a bad quantity with these units.
     static constexpr type bad_quantity() noexcept { return type(bad_double__()); }

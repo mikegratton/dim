@@ -10,6 +10,9 @@
 
 namespace dim {
 
+/**
+ * @brief A specialized flat map of formatters sorted by symbol name.
+ */
 template <class SymbolFormat>
 class format_symbol_map : public detail::container_base {
    protected:
@@ -18,8 +21,11 @@ class format_symbol_map : public detail::container_base {
     ~format_symbol_map() { delete[] map; }
     format_symbol_map(format_symbol_map const& other) { *this = other; }
 
+    /**
+     * @brief Construct a map like `format_symbol_map<formatter<dim>>{{"in", si::inch}, {"yd", si::yard}}`;
+     */
     format_symbol_map(std::initializer_list<SymbolFormat> init)
-        : mapCapacity(init.size()), mapSize(init.size()), map(new SymbolFormat[mapCapacity])
+        : mapCapacity(std::max<int>(1, init.size())), mapSize(init.size()), map(new SymbolFormat[mapCapacity])
     {
         unsigned long i = 0;
         for (auto const& format : init) { memcpy(&map[i++], &format, sizeof(SymbolFormat)); }
@@ -36,12 +42,18 @@ class format_symbol_map : public detail::container_base {
         return *this;
     }
 
+    /**
+     * @brief Add or modify the formatter for a symbol
+     */
     template <class Q, DIM_IS_QUANTITY(Q)>
     void set(const char* symbol_, Q const& scale_, Q const& add_ = Q(0))
     {
         set(SymbolFormat(symbol_, scale_, add_));
     }
 
+    /**
+     * @brief Add or modify the formatter for a symbol
+     */
     void set(SymbolFormat format)
     {
         auto* found = (SymbolFormat*)bsearch(format.symbol(), map, mapSize, sizeof(SymbolFormat), map_compare);
@@ -61,14 +73,21 @@ class format_symbol_map : public detail::container_base {
         qsort(map, mapSize, sizeof(SymbolFormat), map_sort);
     }
 
+    /**
+     * @brief Obtain the formatter for a symbol. Returns nullptr if not found
+     */
     SymbolFormat const* get(char const* symbol) const
     {
         return static_cast<SymbolFormat const*>(bsearch(symbol, map, mapSize, sizeof(SymbolFormat), map_compare));
     }
 
+    /**
+     * @brief Get the number of entries in the map
+     */
     unsigned long size() const { return mapSize; }
 
    protected:
+    /// bsearch() comparison function
     static int map_compare(void const* vkey, void const* velement)
     {
         char const* key = (char const*)vkey;
@@ -76,6 +95,7 @@ class format_symbol_map : public detail::container_base {
         return strncmp(key, element->symbol(), kMaxSymbol);
     }
 
+    /// qsort() comparison function
     static int map_sort(void const* velement1, void const* velement2)
     {
         SymbolFormat const* element1 = (SymbolFormat const*)velement1;
@@ -88,6 +108,9 @@ class format_symbol_map : public detail::container_base {
     SymbolFormat* map;
 };
 
+/**
+ * @brief A flat map from a unit index to a type-erased container_base object
+ */
 class format_index_map : public detail::container_base {
    protected:
     struct Node {
@@ -100,18 +123,41 @@ class format_index_map : public detail::container_base {
     ~format_index_map() { delete[] map; }
     format_index_map(format_index_map const& other) { *this = other; }
 
+    /**
+     * @brief Add or modify the entry for index_
+     */
     void set(long index_, std::unique_ptr<detail::container_base> payload_);
 
+    /**
+     * @brief Access the entry for index. Returns nullptr if not found
+     */
     detail::container_base const* get(long index) const;
 
+    /**
+     * @brief Access the entry for index. Returns nullptr if not found
+     */
     detail::container_base* get(long index);
 
+    /**
+     * @brief Remove the element with the matching index (if it exists)
+     */
+    void erase(long index);
+
+    /**
+     * @brief Get the number of entries in the map
+     */
     unsigned long size() const { return mapSize; }
 
+    /**
+     * @brief Erase all map entries
+     */
     void clear();
 
    protected:
+    /// bsearch() comparison function
     static int map_compare(void const* vkey, void const* velement);
+
+    /// qsort() comparison function
     static int map_sort(void const* velement1, void const* velement2);
 
     unsigned long mapCapacity;
@@ -119,6 +165,7 @@ class format_index_map : public detail::container_base {
     Node* map;
 };
 
+/// Format maps for static quantity types
 template <class Q, DIM_IS_QUANTITY(Q)>
 using format_map = format_symbol_map<formatter<Q>>;
 
@@ -133,7 +180,7 @@ format_map<Q> const& get_default_format()
     return EMPTY;
 }
 
-/// Map from char to a formatter object (for input)
+/// Format maps for dynamic quantity types
 template <class S, class System>
 using dynamic_format_map = format_symbol_map<dynamic_formatter<S, System>>;
 

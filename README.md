@@ -37,6 +37,23 @@ uses the iostream facet/locale system to stash preferred formats and have them b
 wherever `operator<<` is used.  However, for programs that do not wish to use iostreams, Dim 
 provides a simple system based on c-strings for IO.
 
+## History
+
+### v1.1
+
+Bug fixes:
+* Fixed issue with compilation in C++11 mode
+
+Features:
+* Use a custom flat map for formatters. These make setting and changing formatters less verbose,
+as well as improving runtime performance.
+* Add unit index to quantity and unit. This is a 64-bit number that uniquely represents each unit.
+
+
+### v1.0
+
+Initial release.
+
 ## Quickstart
 Here's a basic annotated program
 ```

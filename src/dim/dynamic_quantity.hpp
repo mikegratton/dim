@@ -19,25 +19,17 @@ constexpr dynamic_unit toDynamic()
 }
 
 /// Obtains a unique index for a dynamic_quantity based on its dimension
-inline int64_t index(dynamic_unit const& u)
+inline uint64_t index(dynamic_unit const& u)
 {
-    int64_t value = u[0];
-    value += static_cast<int64_t>(u[1]) << 8;
-    value += static_cast<int64_t>(u[2]) << 16;
-    value += static_cast<int64_t>(u[3]) << 24;
-    value += static_cast<int64_t>(u[4]) << 32;
-    value += static_cast<int64_t>(u[5]) << 40;
-    value += static_cast<int64_t>(u[6]) << 48;
-    value += static_cast<int64_t>(u[7]) << 56;
+    uint64_t value = u[0];
+    value += static_cast<uint64_t>(u[1]) << 8;
+    value += static_cast<uint64_t>(u[2]) << 16;
+    value += static_cast<uint64_t>(u[3]) << 24;
+    value += static_cast<uint64_t>(u[4]) << 32;
+    value += static_cast<uint64_t>(u[5]) << 40;
+    value += static_cast<uint64_t>(u[6]) << 48;
+    value += static_cast<uint64_t>(u[7]) << 56;
     return value;
-    // return *reinterpret_cast<int64_t const*>(&u);
-}
-
-/// Obtain the unique index for a compile-type unit U
-template <class U, DIM_IS_UNIT(U)>
-int64_t index()
-{
-    return index(toDynamic<U>());
 }
 
 /// Compute the inverse of a dynamic unit

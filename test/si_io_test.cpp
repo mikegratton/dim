@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "dim/si.hpp"
+#include "dim/si/definition.hpp"
 #include "doctest.h"
 
 using namespace dim::si;
@@ -158,7 +159,10 @@ TEST_CASE("OStream")
     ss << 5.0_m;
     CHECK(ss.str() == "5_m");
     ss.str("");
-    ss << 5.0_s;
+    si::Time time = 5.0_s;
+    CHECK(si::Time::index() == time.index());
+    CHECK(si::Time::index() != si::Temperature::index());
+    ss << time;
     CHECK(ss.str() == "5_s");
 
     ss.str("");
