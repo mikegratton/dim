@@ -1,39 +1,35 @@
-State 13 conflicts: 1 shift/reduce
-State 14 conflicts: 1 shift/reduce
-State 17 conflicts: 1 shift/reduce
-
-
 Grammar
 
     0 $accept: output $end
 
     1 output: unit_group
-    2       | error
+    2       | unit_group BAD_INPUT
+    3       | BAD_INPUT unit_group
+    4       | BAD_INPUT
+    5       | error
 
-    3 unit_group: OPEN_PARENS unit_group CLOSE_PARENS
-    4           | unit_group EXPONENT exponent_group
-    5           | unit_group DIVIDE unit_group
-    6           | unit_group MULTIPLY unit_group
-    7           | UNIT
-    8           | unit_group BAD_INPUT
+    6 unit_group: OPEN_PARENS unit_group CLOSE_PARENS
+    7           | unit_group EXPONENT exponent_group
+    8           | unit_group DIVIDE unit_group
+    9           | unit_group MULTIPLY unit_group
+   10           | UNIT
 
-    9 exponent_group: OPEN_PARENS exponent_group CLOSE_PARENS
-   10               | INTEGER
-   11               | exponent_group BAD_INPUT
+   11 exponent_group: OPEN_PARENS exponent_group CLOSE_PARENS
+   12               | INTEGER
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    error (256) 2
-    MULTIPLY (258) 6
-    DIVIDE (259) 5
-    EXPONENT (260) 4
-    OPEN_PARENS (261) 3 9
-    CLOSE_PARENS (262) 3 9
-    BAD_INPUT (263) 8 11
-    INTEGER <integer> (264) 10
-    UNIT <unit> (265) 7
+    error (256) 5
+    MULTIPLY (258) 9
+    DIVIDE (259) 8
+    EXPONENT (260) 7
+    OPEN_PARENS (261) 6 11
+    CLOSE_PARENS (262) 6 11
+    INTEGER <integer> (263) 12
+    UNIT <unit> (264) 10
+    BAD_INPUT (265) 2 3 4
 
 
 Nonterminals, with rules where they appear
@@ -41,257 +37,266 @@ Nonterminals, with rules where they appear
     $accept (11)
         on left: 0
     output <quantity> (12)
-        on left: 1 2
+        on left: 1 2 3 4 5
         on right: 0
     unit_group <quantity> (13)
-        on left: 3 4 5 6 7 8
-        on right: 1 3 4 5 6 8
+        on left: 6 7 8 9 10
+        on right: 1 2 3 6 7 8 9
     exponent_group <integer> (14)
-        on left: 9 10 11
-        on right: 4 9 11
+        on left: 11 12
+        on right: 7 11
 
 
 State 0
 
-    0 $accept: . output $end
-    1 output: . unit_group
-    2       | . error
-    3 unit_group: . OPEN_PARENS unit_group CLOSE_PARENS
-    4           | . unit_group EXPONENT exponent_group
-    5           | . unit_group DIVIDE unit_group
-    6           | . unit_group MULTIPLY unit_group
-    7           | . UNIT
-    8           | . unit_group BAD_INPUT
+    0 $accept: • output $end
+    1 output: • unit_group
+    2       | • unit_group BAD_INPUT
+    3       | • BAD_INPUT unit_group
+    4       | • BAD_INPUT
+    5       | • error
+    6 unit_group: • OPEN_PARENS unit_group CLOSE_PARENS
+    7           | • unit_group EXPONENT exponent_group
+    8           | • unit_group DIVIDE unit_group
+    9           | • unit_group MULTIPLY unit_group
+   10           | • UNIT
 
     error        shift, and go to state 1
     OPEN_PARENS  shift, and go to state 2
     UNIT         shift, and go to state 3
+    BAD_INPUT    shift, and go to state 4
 
-    output      go to state 4
-    unit_group  go to state 5
+    output      go to state 5
+    unit_group  go to state 6
 
 
 State 1
 
-    2 output: error .
+    5 output: error •
 
-    $default  reduce using rule 2 (output)
+    $default  reduce using rule 5 (output)
 
 
 State 2
 
-    3 unit_group: . OPEN_PARENS unit_group CLOSE_PARENS
-    3           | OPEN_PARENS . unit_group CLOSE_PARENS
-    4           | . unit_group EXPONENT exponent_group
-    5           | . unit_group DIVIDE unit_group
-    6           | . unit_group MULTIPLY unit_group
-    7           | . UNIT
-    8           | . unit_group BAD_INPUT
+    6 unit_group: • OPEN_PARENS unit_group CLOSE_PARENS
+    6           | OPEN_PARENS • unit_group CLOSE_PARENS
+    7           | • unit_group EXPONENT exponent_group
+    8           | • unit_group DIVIDE unit_group
+    9           | • unit_group MULTIPLY unit_group
+   10           | • UNIT
 
     OPEN_PARENS  shift, and go to state 2
     UNIT         shift, and go to state 3
 
-    unit_group  go to state 6
+    unit_group  go to state 7
 
 
 State 3
 
-    7 unit_group: UNIT .
+   10 unit_group: UNIT •
 
-    $default  reduce using rule 7 (unit_group)
+    $default  reduce using rule 10 (unit_group)
 
 
 State 4
 
-    0 $accept: output . $end
+    3 output: BAD_INPUT • unit_group
+    4       | BAD_INPUT •  [$end]
+    6 unit_group: • OPEN_PARENS unit_group CLOSE_PARENS
+    7           | • unit_group EXPONENT exponent_group
+    8           | • unit_group DIVIDE unit_group
+    9           | • unit_group MULTIPLY unit_group
+   10           | • UNIT
 
-    $end  shift, and go to state 7
+    OPEN_PARENS  shift, and go to state 2
+    UNIT         shift, and go to state 3
+
+    $default  reduce using rule 4 (output)
+
+    unit_group  go to state 8
 
 
 State 5
 
-    1 output: unit_group .  [$end]
-    4 unit_group: unit_group . EXPONENT exponent_group
-    5           | unit_group . DIVIDE unit_group
-    6           | unit_group . MULTIPLY unit_group
-    8           | unit_group . BAD_INPUT
+    0 $accept: output • $end
 
-    MULTIPLY   shift, and go to state 8
-    DIVIDE     shift, and go to state 9
-    EXPONENT   shift, and go to state 10
-    BAD_INPUT  shift, and go to state 11
-
-    $default  reduce using rule 1 (output)
+    $end  shift, and go to state 9
 
 
 State 6
 
-    3 unit_group: OPEN_PARENS unit_group . CLOSE_PARENS
-    4           | unit_group . EXPONENT exponent_group
-    5           | unit_group . DIVIDE unit_group
-    6           | unit_group . MULTIPLY unit_group
-    8           | unit_group . BAD_INPUT
+    1 output: unit_group •  [$end]
+    2       | unit_group • BAD_INPUT
+    7 unit_group: unit_group • EXPONENT exponent_group
+    8           | unit_group • DIVIDE unit_group
+    9           | unit_group • MULTIPLY unit_group
 
-    MULTIPLY      shift, and go to state 8
-    DIVIDE        shift, and go to state 9
-    EXPONENT      shift, and go to state 10
-    CLOSE_PARENS  shift, and go to state 12
-    BAD_INPUT     shift, and go to state 11
+    MULTIPLY   shift, and go to state 10
+    DIVIDE     shift, and go to state 11
+    EXPONENT   shift, and go to state 12
+    BAD_INPUT  shift, and go to state 13
+
+    $default  reduce using rule 1 (output)
 
 
 State 7
 
-    0 $accept: output $end .
+    6 unit_group: OPEN_PARENS unit_group • CLOSE_PARENS
+    7           | unit_group • EXPONENT exponent_group
+    8           | unit_group • DIVIDE unit_group
+    9           | unit_group • MULTIPLY unit_group
 
-    $default  accept
+    MULTIPLY      shift, and go to state 10
+    DIVIDE        shift, and go to state 11
+    EXPONENT      shift, and go to state 12
+    CLOSE_PARENS  shift, and go to state 14
 
 
 State 8
 
-    3 unit_group: . OPEN_PARENS unit_group CLOSE_PARENS
-    4           | . unit_group EXPONENT exponent_group
-    5           | . unit_group DIVIDE unit_group
-    6           | . unit_group MULTIPLY unit_group
-    6           | unit_group MULTIPLY . unit_group
-    7           | . UNIT
-    8           | . unit_group BAD_INPUT
+    3 output: BAD_INPUT unit_group •  [$end]
+    7 unit_group: unit_group • EXPONENT exponent_group
+    8           | unit_group • DIVIDE unit_group
+    9           | unit_group • MULTIPLY unit_group
 
-    OPEN_PARENS  shift, and go to state 2
-    UNIT         shift, and go to state 3
+    MULTIPLY  shift, and go to state 10
+    DIVIDE    shift, and go to state 11
+    EXPONENT  shift, and go to state 12
 
-    unit_group  go to state 13
+    $default  reduce using rule 3 (output)
 
 
 State 9
 
-    3 unit_group: . OPEN_PARENS unit_group CLOSE_PARENS
-    4           | . unit_group EXPONENT exponent_group
-    5           | . unit_group DIVIDE unit_group
-    5           | unit_group DIVIDE . unit_group
-    6           | . unit_group MULTIPLY unit_group
-    7           | . UNIT
-    8           | . unit_group BAD_INPUT
+    0 $accept: output $end •
 
-    OPEN_PARENS  shift, and go to state 2
-    UNIT         shift, and go to state 3
-
-    unit_group  go to state 14
+    $default  accept
 
 
 State 10
 
-    4 unit_group: unit_group EXPONENT . exponent_group
-    9 exponent_group: . OPEN_PARENS exponent_group CLOSE_PARENS
-   10               | . INTEGER
-   11               | . exponent_group BAD_INPUT
+    6 unit_group: • OPEN_PARENS unit_group CLOSE_PARENS
+    7           | • unit_group EXPONENT exponent_group
+    8           | • unit_group DIVIDE unit_group
+    9           | • unit_group MULTIPLY unit_group
+    9           | unit_group MULTIPLY • unit_group
+   10           | • UNIT
 
-    OPEN_PARENS  shift, and go to state 15
-    INTEGER      shift, and go to state 16
+    OPEN_PARENS  shift, and go to state 2
+    UNIT         shift, and go to state 3
 
-    exponent_group  go to state 17
+    unit_group  go to state 15
 
 
 State 11
 
-    8 unit_group: unit_group BAD_INPUT .
+    6 unit_group: • OPEN_PARENS unit_group CLOSE_PARENS
+    7           | • unit_group EXPONENT exponent_group
+    8           | • unit_group DIVIDE unit_group
+    8           | unit_group DIVIDE • unit_group
+    9           | • unit_group MULTIPLY unit_group
+   10           | • UNIT
 
-    $default  reduce using rule 8 (unit_group)
+    OPEN_PARENS  shift, and go to state 2
+    UNIT         shift, and go to state 3
+
+    unit_group  go to state 16
 
 
 State 12
 
-    3 unit_group: OPEN_PARENS unit_group CLOSE_PARENS .
+    7 unit_group: unit_group EXPONENT • exponent_group
+   11 exponent_group: • OPEN_PARENS exponent_group CLOSE_PARENS
+   12               | • INTEGER
 
-    $default  reduce using rule 3 (unit_group)
+    OPEN_PARENS  shift, and go to state 17
+    INTEGER      shift, and go to state 18
+
+    exponent_group  go to state 19
 
 
 State 13
 
-    4 unit_group: unit_group . EXPONENT exponent_group
-    5           | unit_group . DIVIDE unit_group
-    6           | unit_group . MULTIPLY unit_group
-    6           | unit_group MULTIPLY unit_group .  [$end, MULTIPLY, DIVIDE, CLOSE_PARENS, BAD_INPUT]
-    8           | unit_group . BAD_INPUT
+    2 output: unit_group BAD_INPUT •
 
-    EXPONENT   shift, and go to state 10
-    BAD_INPUT  shift, and go to state 11
-
-    BAD_INPUT  [reduce using rule 6 (unit_group)]
-    $default   reduce using rule 6 (unit_group)
-
-    Conflict between rule 6 and token MULTIPLY resolved as reduce (%left MULTIPLY).
-    Conflict between rule 6 and token DIVIDE resolved as reduce (%left DIVIDE).
-    Conflict between rule 6 and token EXPONENT resolved as shift (MULTIPLY < EXPONENT).
+    $default  reduce using rule 2 (output)
 
 
 State 14
 
-    4 unit_group: unit_group . EXPONENT exponent_group
-    5           | unit_group . DIVIDE unit_group
-    5           | unit_group DIVIDE unit_group .  [$end, MULTIPLY, DIVIDE, CLOSE_PARENS, BAD_INPUT]
-    6           | unit_group . MULTIPLY unit_group
-    8           | unit_group . BAD_INPUT
+    6 unit_group: OPEN_PARENS unit_group CLOSE_PARENS •
 
-    EXPONENT   shift, and go to state 10
-    BAD_INPUT  shift, and go to state 11
-
-    BAD_INPUT  [reduce using rule 5 (unit_group)]
-    $default   reduce using rule 5 (unit_group)
-
-    Conflict between rule 5 and token MULTIPLY resolved as reduce (%left MULTIPLY).
-    Conflict between rule 5 and token DIVIDE resolved as reduce (%left DIVIDE).
-    Conflict between rule 5 and token EXPONENT resolved as shift (DIVIDE < EXPONENT).
+    $default  reduce using rule 6 (unit_group)
 
 
 State 15
 
-    9 exponent_group: . OPEN_PARENS exponent_group CLOSE_PARENS
-    9               | OPEN_PARENS . exponent_group CLOSE_PARENS
-   10               | . INTEGER
-   11               | . exponent_group BAD_INPUT
+    7 unit_group: unit_group • EXPONENT exponent_group
+    8           | unit_group • DIVIDE unit_group
+    9           | unit_group • MULTIPLY unit_group
+    9           | unit_group MULTIPLY unit_group •  [$end, MULTIPLY, DIVIDE, CLOSE_PARENS, BAD_INPUT]
 
-    OPEN_PARENS  shift, and go to state 15
-    INTEGER      shift, and go to state 16
+    EXPONENT  shift, and go to state 12
 
-    exponent_group  go to state 18
+    $default  reduce using rule 9 (unit_group)
+
+    Conflict between rule 9 and token MULTIPLY resolved as reduce (%left MULTIPLY).
+    Conflict between rule 9 and token DIVIDE resolved as reduce (%left DIVIDE).
+    Conflict between rule 9 and token EXPONENT resolved as shift (MULTIPLY < EXPONENT).
 
 
 State 16
 
-   10 exponent_group: INTEGER .
+    7 unit_group: unit_group • EXPONENT exponent_group
+    8           | unit_group • DIVIDE unit_group
+    8           | unit_group DIVIDE unit_group •  [$end, MULTIPLY, DIVIDE, CLOSE_PARENS, BAD_INPUT]
+    9           | unit_group • MULTIPLY unit_group
 
-    $default  reduce using rule 10 (exponent_group)
+    EXPONENT  shift, and go to state 12
+
+    $default  reduce using rule 8 (unit_group)
+
+    Conflict between rule 8 and token MULTIPLY resolved as reduce (%left MULTIPLY).
+    Conflict between rule 8 and token DIVIDE resolved as reduce (%left DIVIDE).
+    Conflict between rule 8 and token EXPONENT resolved as shift (DIVIDE < EXPONENT).
 
 
 State 17
 
-    4 unit_group: unit_group EXPONENT exponent_group .  [$end, MULTIPLY, DIVIDE, EXPONENT, CLOSE_PARENS, BAD_INPUT]
-   11 exponent_group: exponent_group . BAD_INPUT
+   11 exponent_group: • OPEN_PARENS exponent_group CLOSE_PARENS
+   11               | OPEN_PARENS • exponent_group CLOSE_PARENS
+   12               | • INTEGER
 
-    BAD_INPUT  shift, and go to state 19
+    OPEN_PARENS  shift, and go to state 17
+    INTEGER      shift, and go to state 18
 
-    BAD_INPUT  [reduce using rule 4 (unit_group)]
-    $default   reduce using rule 4 (unit_group)
+    exponent_group  go to state 20
 
 
 State 18
 
-    9 exponent_group: OPEN_PARENS exponent_group . CLOSE_PARENS
-   11               | exponent_group . BAD_INPUT
+   12 exponent_group: INTEGER •
 
-    CLOSE_PARENS  shift, and go to state 20
-    BAD_INPUT     shift, and go to state 19
+    $default  reduce using rule 12 (exponent_group)
 
 
 State 19
 
-   11 exponent_group: exponent_group BAD_INPUT .
+    7 unit_group: unit_group EXPONENT exponent_group •
 
-    $default  reduce using rule 11 (exponent_group)
+    $default  reduce using rule 7 (unit_group)
 
 
 State 20
 
-    9 exponent_group: OPEN_PARENS exponent_group CLOSE_PARENS .
+   11 exponent_group: OPEN_PARENS exponent_group • CLOSE_PARENS
 
-    $default  reduce using rule 9 (exponent_group)
+    CLOSE_PARENS  shift, and go to state 21
+
+
+State 21
+
+   11 exponent_group: OPEN_PARENS exponent_group CLOSE_PARENS •
+
+    $default  reduce using rule 11 (exponent_group)

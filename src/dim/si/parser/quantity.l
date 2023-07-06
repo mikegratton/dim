@@ -32,7 +32,7 @@
 
 ")" { return CLOSE_PARENS; }
 
-[a-zA-Z]+ { yylval->unit = strdup(yytext); return UNIT; }
+[a-zA-Z]+ { strncpy(yylval->unit, yytext, sizeof(yylval->unit)); return UNIT; }
 
 . { return BAD_INPUT; }
 

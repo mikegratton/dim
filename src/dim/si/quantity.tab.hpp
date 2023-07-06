@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_QUANTITY_QUANTITY_TAB_HPP_INCLUDED
 # define YY_QUANTITY_QUANTITY_TAB_HPP_INCLUDED
@@ -52,20 +53,25 @@
 extern int quantitydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef QUANTITYTOKENTYPE
 # define QUANTITYTOKENTYPE
   enum quantitytokentype
   {
-    MULTIPLY = 258,
-    DIVIDE = 259,
-    EXPONENT = 260,
-    OPEN_PARENS = 261,
-    CLOSE_PARENS = 262,
-    BAD_INPUT = 263,
-    INTEGER = 264,
-    UNIT = 265
+    QUANTITYEMPTY = -2,
+    QUANTITYEOF = 0,               /* "end of file"  */
+    QUANTITYerror = 256,           /* error  */
+    QUANTITYUNDEF = 257,           /* "invalid token"  */
+    MULTIPLY = 258,                /* MULTIPLY  */
+    DIVIDE = 259,                  /* DIVIDE  */
+    EXPONENT = 260,                /* EXPONENT  */
+    OPEN_PARENS = 261,             /* OPEN_PARENS  */
+    CLOSE_PARENS = 262,            /* CLOSE_PARENS  */
+    INTEGER = 263,                 /* INTEGER  */
+    UNIT = 264,                    /* UNIT  */
+    BAD_INPUT = 265                /* BAD_INPUT  */
   };
+  typedef enum quantitytokentype quantitytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -75,10 +81,10 @@ union QUANTITYSTYPE
 #line 9 "quantity.y"
 
   int integer;  
-  char* unit;
+  char unit[8];
   ::dim::si::dynamic_quantity quantity;
 
-#line 82 "../quantity.tab.hpp"
+#line 88 "../quantity.tab.hpp"
 
 };
 typedef union QUANTITYSTYPE QUANTITYSTYPE;
@@ -88,6 +94,8 @@ typedef union QUANTITYSTYPE QUANTITYSTYPE;
 
 
 
+
 int quantityparse (void* scanner, ::dim::si::dynamic_quantity* result);
+
 
 #endif /* !YY_QUANTITY_QUANTITY_TAB_HPP_INCLUDED  */

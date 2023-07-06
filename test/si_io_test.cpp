@@ -13,13 +13,15 @@ void doParseCheck(char const* text, double value, dim::dynamic_unit const& unit)
 {
     char* endptr;
     double v = strtod(text, &endptr);
-
+    endptr++;
     using namespace dim::detail;
     auto q = v * dim::detail::parse_standard_rep<dim::si::system, double>(endptr, strlen(endptr));
     CHECK(q.is_bad() == false);
-    if (q.is_bad()) { std::cout << "Failed to parse " << text << std::endl; }
-    CHECK(q.value == doctest::Approx(value));
-    CHECK(dim::unitsMatch(q.unit, unit));
+    if (q.is_bad()) {
+        std::cout << "Failed to parse " << text << ", got v = " << v << ", unit = " << endptr << std::endl;
+    }
+    CHECK(q.value() == doctest::Approx(value));
+    CHECK(dim::unitsMatch(q.unit(), unit));
 }
 
 void doParseFailCheck(char const* text)

@@ -278,14 +278,16 @@ namespace detail {
 template<>
 ::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend) {
     // Construct the flex scanner for re-use throughout the program   
+    /*
     static thread_local yyscan_t s_scanner;
     static thread_local bool s_init = false;
     if (s_init == false) {
         quantitylex_init(&s_scanner);
         s_init = true;
     }
-    
-    ::dim::si::dynamic_quantity result; // Our return value
+    */
+    yyscan_t s_scanner;
+    quantitylex_init(&s_scanner);
     
     // Make a buffer with the text to scan
     YY_BUFFER_STATE buf;    
@@ -294,15 +296,16 @@ template<>
     } else {
         buf = quantity_scan_bytes(unit_str, nend, s_scanner);
     }
-    
+
     // Scan it
-    int r = quantityparse(s_scanner, &result); 
-    if (r != 0) {        
+    ::dim::si::dynamic_quantity result; // Our return value        
+    if (quantityparse(s_scanner, &result) != 0) {
         result = ::dim::si::dynamic_quantity::bad_quantity();
     }
     
     // Clean up
     quantity_delete_buffer(buf, s_scanner);    
+    quantitylex_destroy(s_scanner);
     return result;
 }
 }

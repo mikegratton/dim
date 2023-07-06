@@ -68,8 +68,8 @@ template <class U, class scalar = double, DIM_IS_UNIT(U)>
 bool parse_unit_dynamic(scalar& scale, const char* unit_str)
 {
     dynamic_quantity<scalar, typename U::system> dim = parse_standard_rep<typename U::system, scalar>(unit_str);
-    scale = dim.value;
-    return unitsMatch(dim.unit, toDynamic<U>());
+    scale = dim.value();
+    return unitsMatch(dim.unit(), toDynamic<U>());
 }
 
 }  // end of namespace detail

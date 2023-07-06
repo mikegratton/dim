@@ -1038,7 +1038,7 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 35 "quantity.l"
-{ yylval->unit = strdup(yytext); return UNIT; }
+{ strncpy(yylval->unit, yytext, sizeof(yylval->unit)); return UNIT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP

@@ -8,7 +8,7 @@
 
 %union {
   int integer;  
-  char* unit;
+  char unit[8];
   ::dim::si::dynamic_quantity quantity;
 }
 
@@ -28,9 +28,9 @@
 %token EXPONENT
 %token OPEN_PARENS
 %token CLOSE_PARENS
-%token BAD_INPUT
 %token <integer> INTEGER
 %token <unit> UNIT
+%token BAD_INPUT
 %type <integer> exponent_group
 %type <quantity> unit_group
 %type <quantity> output
@@ -43,7 +43,10 @@
 %%
 
 output :
-   unit_group { *result = $$ = $1; return 0; }
+   unit_group { *result = $$ = $1; return 0; }   
+   | unit_group BAD_INPUT { return 1; }
+   | BAD_INPUT unit_group { return 1; }
+   | BAD_INPUT { return 1; }
    | error { return 1; }
    ;
    
@@ -52,14 +55,12 @@ unit_group:
    | unit_group EXPONENT exponent_group { $$ = power($1, $3); }
    | unit_group DIVIDE unit_group { $$ = divide($1, $3); }
    | unit_group MULTIPLY unit_group { $$ = multiply($1, $3); }      
-   | UNIT { $$ = dim::si::detail::parse_known_quantity($1); }      
-   | unit_group BAD_INPUT { return 1; }
+   | UNIT { $$ = dim::si::detail::parse_known_quantity($1); }            
    ;
    
 exponent_group:
    OPEN_PARENS exponent_group CLOSE_PARENS { $$ = $2; }
-   | INTEGER         
-   | exponent_group BAD_INPUT { return 1; }
+   | INTEGER            
    ;
     
 %%
