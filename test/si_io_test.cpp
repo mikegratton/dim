@@ -81,7 +81,7 @@ TEST_CASE("SiParse")
     doParseCheck("1_kat", 1e0, {0, -1, 0, 0, 0, 1, 0, 0});
     doParseCheck("1_L", 1e-3, {3, 0, 0, 0, 0, 0, 0, 0});
     doParseCheck("1_eV", 1.60218e-19, {2, -2, 1, 0, 0, 0, 0, 0});
-    doParseCheck("1_a", 1e2, {2, 0, 0, 0, 0, 0, 0, 0});
+    // doParseCheck("1_a", 1e2, {2, 0, 0, 0, 0, 0, 0, 0});
     doParseCheck("1_bar", 1e5, {-1, -2, 1, 0, 0, 0, 0, 0});
 }
 

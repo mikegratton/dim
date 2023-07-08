@@ -110,29 +110,75 @@ enum yysymbol_kind_t
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_MULTIPLY = 3,                   /* MULTIPLY  */
-  YYSYMBOL_DIVIDE = 4,                     /* DIVIDE  */
-  YYSYMBOL_EXPONENT = 5,                   /* EXPONENT  */
-  YYSYMBOL_OPEN_PARENS = 6,                /* OPEN_PARENS  */
-  YYSYMBOL_CLOSE_PARENS = 7,               /* CLOSE_PARENS  */
-  YYSYMBOL_INTEGER = 8,                    /* INTEGER  */
-  YYSYMBOL_UNIT = 9,                       /* UNIT  */
-  YYSYMBOL_BAD_INPUT = 10,                 /* BAD_INPUT  */
-  YYSYMBOL_YYACCEPT = 11,                  /* $accept  */
-  YYSYMBOL_output = 12,                    /* output  */
-  YYSYMBOL_unit_group = 13,                /* unit_group  */
-  YYSYMBOL_exponent_group = 14             /* exponent_group  */
+  YYSYMBOL_INTEGER = 4,                    /* INTEGER  */
+  YYSYMBOL_BAD_INPUT = 5,                  /* BAD_INPUT  */
+  YYSYMBOL_6_ = 6,                         /* '/'  */
+  YYSYMBOL_7_ = 7,                         /* '^'  */
+  YYSYMBOL_8_ = 8,                         /* '('  */
+  YYSYMBOL_9_ = 9,                         /* ')'  */
+  YYSYMBOL_10_y_ = 10,                     /* 'y'  */
+  YYSYMBOL_11_z_ = 11,                     /* 'z'  */
+  YYSYMBOL_12_a_ = 12,                     /* 'a'  */
+  YYSYMBOL_13_f_ = 13,                     /* 'f'  */
+  YYSYMBOL_14_p_ = 14,                     /* 'p'  */
+  YYSYMBOL_15_n_ = 15,                     /* 'n'  */
+  YYSYMBOL_16_u_ = 16,                     /* 'u'  */
+  YYSYMBOL_17_m_ = 17,                     /* 'm'  */
+  YYSYMBOL_18_c_ = 18,                     /* 'c'  */
+  YYSYMBOL_19_d_ = 19,                     /* 'd'  */
+  YYSYMBOL_20_Y_ = 20,                     /* 'Y'  */
+  YYSYMBOL_21_Z_ = 21,                     /* 'Z'  */
+  YYSYMBOL_22_E_ = 22,                     /* 'E'  */
+  YYSYMBOL_23_P_ = 23,                     /* 'P'  */
+  YYSYMBOL_24_T_ = 24,                     /* 'T'  */
+  YYSYMBOL_25_G_ = 25,                     /* 'G'  */
+  YYSYMBOL_26_M_ = 26,                     /* 'M'  */
+  YYSYMBOL_27_k_ = 27,                     /* 'k'  */
+  YYSYMBOL_28_h_ = 28,                     /* 'h'  */
+  YYSYMBOL_29_s_ = 29,                     /* 's'  */
+  YYSYMBOL_30_g_ = 30,                     /* 'g'  */
+  YYSYMBOL_31_r_ = 31,                     /* 'r'  */
+  YYSYMBOL_32_K_ = 32,                     /* 'K'  */
+  YYSYMBOL_33_o_ = 33,                     /* 'o'  */
+  YYSYMBOL_34_l_ = 34,                     /* 'l'  */
+  YYSYMBOL_35_A_ = 35,                     /* 'A'  */
+  YYSYMBOL_36_H_ = 36,                     /* 'H'  */
+  YYSYMBOL_37_N_ = 37,                     /* 'N'  */
+  YYSYMBOL_38_J_ = 38,                     /* 'J'  */
+  YYSYMBOL_39_W_ = 39,                     /* 'W'  */
+  YYSYMBOL_40_C_ = 40,                     /* 'C'  */
+  YYSYMBOL_41_V_ = 41,                     /* 'V'  */
+  YYSYMBOL_42_F_ = 42,                     /* 'F'  */
+  YYSYMBOL_43_R_ = 43,                     /* 'R'  */
+  YYSYMBOL_44_S_ = 44,                     /* 'S'  */
+  YYSYMBOL_45_b_ = 45,                     /* 'b'  */
+  YYSYMBOL_46_I_ = 46,                     /* 'I'  */
+  YYSYMBOL_47_x_ = 47,                     /* 'x'  */
+  YYSYMBOL_48_B_ = 48,                     /* 'B'  */
+  YYSYMBOL_49_q_ = 49,                     /* 'q'  */
+  YYSYMBOL_50_v_ = 50,                     /* 'v'  */
+  YYSYMBOL_51_t_ = 51,                     /* 't'  */
+  YYSYMBOL_52_L_ = 52,                     /* 'L'  */
+  YYSYMBOL_53_e_ = 53,                     /* 'e'  */
+  YYSYMBOL_YYACCEPT = 54,                  /* $accept  */
+  YYSYMBOL_output = 55,                    /* output  */
+  YYSYMBOL_unit_group = 56,                /* unit_group  */
+  YYSYMBOL_unit = 57,                      /* unit  */
+  YYSYMBOL_prefix = 58,                    /* prefix  */
+  YYSYMBOL_unit_literal = 59,              /* unit_literal  */
+  YYSYMBOL_exponent_group = 60             /* exponent_group  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 
 /* Unqualified %code blocks.  */
-#line 21 "quantity.y"
+#line 23 "quantity.y"
 
     int quantityerror(void* lval, ::dim::si::dynamic_quantity* val, void const* scanner);
     int quantitylex(YYSTYPE* lval, void* scanner);
 
-#line 136 "../quantity.tab.cpp"
+#line 182 "../quantity.tab.cpp"
 
 #ifdef short
 # undef short
@@ -453,21 +499,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  9
+#define YYFINAL  64
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   27
+#define YYLAST   172
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  11
+#define YYNTOKENS  54
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  13
+#define YYNRULES  65
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  22
+#define YYNSTATES  88
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   265
+#define YYMAXUTOK   260
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -485,15 +531,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       8,     9,     2,     2,     2,     2,     2,     6,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,    35,    48,    40,     2,    22,
+      42,    25,    36,    46,    38,    32,    52,    26,    37,     2,
+      23,     2,    43,    44,    24,     2,    41,    39,     2,    20,
+      21,     2,     2,     2,     7,     2,     2,    12,    45,    18,
+      19,    53,    13,    30,    28,     2,     2,    27,    34,    17,
+      15,    33,    14,    49,    31,    29,    51,    16,    50,     2,
+      47,    10,    11,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -507,15 +553,20 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10
+       5
 };
 
 #if QUANTITYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    46,    46,    47,    48,    49,    50,    54,    55,    56,
-      57,    58,    62,    63
+       0,    43,    43,    44,    45,    46,    47,    51,    52,    53,
+      54,    55,    59,    60,    64,    65,    66,    67,    68,    69,
+      70,    71,    72,    73,    74,    75,    76,    77,    78,    79,
+      80,    81,    82,    86,    87,    88,    89,    90,    91,    92,
+      93,    94,    95,    96,    97,    98,    99,   100,   101,   102,
+     103,   104,   105,   106,   107,   108,   109,   110,   111,   112,
+     113,   114,   115,   116,   120,   121
 };
 #endif
 
@@ -531,9 +582,14 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "MULTIPLY", "DIVIDE",
-  "EXPONENT", "OPEN_PARENS", "CLOSE_PARENS", "INTEGER", "UNIT",
-  "BAD_INPUT", "$accept", "output", "unit_group", "exponent_group", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "MULTIPLY", "INTEGER",
+  "BAD_INPUT", "'/'", "'^'", "'('", "')'", "'y'", "'z'", "'a'", "'f'",
+  "'p'", "'n'", "'u'", "'m'", "'c'", "'d'", "'Y'", "'Z'", "'E'", "'P'",
+  "'T'", "'G'", "'M'", "'k'", "'h'", "'s'", "'g'", "'r'", "'K'", "'o'",
+  "'l'", "'A'", "'H'", "'N'", "'J'", "'W'", "'C'", "'V'", "'F'", "'R'",
+  "'S'", "'b'", "'I'", "'x'", "'B'", "'q'", "'v'", "'t'", "'L'", "'e'",
+  "$accept", "output", "unit_group", "unit", "prefix", "unit_literal",
+  "exponent_group", YY_NULLPTR
 };
 
 static const char *
@@ -543,23 +599,29 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-4)
+#define YYPACT_NINF (-15)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-1)
+#define YYTABLE_NINF (-54)
 
 #define yytable_value_is_error(Yyn) \
   0
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-static const yytype_int8 yypact[] =
+static const yytype_int16 yypact[] =
 {
-      -1,    -4,    -3,    -4,    -3,     1,     9,    13,    18,    -4,
-      -3,    -3,    19,    -4,    -4,     2,     2,    19,    -4,    -4,
-       8,    -4
+       1,   -15,    56,    56,   -15,   -15,   -15,   -15,   -15,   -15,
+     -15,   139,   -14,   -15,   -15,   -15,   -15,    -4,    52,     0,
+     -15,    23,   -15,    17,   -15,    38,   -15,   -15,    40,   -15,
+     -15,    11,   -15,   -15,   -15,   -15,    10,    50,   -13,    41,
+     -15,    48,   103,   149,   -15,    88,   -15,   154,   144,    73,
+     -15,   -15,   -15,    59,   -15,    95,   -15,   -15,   -15,    85,
+     -15,   -15,   -15,   -15,   -15,    56,   -15,    56,    -1,    89,
+     -14,    -4,   -15,     0,    23,   -15,   -15,   -15,   -15,   -15,
+     -15,   114,   114,   -15,    -1,   -15,   126,   -15
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -567,21 +629,27 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     6,     0,    11,     5,     0,     2,     0,     4,     1,
-       0,     0,     0,     3,     7,    10,     9,     0,    13,     8,
-       0,    12
+       0,     6,     5,     0,    14,    15,    16,    17,    18,    19,
+      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    34,    35,     0,    37,    39,    54,    43,
+      45,    46,    47,    48,    49,    50,    51,     0,     0,     0,
+      61,     0,     0,     2,    11,     0,    13,     4,     0,     0,
+      40,    44,    58,     0,    42,     0,    41,    52,    59,     0,
+      55,    56,    57,    63,     1,     0,     3,     0,     0,    33,
+       0,     0,    53,     0,     0,    12,     7,    38,    60,    36,
+      62,    10,     9,    65,     0,     8,     0,    64
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,     0,     7
+     -15,   -15,    -2,   -15,   -15,    92,    54
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     5,     6,    19
+       0,    42,    43,    44,    45,    46,    85
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -589,39 +657,85 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     9,     7,     2,     8,     2,     3,    12,     3,     4,
-      15,    16,    10,    11,    12,    21,    10,    11,    12,    13,
-      14,    10,    11,    12,    20,    17,     0,    18
+      47,    48,     1,    83,    60,    50,     2,    84,    51,     3,
+      52,     4,     5,     6,     7,     8,     9,    10,    11,    12,
+      13,    14,    15,    16,    17,    18,    19,    20,    21,    22,
+      23,    24,    25,    26,    61,    53,    27,    28,    29,    30,
+      31,    32,    33,    34,    35,    36,    37,    38,    54,    39,
+      55,    56,   -53,    40,    41,   -53,    57,   -53,   -53,   -53,
+      58,   -53,    59,    81,     3,    82,     4,     5,     6,     7,
+       8,     9,    10,    11,    12,    13,    14,    15,    16,    17,
+      18,    19,    20,    21,    22,    23,    24,    25,    26,    63,
+      62,    27,    28,    29,    30,    31,    32,    33,    34,    35,
+      36,    37,    38,    64,    39,    69,    70,    77,    40,    41,
+      78,    71,    72,    73,    79,    74,    80,    23,    24,    25,
+      26,    68,    49,    27,    28,    29,    30,    31,    32,    33,
+      34,    35,    36,    37,    38,    87,    39,    75,    86,   -33,
+      40,    41,   -33,     0,   -33,   -33,   -33,    65,   -33,     0,
+      67,    68,    65,    76,    66,    67,    68,    65,     0,     0,
+      67,    68,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    49
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,     0,     2,     6,     4,     6,     9,     5,     9,    10,
-      10,    11,     3,     4,     5,     7,     3,     4,     5,    10,
-       7,     3,     4,     5,    17,     6,    -1,     8
+       2,     3,     1,     4,    17,    19,     5,     8,    12,     8,
+      10,    10,    11,    12,    13,    14,    15,    16,    17,    18,
+      19,    20,    21,    22,    23,    24,    25,    26,    27,    28,
+      29,    30,    31,    32,    47,    12,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    45,    46,    31,    48,
+      12,    11,     0,    52,    53,     3,    45,     5,     6,     7,
+      50,     9,    12,    65,     8,    67,    10,    11,    12,    13,
+      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    29,    30,    31,    32,    41,
+      49,    35,    36,    37,    38,    39,    40,    41,    42,    43,
+      44,    45,    46,     0,    48,    17,    18,    34,    52,    53,
+      51,    23,    24,    25,    19,    27,    31,    29,    30,    31,
+      32,     7,    33,    35,    36,    37,    38,    39,    40,    41,
+      42,    43,    44,    45,    46,     9,    48,    45,    84,     0,
+      52,    53,     3,    -1,     5,     6,     7,     3,     9,    -1,
+       6,     7,     3,     9,     5,     6,     7,     3,    -1,    -1,
+       6,     7,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    33
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     1,     6,     9,    10,    12,    13,    13,    13,     0,
-       3,     4,     5,    10,     7,    13,    13,     6,     8,    14,
-      14,     7
+       0,     1,     5,     8,    10,    11,    12,    13,    14,    15,
+      16,    17,    18,    19,    20,    21,    22,    23,    24,    25,
+      26,    27,    28,    29,    30,    31,    32,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    45,    46,    48,
+      52,    53,    55,    56,    57,    58,    59,    56,    56,    33,
+      19,    12,    10,    12,    31,    12,    11,    45,    50,    12,
+      17,    47,    49,    41,     0,     3,     5,     6,     7,    17,
+      18,    23,    24,    25,    27,    59,     9,    34,    51,    19,
+      31,    56,    56,     4,     8,    60,    60,     9
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    11,    12,    12,    12,    12,    12,    13,    13,    13,
-      13,    13,    14,    14
+       0,    54,    55,    55,    55,    55,    55,    56,    56,    56,
+      56,    56,    57,    57,    58,    58,    58,    58,    58,    58,
+      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
+      58,    58,    58,    59,    59,    59,    59,    59,    59,    59,
+      59,    59,    59,    59,    59,    59,    59,    59,    59,    59,
+      59,    59,    59,    59,    59,    59,    59,    59,    59,    59,
+      59,    59,    59,    59,    60,    60
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     2,     1,     1,     3,     3,     3,
-       3,     1,     3,     1
+       3,     1,     2,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     3,     1,     3,     1,
+       2,     2,     2,     1,     2,     1,     1,     1,     1,     1,
+       1,     1,     2,     1,     1,     2,     2,     2,     2,     2,
+       3,     1,     3,     2,     3,     1
 };
 
 
@@ -828,10 +942,40 @@ yydestruct (const char *yymsg,
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   switch (yykind)
     {
-    case YYSYMBOL_UNIT: /* UNIT  */
-#line 41 "quantity.y"
-            { free(((*yyvaluep).unit)); }
-#line 835 "../quantity.tab.cpp"
+    case YYSYMBOL_INTEGER: /* INTEGER  */
+#line 38 "quantity.y"
+            { }
+#line 949 "../quantity.tab.cpp"
+        break;
+
+    case YYSYMBOL_unit_group: /* unit_group  */
+#line 38 "quantity.y"
+            { }
+#line 955 "../quantity.tab.cpp"
+        break;
+
+    case YYSYMBOL_unit: /* unit  */
+#line 38 "quantity.y"
+            { }
+#line 961 "../quantity.tab.cpp"
+        break;
+
+    case YYSYMBOL_prefix: /* prefix  */
+#line 38 "quantity.y"
+            { }
+#line 967 "../quantity.tab.cpp"
+        break;
+
+    case YYSYMBOL_unit_literal: /* unit_literal  */
+#line 38 "quantity.y"
+            { }
+#line 973 "../quantity.tab.cpp"
+        break;
+
+    case YYSYMBOL_exponent_group: /* exponent_group  */
+#line 38 "quantity.y"
+            { }
+#line 979 "../quantity.tab.cpp"
         break;
 
       default:
@@ -1105,73 +1249,373 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* output: unit_group  */
-#line 46 "quantity.y"
-              { *result = (yyval.quantity) = (yyvsp[0].quantity); return 0; }
-#line 1111 "../quantity.tab.cpp"
+#line 43 "quantity.y"
+                          { *result = (yyvsp[0].quantity); return 0; }
+#line 1255 "../quantity.tab.cpp"
     break;
 
   case 3: /* output: unit_group BAD_INPUT  */
-#line 47 "quantity.y"
-                          { return 1; }
-#line 1117 "../quantity.tab.cpp"
+#line 44 "quantity.y"
+                          { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+#line 1261 "../quantity.tab.cpp"
     break;
 
   case 4: /* output: BAD_INPUT unit_group  */
-#line 48 "quantity.y"
-                          { return 1; }
-#line 1123 "../quantity.tab.cpp"
+#line 45 "quantity.y"
+                          { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+#line 1267 "../quantity.tab.cpp"
     break;
 
   case 5: /* output: BAD_INPUT  */
-#line 49 "quantity.y"
-               { return 1; }
-#line 1129 "../quantity.tab.cpp"
+#line 46 "quantity.y"
+                          { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+#line 1273 "../quantity.tab.cpp"
     break;
 
   case 6: /* output: error  */
-#line 50 "quantity.y"
-           { return 1; }
-#line 1135 "../quantity.tab.cpp"
+#line 47 "quantity.y"
+                          { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+#line 1279 "../quantity.tab.cpp"
     break;
 
-  case 7: /* unit_group: OPEN_PARENS unit_group CLOSE_PARENS  */
-#line 54 "quantity.y"
-                                       { (yyval.quantity) = (yyvsp[-1].quantity); }
-#line 1141 "../quantity.tab.cpp"
+  case 7: /* unit_group: '(' unit_group ')'  */
+#line 51 "quantity.y"
+                                      { (yyval.quantity) = (yyvsp[-1].quantity);               }
+#line 1285 "../quantity.tab.cpp"
     break;
 
-  case 8: /* unit_group: unit_group EXPONENT exponent_group  */
-#line 55 "quantity.y"
-                                        { (yyval.quantity) = power((yyvsp[-2].quantity), (yyvsp[0].integer)); }
-#line 1147 "../quantity.tab.cpp"
+  case 8: /* unit_group: unit_group '^' exponent_group  */
+#line 52 "quantity.y"
+                                      { (yyval.quantity) = power((yyvsp[-2].quantity), (yyvsp[0].integer));    }
+#line 1291 "../quantity.tab.cpp"
     break;
 
-  case 9: /* unit_group: unit_group DIVIDE unit_group  */
-#line 56 "quantity.y"
-                                  { (yyval.quantity) = divide((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
-#line 1153 "../quantity.tab.cpp"
+  case 9: /* unit_group: unit_group '/' unit_group  */
+#line 53 "quantity.y"
+                                      { (yyval.quantity) = divide((yyvsp[-2].quantity), (yyvsp[0].quantity));   }
+#line 1297 "../quantity.tab.cpp"
     break;
 
   case 10: /* unit_group: unit_group MULTIPLY unit_group  */
-#line 57 "quantity.y"
-                                    { (yyval.quantity) = multiply((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
-#line 1159 "../quantity.tab.cpp"
+#line 54 "quantity.y"
+                                      { (yyval.quantity) = multiply((yyvsp[-2].quantity), (yyvsp[0].quantity)); }
+#line 1303 "../quantity.tab.cpp"
     break;
 
-  case 11: /* unit_group: UNIT  */
-#line 58 "quantity.y"
-          { (yyval.quantity) = dim::si::detail::parse_known_quantity((yyvsp[0].unit)); }
-#line 1165 "../quantity.tab.cpp"
+  case 12: /* unit: prefix unit_literal  */
+#line 59 "quantity.y"
+                       { (yyval.quantity) = (yyvsp[-1].scale) * (yyvsp[0].quantity); }
+#line 1309 "../quantity.tab.cpp"
     break;
 
-  case 12: /* exponent_group: OPEN_PARENS exponent_group CLOSE_PARENS  */
-#line 62 "quantity.y"
-                                           { (yyval.integer) = (yyvsp[-1].integer); }
-#line 1171 "../quantity.tab.cpp"
+  case 14: /* prefix: 'y'  */
+#line 64 "quantity.y"
+          { (yyval.scale) = 1e-24; }
+#line 1315 "../quantity.tab.cpp"
+    break;
+
+  case 15: /* prefix: 'z'  */
+#line 65 "quantity.y"
+          { (yyval.scale) = 1e-21; }
+#line 1321 "../quantity.tab.cpp"
+    break;
+
+  case 16: /* prefix: 'a'  */
+#line 66 "quantity.y"
+          { (yyval.scale) = 1e-18; }
+#line 1327 "../quantity.tab.cpp"
+    break;
+
+  case 17: /* prefix: 'f'  */
+#line 67 "quantity.y"
+          { (yyval.scale) = 1e-15; }
+#line 1333 "../quantity.tab.cpp"
+    break;
+
+  case 18: /* prefix: 'p'  */
+#line 68 "quantity.y"
+          { (yyval.scale) = 1e-12; }
+#line 1339 "../quantity.tab.cpp"
+    break;
+
+  case 19: /* prefix: 'n'  */
+#line 69 "quantity.y"
+          { (yyval.scale) = 1e-9; }
+#line 1345 "../quantity.tab.cpp"
+    break;
+
+  case 20: /* prefix: 'u'  */
+#line 70 "quantity.y"
+          { (yyval.scale) = 1e-6; }
+#line 1351 "../quantity.tab.cpp"
+    break;
+
+  case 21: /* prefix: 'm'  */
+#line 71 "quantity.y"
+          { (yyval.scale) = 1e-3; }
+#line 1357 "../quantity.tab.cpp"
+    break;
+
+  case 22: /* prefix: 'c'  */
+#line 72 "quantity.y"
+          { (yyval.scale) = 1e-2; }
+#line 1363 "../quantity.tab.cpp"
+    break;
+
+  case 23: /* prefix: 'd'  */
+#line 73 "quantity.y"
+          { (yyval.scale) = 1e-1; }
+#line 1369 "../quantity.tab.cpp"
+    break;
+
+  case 24: /* prefix: 'Y'  */
+#line 74 "quantity.y"
+          { (yyval.scale) = 1e24; }
+#line 1375 "../quantity.tab.cpp"
+    break;
+
+  case 25: /* prefix: 'Z'  */
+#line 75 "quantity.y"
+          { (yyval.scale) = 1e21; }
+#line 1381 "../quantity.tab.cpp"
+    break;
+
+  case 26: /* prefix: 'E'  */
+#line 76 "quantity.y"
+          { (yyval.scale) = 1e18; }
+#line 1387 "../quantity.tab.cpp"
+    break;
+
+  case 27: /* prefix: 'P'  */
+#line 77 "quantity.y"
+          { (yyval.scale) = 1e15; }
+#line 1393 "../quantity.tab.cpp"
+    break;
+
+  case 28: /* prefix: 'T'  */
+#line 78 "quantity.y"
+          { (yyval.scale) = 1e12; }
+#line 1399 "../quantity.tab.cpp"
+    break;
+
+  case 29: /* prefix: 'G'  */
+#line 79 "quantity.y"
+          { (yyval.scale) = 1e9; }
+#line 1405 "../quantity.tab.cpp"
+    break;
+
+  case 30: /* prefix: 'M'  */
+#line 80 "quantity.y"
+          { (yyval.scale) = 1e6; }
+#line 1411 "../quantity.tab.cpp"
+    break;
+
+  case 31: /* prefix: 'k'  */
+#line 81 "quantity.y"
+          { (yyval.scale) = 1e3; }
+#line 1417 "../quantity.tab.cpp"
+    break;
+
+  case 32: /* prefix: 'h'  */
+#line 82 "quantity.y"
+          { (yyval.scale) = 1e2; }
+#line 1423 "../quantity.tab.cpp"
+    break;
+
+  case 33: /* unit_literal: 'm'  */
+#line 86 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 1,  0,  0,  0,  0,  0,  0,  0}); }
+#line 1429 "../quantity.tab.cpp"
+    break;
+
+  case 34: /* unit_literal: 's'  */
+#line 87 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  0,  0}); }
+#line 1435 "../quantity.tab.cpp"
+    break;
+
+  case 35: /* unit_literal: 'g'  */
+#line 88 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e-3, { 0,  0,  1,  0,  0,  0,  0,  0}); }
+#line 1441 "../quantity.tab.cpp"
+    break;
+
+  case 36: /* unit_literal: 'r' 'a' 'd'  */
+#line 89 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  1,  0,  0,  0,  0}); }
+#line 1447 "../quantity.tab.cpp"
+    break;
+
+  case 37: /* unit_literal: 'K'  */
+#line 90 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  1,  0,  0,  0}); }
+#line 1453 "../quantity.tab.cpp"
+    break;
+
+  case 38: /* unit_literal: 'm' 'o' 'l'  */
+#line 91 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  1,  0,  0}); }
+#line 1459 "../quantity.tab.cpp"
+    break;
+
+  case 39: /* unit_literal: 'A'  */
+#line 92 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  1,  0}); }
+#line 1465 "../quantity.tab.cpp"
+    break;
+
+  case 40: /* unit_literal: 'c' 'd'  */
+#line 93 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  0,  1}); }
+#line 1471 "../quantity.tab.cpp"
+    break;
+
+  case 41: /* unit_literal: 'H' 'z'  */
+#line 94 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
+#line 1477 "../quantity.tab.cpp"
+    break;
+
+  case 42: /* unit_literal: 's' 'r'  */
+#line 95 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  0}); }
+#line 1483 "../quantity.tab.cpp"
+    break;
+
+  case 43: /* unit_literal: 'N'  */
+#line 96 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 1, -2,  1,  0,  0,  0,  0,  0}); }
+#line 1489 "../quantity.tab.cpp"
+    break;
+
+  case 44: /* unit_literal: 'P' 'a'  */
+#line 97 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
+#line 1495 "../quantity.tab.cpp"
+    break;
+
+  case 45: /* unit_literal: 'J'  */
+#line 98 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0,  0,  0}); }
+#line 1501 "../quantity.tab.cpp"
+    break;
+
+  case 46: /* unit_literal: 'W'  */
+#line 99 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0,  0,  0}); }
+#line 1507 "../quantity.tab.cpp"
+    break;
+
+  case 47: /* unit_literal: 'C'  */
+#line 100 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  1,  0}); }
+#line 1513 "../quantity.tab.cpp"
+    break;
+
+  case 48: /* unit_literal: 'V'  */
+#line 101 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -1,  0}); }
+#line 1519 "../quantity.tab.cpp"
+    break;
+
+  case 49: /* unit_literal: 'F'  */
+#line 102 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  {-2,  4, -1,  0,  0,  0,  2,  0}); }
+#line 1525 "../quantity.tab.cpp"
+    break;
+
+  case 50: /* unit_literal: 'R'  */
+#line 103 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -2,  0}); }
+#line 1531 "../quantity.tab.cpp"
+    break;
+
+  case 51: /* unit_literal: 'S'  */
+#line 104 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  {-2,  3, -1,  0,  0,  0,  2,  0}); }
+#line 1537 "../quantity.tab.cpp"
+    break;
+
+  case 52: /* unit_literal: 'W' 'b'  */
+#line 105 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -1,  0}); }
+#line 1543 "../quantity.tab.cpp"
+    break;
+
+  case 53: /* unit_literal: 'T'  */
+#line 106 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0, -2,  1,  0,  0,  0, -1,  0}); }
+#line 1549 "../quantity.tab.cpp"
+    break;
+
+  case 54: /* unit_literal: 'H'  */
+#line 107 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -2,  0}); }
+#line 1555 "../quantity.tab.cpp"
+    break;
+
+  case 55: /* unit_literal: 'I' 'm'  */
+#line 108 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  1}); }
+#line 1561 "../quantity.tab.cpp"
+    break;
+
+  case 56: /* unit_literal: 'I' 'x'  */
+#line 109 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  {-2,  0,  0,  2,  0,  0,  0,  1}); }
+#line 1567 "../quantity.tab.cpp"
+    break;
+
+  case 57: /* unit_literal: 'B' 'q'  */
+#line 110 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
+#line 1573 "../quantity.tab.cpp"
+    break;
+
+  case 58: /* unit_literal: 'G' 'y'  */
+#line 111 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  0,  0,  0,  0,  0,  0}); }
+#line 1579 "../quantity.tab.cpp"
+    break;
+
+  case 59: /* unit_literal: 'S' 'v'  */
+#line 112 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  0,  0,  0,  0,  0,  0}); }
+#line 1585 "../quantity.tab.cpp"
+    break;
+
+  case 60: /* unit_literal: 'k' 'a' 't'  */
+#line 113 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  1,  0,  0}); }
+#line 1591 "../quantity.tab.cpp"
+    break;
+
+  case 61: /* unit_literal: 'L'  */
+#line 114 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e-3, { 3,  0,  0,  0,  0,  0,  0,  0}); }
+#line 1597 "../quantity.tab.cpp"
+    break;
+
+  case 62: /* unit_literal: 'b' 'a' 'r'  */
+#line 115 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1e5,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
+#line 1603 "../quantity.tab.cpp"
+    break;
+
+  case 63: /* unit_literal: 'e' 'V'  */
+#line 116 "quantity.y"
+                  { (yyval.quantity) = ::dim::si::dynamic_quantity(1.60218e-19, {2, -2, 1, 0, 0, 0, 0, 0}); }
+#line 1609 "../quantity.tab.cpp"
+    break;
+
+  case 64: /* exponent_group: '(' exponent_group ')'  */
+#line 120 "quantity.y"
+                          { (yyval.integer) = (yyvsp[-1].integer); }
+#line 1615 "../quantity.tab.cpp"
     break;
 
 
-#line 1175 "../quantity.tab.cpp"
+#line 1619 "../quantity.tab.cpp"
 
       default: break;
     }
@@ -1364,10 +1808,11 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 66 "quantity.y"
+#line 124 "quantity.y"
 
  
 int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
 {
+   *val = ::dim::si::dynamic_quantity::bad_quantity();
    return 1;
 }

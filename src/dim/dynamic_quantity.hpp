@@ -62,6 +62,7 @@ struct dynamic_quantity : public dynamic_quantity_tag {
     dynamic_unit const& unit() const { return unit_; }
     dynamic_unit& unit() { return unit_; }
     int8_t unit(std::size_t i) { return unit_[i]; }
+    void unit(dynamic_unit const& u) { unit_ = u; }
     scalar value() const { return value_; }
     void value(scalar v) { value_ = v; }
 
@@ -83,6 +84,15 @@ struct dynamic_quantity : public dynamic_quantity_tag {
     constexpr int8_t amount() const { return unit_[base_dimension::Amount]; }
     constexpr int8_t current() const { return unit_[base_dimension::Current]; }
     constexpr int8_t luminosity() const { return unit_[base_dimension::Luminosity]; }
+
+    void length(int8_t i) { unit_[base_dimension::Length] = i; }
+    void time(int8_t i) { unit_[base_dimension::Time] = i; }
+    void mass(int8_t i) { unit_[base_dimension::Mass] = i; }
+    void angle(int8_t i) { unit_[base_dimension::Angle] = i; }
+    void temperature(int8_t i) { unit_[base_dimension::Temperature] = i; }
+    void amount(int8_t i) { unit_[base_dimension::Amount] = i; }
+    void current(int8_t i) { unit_[base_dimension::Current] = i; }
+    void luminosity(int8_t i) { unit_[base_dimension::Luminosity] = i; }
 
     constexpr bool dimensionless() const { return (index(unit_) == 0L); }
 

@@ -24,15 +24,15 @@
 
 " " { return MULTIPLY; }
 
-"/" { return DIVIDE; }
+"/" { return '/'; }
 
-"^" { return EXPONENT; }
+"^" { return '^'; }
 
-"(" { return OPEN_PARENS; }
+"(" { return '('; }
 
-")" { return CLOSE_PARENS; }
+")" { return ')'; }
 
-[a-zA-Z]+ { strncpy(yylval->unit, yytext, sizeof(yylval->unit)); return UNIT; }
+[a-zA-Z] { return yytext[0]; }
 
 . { return BAD_INPUT; }
 

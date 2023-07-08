@@ -63,13 +63,8 @@ extern int quantitydebug;
     QUANTITYerror = 256,           /* error  */
     QUANTITYUNDEF = 257,           /* "invalid token"  */
     MULTIPLY = 258,                /* MULTIPLY  */
-    DIVIDE = 259,                  /* DIVIDE  */
-    EXPONENT = 260,                /* EXPONENT  */
-    OPEN_PARENS = 261,             /* OPEN_PARENS  */
-    CLOSE_PARENS = 262,            /* CLOSE_PARENS  */
-    INTEGER = 263,                 /* INTEGER  */
-    UNIT = 264,                    /* UNIT  */
-    BAD_INPUT = 265                /* BAD_INPUT  */
+    INTEGER = 259,                 /* INTEGER  */
+    BAD_INPUT = 260                /* BAD_INPUT  */
   };
   typedef enum quantitytokentype quantitytoken_kind_t;
 #endif
@@ -81,10 +76,10 @@ union QUANTITYSTYPE
 #line 9 "quantity.y"
 
   int integer;  
-  char unit[8];
-  ::dim::si::dynamic_quantity quantity;
+  double scale;
+  ::dim::si::dynamic_quantity quantity; 
 
-#line 88 "../quantity.tab.hpp"
+#line 83 "../quantity.tab.hpp"
 
 };
 typedef union QUANTITYSTYPE QUANTITYSTYPE;
