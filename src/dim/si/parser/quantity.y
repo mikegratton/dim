@@ -1,50 +1,47 @@
-%define api.pure true
-%define api.prefix {quantity}
+%language "c++"
+%require "3.8" 
+%skeleton "lalr1.cc" 
 
-%code top {
-#include "dim/dynamic_quantity.hpp"
-#include "dim/si/parse_unit.hpp"
+%header
+%define api.prefix {siquant}
+%define api.value.type variant
+
+%code requires {
+    #include "dim/dynamic_quantity.hpp"
+    #include "dim/si/si_io.hpp"
+    namespace dim {
+    namespace si {
+    namespace detail {
+    class quantity_parser_driver;
+    }
+    }
+    }
 }
 
-%union {
-  int integer;  
-  double scale;
-  ::dim::si::dynamic_quantity quantity; 
-}
-
-
-%param { void* scanner }
-
-%parse-param {
-    ::dim::si::dynamic_quantity* result
-}
+%param { ::dim::si::detail::quantity_parser_driver& driver }
 
 
 %code {
-    int quantityerror(void* lval, ::dim::si::dynamic_quantity* val, void const* scanner);
-    int quantitylex(YYSTYPE* lval, void* scanner);
+    #include "quantity_parser_driver.hpp"
+
+    int yylex( siquant::parser::value_type* o_value, ::dim::si::detail::quantity_parser_driver& io_driver);
+
 }
 
 %token MULTIPLY
-%token <integer> INTEGER
-%token BAD_INPUT
-%type <integer> exponent_group
-%type <quantity> unit_group unit unit_literal
-%type <scale> prefix
+%token <int> INTEGER
+%type <int> exponent_group
+%type <::dim::si::dynamic_quantity> unit_group unit unit_literal
+%type <double> prefix
 
 %left MULTIPLY '/'
 %right '^'
 
-%destructor { } <*>
-
 %%
 
 output :
-   unit_group             { *result = $1; return 0; }   
-   | unit_group BAD_INPUT { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
-   | BAD_INPUT unit_group { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
-   | BAD_INPUT            { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
-   | error                { *result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+   unit_group             { driver.result = $1; return 0; }      
+   | error                { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
    ;
    
 unit_group:   
@@ -122,9 +119,42 @@ exponent_group:
    ;
     
 %%
- 
-int quantityerror(void* yylval, ::dim::si::dynamic_quantity* val, void const* scanner)
+
+int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_parser_driver& io_driver)
 {
-   *val = ::dim::si::dynamic_quantity::bad_quantity();
-   return 1;
+    if (io_driver.corpus_size > 0 && io_driver.cursor - io_driver.corpus >= io_driver.corpus_size) {
+        return siquant::parser::token::SIQUANTEOF;
+    }
+    char c = *io_driver.cursor++;
+    switch(c) {
+        case '.':
+        case '*':
+        case '_':
+        case ' ':
+            return siquant::parser::token::MULTIPLY;
+        case '-':
+        case '+':
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9': {
+            char* endPtr;
+            o_typePtr->emplace<int>(strtol(io_driver.cursor-1, &endPtr, 10));
+            io_driver.cursor = endPtr;
+            return siquant::parser::token::INTEGER;
+        }
+        default:
+            return c;
+    }
+}
+
+void siquant::parser::error(std::string const&) 
+{
+    throw std::runtime_error("bad quantity");
 }

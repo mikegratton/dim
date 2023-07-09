@@ -171,7 +171,9 @@ format_map<Area> const& get_default_format<Area>() {
         {"mile2", mile * mile},
         {"sq_ft", foot * foot},
         {"ft^2", foot * foot},
-        {"foot2", foot * foot}
+        {"foot2", foot * foot},
+        {"a", 1e2*meter2},
+        {"ha", 1e4*meter2}
     };
     return s_known;
 }
@@ -264,49 +266,18 @@ format_map<Torque> const& get_default_format<Torque>() {
 // clang-format on
 }  // namespace dim
 
-// Use the Bison/Flex parser. The includes for these are fairly involved,
-// so we put them down here to avoid polluting anything else.
-
-// clang-format off
-// SERIOUSLY??? Flex needs you to tell it this. Include order also matters
-#define YYSTYPE QUANTITYSTYPE
-#include "quantity.tab.hpp"
-#include "quantity.lex.hpp"
+// Use the Bison/Flex parser.
+#include "quantity_parser_driver.hpp"
 
 namespace dim {
 namespace detail {
-template<>
-::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend) {
-    // Construct the flex scanner for re-use throughout the program   
-    /*
-    static thread_local yyscan_t s_scanner;
-    static thread_local bool s_init = false;
-    if (s_init == false) {
-        quantitylex_init(&s_scanner);
-        s_init = true;
-    }
-    */
-    yyscan_t s_scanner;
-    quantitylex_init(&s_scanner);
-    
-    // Make a buffer with the text to scan
-    YY_BUFFER_STATE buf;    
-    if (nend == -1) {
-        buf = quantity_scan_string(unit_str, s_scanner);
-    } else {
-        buf = quantity_scan_bytes(unit_str, nend, s_scanner);
-    }
 
-    // Scan it
-    ::dim::si::dynamic_quantity result; // Our return value        
-    if (quantityparse(s_scanner, &result) != 0) {
-        result = ::dim::si::dynamic_quantity::bad_quantity();
-    }
-    
-    // Clean up
-    quantity_delete_buffer(buf, s_scanner);    
-    quantitylex_destroy(s_scanner);
-    return result;
+template <>
+::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend)
+{
+    dim::si::detail::quantity_parser_driver driver;
+    driver.parse(unit_str, nend);
+    return driver.result;
 }
-}
-}
+}  // namespace detail
+}  // namespace dim
