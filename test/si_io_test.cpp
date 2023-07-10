@@ -270,6 +270,10 @@ TEST_CASE("StringFormat")
     CHECK(angle / dim::si::degree == doctest::Approx(5.2));
     auto text2 = to_string(angle);
     CHECK(text2 == "0.090757_rad");
+
+    std::string text3 = "12*kN/m";
+    decltype(si::newton / si::meter) result;
+    CHECK(from_string(result, text3));
 }
 
 TEST_CASE("LengthFormat")

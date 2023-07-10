@@ -2,7 +2,7 @@
 all : ../quantity.tab.cpp
 
 ../quantity.tab.cpp: quantity.y
-	bison --report=all --defines=../quantity.tab.hpp -o ../quantity.tab.cpp quantity.y
+	bison --defines=../quantity.tab.hpp -o ../quantity.tab.cpp quantity.y
 
 .PHONY: clean
 clean:

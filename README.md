@@ -9,19 +9,17 @@
 When working with dimension quantities like length and time in code,
 two major problems arise:
 
-    1. Different authors expect different units (feet instead of meters, say)
-    2. Function arguments are initialized wrong at the call site
+ 1. Different authors expect different units (feet instead of meters, say)
+ 2. Function arguments are initialized wrong at the call site
     
 For (2), I mean
-```
+```cpp
 double compute_distance(double time_s, double speed_mps)
 {
     return time_s*speed_mps;
 }
 // ...
-
 double dist = compute_distance(speed, time); // Oops...
-
 ```
 Dim solves these problems by using the C++ template feature to make each quantity
 a different type. This shifts the burden of dimension checking and many conversions
@@ -34,8 +32,10 @@ dimensional values at the start and end of a calculation.
 In addition, one often must print a quantity to a string or parse a string into a 
 quantity. Dim provides extensive IO support through a layered approach. The easiest to use path 
 uses the iostream facet/locale system to stash preferred formats and have them be applied 
-wherever `operator<<` is used.  However, for programs that do not wish to use iostreams, Dim 
-provides a simple system based on c-strings for IO.
+wherever `operator<<` is used. This is as simple as
+
+However, for programs that do not wish to use iostreams, Dim provides a simple system based on 
+c-strings for IO.
 
 ## History
 
@@ -48,6 +48,12 @@ Features:
 * Use a custom flat map for formatters. These make setting and changing formatters less verbose,
 as well as improving runtime performance.
 * Add unit index to quantity and unit. This is a 64-bit number that uniquely represents each unit.
+* Made major improvements to the Bison-based parser. The new parser does not copy any strings and 
+  is much more efficient.
+
+Changes:
+* Due to the parser changes, the are ("a") and the hectare ("ha") are no longer recognized by the 
+fallback parser. The format map for area types has gained these quantities.
 
 
 ### v1.0
@@ -56,7 +62,7 @@ Initial release.
 
 ## Quickstart
 Here's a basic annotated program
-```
+```cpp
 #include <cassert>
 #include <iostream>
 #include <dim/si.hpp> // 1
@@ -96,7 +102,7 @@ You can find this code in `example/quickstart.cpp`.
 
 In function  `compute_distance`, the compiler has checked that e.g. Time*Speed 
 results in units of Speed.  If we instead tried to write a function body of
-```
+```cpp
 Length compute_distance(Time t, Speed v) { return 0.5*t*t*v; }
 ```
 the program would not compile.  The error is
@@ -173,7 +179,7 @@ quantities do not have the trailing underscore.
 #### Defining Custom Quantities
 You can define new quantities simply by using the C++ decltype operator. For example, suppose
 we wanted to represent a screw pitch.  We could do
-```
+```cpp
 using Pitch = decltype(meter/radian);
 ```
 and then Pitch becomes a convenient alias. See the code `example/advanced.cpp`.
@@ -182,7 +188,7 @@ and then Pitch becomes a convenient alias. See the code `example/advanced.cpp`.
 Dim ships with literal formatters based on the NIST standard. But often other formatters are
 useful for your domain.  Suppose we want angular degrees to have the format `_deg`.  We can 
 define
-```
+```cpp
 inline constexpr Angle operator "" _deg(long double x) { return static_cast<double>(x)*degree; } \
 inline constexpr Angle operator "" _deg(unsigned long long x) { return static_cast<double>(x)*degree; } 
 ```
@@ -219,7 +225,7 @@ serializing or deserializing data.
 ## Guard Values, NaN, and `bad_quantity`
 Dim uses NaN as a guard value in several places. You can construct a "bad" version of a type
 via
-```
+```cpp
 Length its_bad = Length::bad_quantity();
 ```
 and you can check for badness with `is_bad()`.  See [Bad Quantities and NaN](#Bad-Quantities-and-NaN) 
@@ -269,46 +275,49 @@ a length dimension of 1 while the LHS has a length dimension of 2.
 
 # Input and Output
 
+In Dim, "input and output" is used to mean deserialization and serialization from text. 
+
 ## Formatters, Facets, and Locales
 Input/output in Dim rests on the `formatter` class. The formatter is a simple class that associates 
 a string "symbol" with information on how to nondimensionalize a quantity. For example
-```
+```cpp
 si::formatter<si::Angle> degree_formatter("deg", si::degree);
 ```
 will format angles as degrees. The template parameter is the quantity
 type (`si::Angle`), the first argument is the symbol string ("deg"), and the second argument gives
 what you would multiply 1.0 by to obtain a quantity of the indicated symbol (`si::degree`).  There's
 an optional third argument that is used for temperature conversion as an additive offset:
-```
+```cpp
 si::formatter<si::Temperature> fahrenheit_format("F", 5./9.*kelvin, 255.37*kelvin);
 ```
 Hey, no one ever said thermodynamics was easy.  
 
 Formatters provide `input` and `output` methods.  Input takes the form
-```
+```cpp
 si::Angle x = degree_formatter.input(90.0);
 ```
 while output is
 ```
 si::formatted_quantity<double> fmt = degree_formatter.output(2_rad);
 ```
-which divides the output into a scalar (double) part `value()` and a `char const*` symbol part `symbol()`.
-This allows you to do
-```
+The `formatted_quantity` divides the output into a scalar (double) part `value()` and a `char const*` 
+symbol part `symbol()`. This allows you to do
+```cpp
 printf("My angle is %g_%s\n", fmt.value(), fmt.symbol());
 ```
 or put the result into structured XML, etc.  An overload for `operator<<` allows for interaction with
 `ostream` objects:
-```
+```cpp
 std::cout << "My angle is " << degree_formatter.output(2_rad) << "\n";
 ```
 
 Formatters are nice, but keeping track of them is often a bother. Dim taps into the facet/locale system of 
 `std::iostream` to make these formatters available transparently to stream operators. The facet allows 
 `operator<<` and `operator>>` to look up the appropriate formatter for the quantity and apply it. To use 
-this system, you need to install the Dim facet into the global locale.  You also will probably want to adjust 
-the format to your taste.  Here's an example of setting up angles to be output in degrees by default:
-```
+this system, you need to install the Dim facet into the global locale.  You may want to adjust 
+the format to match expectations in your domain.  Here's an example of setting up angles to be output in 
+degrees by default:
+```cpp
 #include <dim/si.hpp>
 namespace si = ::dim::si;
 
@@ -340,34 +349,33 @@ the format only in certain places, you can construct and use the formatter as sh
 But what if there's no format? Well, Dim has a basic fallback output format. A symbol is associated
 with each dimension in a system, so a unit symbol can be reconstructed. This is correct, but it isn't 
 usually very pretty. Thus suppose we had a torque we wanted to print:
-```
+```cpp
 si::Torque T = 3_N * 2_m / 1.2_rad;
 std::cout << "Torque is " << T << "\n";
 ```
-If there's nothing in the facet about `si::Torque`, the output will be "5_rad^-1_kg_m^2_s^-2".
+If there's no output formatter for `si::Torque`, the output will be "5_rad^-1_kg_m^2_s^-2".
 
 ## Parsing Quantities
 
 Input is a different beast. One interesting part is that because Dim is strongly typed, we know
 the desired destination quantity type.  We need to see that the input string can be parsed to a 
 matching dimension. For example,
-```
+```cpp
 si::Angle the_angle;
 std::cout << "Enter an angle: ";
 std::cin >> the_angle;
 ```
 If the user enters is `3 rad`, all is well. If the enters `12 ft`, we've got a problem.  As Dim doesn't
 use exceptions, we treat incompatible input dimensions as a "bad quantity" -- a silent `NaN`.  The test
-`the_angle.is_bad()` can check that a valid input was recieved. 
+`the_angle.is_bad()` can check that a valid input was received. 
 
 ### Stream-based Parsing
-What formatters are available for what types? Well, the facet maintains a map of maps for input.  First,
-since we know the destination quantity type, it looks up the map for that type. The resulting map is
-then indexed by the symbol string. If an exact string match is found, that formatter is used to parse
+The facet maintains a map from input type to symbol for each quantity type indexed by the symbol string.
+If the input unit string is an exact match to a map entry, that formatter is used to parse
 the quantity.  This provides a flexible system where you can provide formatters for whatever 
-domain-specific conventions you work with.  For instance, here's the default map that Dim ships 
-with for length:
-```
+domain-specific conventions you work with.  Dim ships with format maps for many common quantities. These
+are derived from the NIST suggestions. For instance, here's the default length map:
+```cpp
     static const format_map<Length> s_known {
         {"in",   formatter<Length>("in", inch) },
         {"inch", formatter<Length>("inch", inch)},
@@ -381,47 +389,53 @@ with for length:
         {"nautical_mile", formatter<Length>("nautical_mile", nautical_mile)}
     };
 ```
-Notice that `m` and `cm` and so on aren't there because they are handled by the fallback parser
-below (SI units are generally easy to parse). Instead, what's here are the conventions suggested by NIST SP 
-811. But suppose for your domain, you wanted to accept "feet" for "foot" and "nm" for nautical mile (yes, that's
-a symbol clash with nanometer -- but you know what your users expect).  You could add these to the facet via
-```
+Note that `m` and related SI units aren't included because they are handled by the fallback parser
+below -- SI units are generally easy to parse. But suppose for your domain, you wanted to accept "feet" for 
+"foot" and "nm" for nautical mile (yes, that's a symbol clash with nanometer -- but you know what your users 
+expect).  You could add these to the facet via
+```cpp
 auto* facet = si::system::make_default_facet(); // obtain the default si facet    
 facet->input_formatter(formatter<Length>("feet", foot));
 facet->input_formatter(formatter<Length>("nm", nautical_mile));
 ```
-Because the map is consulted first, you've overridden the meaning of "nm" for your program.
+Because the map is consulted before the fallback parser is called, you've overridden the meaning of "nm" for 
+your program.
+
+Dim uses a custom flat map for this purpose. The maps are sorted upon each insertion, but are substantially
+faster to search during normal operation of the facet as the data is contiguous in memory.
+
+Dim provides `si::to_string()` and `si::from_string()` to use the facet without stream-based operations.
 
 ### Fallback Parser
 
-When a symbol isn't recognized, Dim falls back to a Flex/Bison built parser for SI types.  This
-parser understands the SI prefixes and symbols defined in NIST SP 811. The parser recognizes 
+When a symbol isn't recognized, Dim falls back to a Bison-built parser for SI types.  This
+parser understands (almost all of) the SI prefixes and symbols defined in NIST SP 811. The parser recognizes 
 `_`, `*` and space as multiplication, `/` as division, and `^` as exponentiation, as well as
-parentheses.
+parentheses. 
 
 The symbol tables differ very slightly from the standard so that only ASCII characters are used.
 
 | Prefix | Magnitude |
 |--------|-----------|
-   | y | 1e-24 |
-    | z | 1e-21 |
-    | a | 1e-18 |
-    | f | 1e-15 |
-    | p | 1e-12 |
-    | n | 1e-9 |
-    | u*| 1e-6 |
-    | m | 1e-3 |
-    | c | 1e-2 |
-    | d | 1e-1 |
-    | Y | 1e24 |
-    | Z | 1e21 |
-    | E | 1e18 |
-    | P | 1e15 |
-    | T | 1e12 |
-    | G | 1e9 |
-    | M | 1e6 |
-    | k | 1e3 |
-    | h | 1e2 |
+| y | 1e-24 |
+| z | 1e-21 |
+| a | 1e-18 |
+| f | 1e-15 |
+| p | 1e-12 |
+| n | 1e-9 |
+| u*| 1e-6 |
+| m | 1e-3 |
+| c | 1e-2 |
+| d | 1e-1 |
+| Y | 1e24 |
+| Z | 1e21 |
+| E | 1e18 |
+| P | 1e15 |
+| T | 1e12 |
+| G | 1e9 |
+| M | 1e6 |
+| k | 1e3 |
+| h | 1e2 |
     
 Note mu (&#956;) has been replaced by "u". 
 
@@ -456,10 +470,25 @@ Note mu (&#956;) has been replaced by "u".
 | kat  | katal|
 | L    | liter|
 | eV   | electron volt|
-| a    | acre|
 | bar  | bar |
 
-Note Omega (&#937;) has been replaced by "R". 
+Note Omega (&#937;) has been replaced by "R". The are (symbol "a") has been excluded as it makes parsing the 
+units string ambiguous (is "Pa" a pascal or is it a petaare?).  The parser has been designed to avoid memory
+allocation or string copies.
+
+## Simple and Complete Parsing
+
+The `parser_quantity()` function accesses the default unit symbol maps and uses the fallback parser where 
+required. You call it like so:
+```cpp
+double scale = ...; // Taken from your data source
+char const* unit_string = ... ; // Taken from your data source
+si::Force f;
+if (parse_quantity(f, scale, unit_string)) {
+    // Use f
+}
+```
+
 
 # Advanced Topics
 
@@ -470,7 +499,7 @@ more related than `std::string` and `double`.  This is often painful for code th
 these types in a uniform way.  To aid with this, Dim provides a macro `DIM_IS_QUANTITY` that works 
 with the C++ Substitution Failure is not an Error (SFINAE -- this language has the *worst* jargon).  
 It works like this
-```
+```cpp
 template<class Q, DIM_IS_QUANTITY(Q)>
 char* print_quantity(char* o_quant_str, Q const& q)
 {
@@ -488,13 +517,14 @@ will have a member `value`. A C++17 `if constexpr` functionality may be added at
 If you need to nondimensionalize a quantity say for serialization, you may want to squeeze out 
 all the performance you can while still using the facilities of Dim to catch errors.  For example,
 here are three ways to nondimensionalize a length:
-```
+```cpp
 Length L = 2_m;
 double v1 = dimensionless_cast(L); // 1
 double v1 = L / meter; // 2
 double v2 = L / meter_; // 3
 ```
-(1) just uses our knowledge that lengths are stored in meters.  It is a bit unsafe, however.  (2)
+(1) just uses our knowledge that lengths are stored in meters.  It doesn't document this fact very well, 
+however  (2)
 does just what it says, provide the length of L in meters. However, since `meter` is itself a Length 
 quantity, this actually performs a floating point division (2.0/1.0).  (3) uses the specially defined
 *unit* types (these are the same as the quantities but have a trailing underscore).  The `operator/`
@@ -517,11 +547,11 @@ When `__FAST_MATH__` is defined, Dim uses an expanded notion of a "bad" floating
 includes numbers that are Inf, -Inf, and NaN in IEEE 754 floating point. The rationale is that on 
 embedded systems (ARM in particular), you often must compile with `-Ofast` to obtain access to SIMD 
 instructions. When you do this, `std::isnan()` always evaluates to false.  Dim uses its own 
-`is_bad` function to work around this. The trade-off is that algorithms relying on correct 
+`is_bad()` function to work around this. The trade-off is that algorithms relying on correct 
 behavior with Inf will see values as "bad". But such algorithms are usually limited to specialized 
 scientific codes rather than the more general robotics and engineering codes Dim is intended for.
 
-Note if `__FAST_MATH__` isn't defined, then is_bad() is just checking if the value is NaN.
+Note if `__FAST_MATH__` isn't defined, then `is_bad()` is an alias for `isnan()`.
 
 # Appendix A: Default Quantity Input Symbols
 For non-SI quantities, Dim provides a default override map for typical unit abbreviations.
@@ -623,6 +653,8 @@ Note that standard SI notation doesn't appear below as the parser handles it jus
 * "sq_ft" : Square Foot
 * "ft^2" : Square Foot
 * "foot2" : Square Foot
+* "a" : are
+* "ha" : hectare
 
 ## Volume
 * "cc" : Cubic Centimeter

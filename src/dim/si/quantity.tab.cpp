@@ -707,368 +707,374 @@ namespace siquant {
 #line 708 "../quantity.tab.cpp"
     break;
 
-  case 3: // output: error
+  case 3: // output: MULTIPLY unit_group
 #line 44 "quantity.y"
-                          { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
+                          { driver.result = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); return 0; }
 #line 714 "../quantity.tab.cpp"
     break;
 
-  case 4: // unit_group: '(' unit_group ')'
-#line 48 "quantity.y"
-                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[1].value.as < ::dim::si::dynamic_quantity > ();               }
+  case 4: // output: error
+#line 45 "quantity.y"
+                          { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
 #line 720 "../quantity.tab.cpp"
     break;
 
-  case 5: // unit_group: unit_group '^' exponent_group
+  case 5: // unit_group: '(' unit_group ')'
 #line 49 "quantity.y"
-                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = power(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < int > ());    }
+                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[1].value.as < ::dim::si::dynamic_quantity > ();               }
 #line 726 "../quantity.tab.cpp"
     break;
 
-  case 6: // unit_group: unit_group '/' unit_group
+  case 6: // unit_group: unit_group '^' exponent_group
 #line 50 "quantity.y"
-                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = divide(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < ::dim::si::dynamic_quantity > ());   }
+                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = power(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < int > ());    }
 #line 732 "../quantity.tab.cpp"
     break;
 
-  case 7: // unit_group: unit_group MULTIPLY unit_group
+  case 7: // unit_group: unit_group '/' unit_group
 #line 51 "quantity.y"
-                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = multiply(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < ::dim::si::dynamic_quantity > ()); }
+                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = divide(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < ::dim::si::dynamic_quantity > ());   }
 #line 738 "../quantity.tab.cpp"
     break;
 
-  case 8: // unit_group: unit
+  case 8: // unit_group: unit_group MULTIPLY unit_group
 #line 52 "quantity.y"
-     { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
+                                      { yylhs.value.as < ::dim::si::dynamic_quantity > () = multiply(yystack_[2].value.as < ::dim::si::dynamic_quantity > (), yystack_[0].value.as < ::dim::si::dynamic_quantity > ()); }
 #line 744 "../quantity.tab.cpp"
     break;
 
-  case 9: // unit: prefix unit_literal
-#line 56 "quantity.y"
-                       { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[1].value.as < double > () * yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
+  case 9: // unit_group: unit
+#line 53 "quantity.y"
+     { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
 #line 750 "../quantity.tab.cpp"
     break;
 
-  case 10: // unit: unit_literal
+  case 10: // unit: prefix unit_literal
 #line 57 "quantity.y"
-     { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
+                       { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[1].value.as < double > () * yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
 #line 756 "../quantity.tab.cpp"
     break;
 
-  case 11: // prefix: 'y'
-#line 61 "quantity.y"
-          { yylhs.value.as < double > () = 1e-24; }
+  case 11: // unit: unit_literal
+#line 58 "quantity.y"
+     { yylhs.value.as < ::dim::si::dynamic_quantity > () = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); }
 #line 762 "../quantity.tab.cpp"
     break;
 
-  case 12: // prefix: 'z'
+  case 12: // prefix: 'y'
 #line 62 "quantity.y"
-          { yylhs.value.as < double > () = 1e-21; }
+          { yylhs.value.as < double > () = 1e-24; }
 #line 768 "../quantity.tab.cpp"
     break;
 
-  case 13: // prefix: 'a'
+  case 13: // prefix: 'z'
 #line 63 "quantity.y"
-          { yylhs.value.as < double > () = 1e-18; }
+          { yylhs.value.as < double > () = 1e-21; }
 #line 774 "../quantity.tab.cpp"
     break;
 
-  case 14: // prefix: 'f'
+  case 14: // prefix: 'a'
 #line 64 "quantity.y"
-          { yylhs.value.as < double > () = 1e-15; }
+          { yylhs.value.as < double > () = 1e-18; }
 #line 780 "../quantity.tab.cpp"
     break;
 
-  case 15: // prefix: 'p'
+  case 15: // prefix: 'f'
 #line 65 "quantity.y"
-          { yylhs.value.as < double > () = 1e-12; }
+          { yylhs.value.as < double > () = 1e-15; }
 #line 786 "../quantity.tab.cpp"
     break;
 
-  case 16: // prefix: 'n'
+  case 16: // prefix: 'p'
 #line 66 "quantity.y"
-          { yylhs.value.as < double > () = 1e-9; }
+          { yylhs.value.as < double > () = 1e-12; }
 #line 792 "../quantity.tab.cpp"
     break;
 
-  case 17: // prefix: 'u'
+  case 17: // prefix: 'n'
 #line 67 "quantity.y"
-          { yylhs.value.as < double > () = 1e-6; }
+          { yylhs.value.as < double > () = 1e-9; }
 #line 798 "../quantity.tab.cpp"
     break;
 
-  case 18: // prefix: 'm'
+  case 18: // prefix: 'u'
 #line 68 "quantity.y"
-          { yylhs.value.as < double > () = 1e-3; }
+          { yylhs.value.as < double > () = 1e-6; }
 #line 804 "../quantity.tab.cpp"
     break;
 
-  case 19: // prefix: 'c'
+  case 19: // prefix: 'm'
 #line 69 "quantity.y"
-          { yylhs.value.as < double > () = 1e-2; }
+          { yylhs.value.as < double > () = 1e-3; }
 #line 810 "../quantity.tab.cpp"
     break;
 
-  case 20: // prefix: 'd'
+  case 20: // prefix: 'c'
 #line 70 "quantity.y"
-          { yylhs.value.as < double > () = 1e-1; }
+          { yylhs.value.as < double > () = 1e-2; }
 #line 816 "../quantity.tab.cpp"
     break;
 
-  case 21: // prefix: 'Y'
+  case 21: // prefix: 'd'
 #line 71 "quantity.y"
-          { yylhs.value.as < double > () = 1e24; }
+          { yylhs.value.as < double > () = 1e-1; }
 #line 822 "../quantity.tab.cpp"
     break;
 
-  case 22: // prefix: 'Z'
+  case 22: // prefix: 'Y'
 #line 72 "quantity.y"
-          { yylhs.value.as < double > () = 1e21; }
+          { yylhs.value.as < double > () = 1e24; }
 #line 828 "../quantity.tab.cpp"
     break;
 
-  case 23: // prefix: 'E'
+  case 23: // prefix: 'Z'
 #line 73 "quantity.y"
-          { yylhs.value.as < double > () = 1e18; }
+          { yylhs.value.as < double > () = 1e21; }
 #line 834 "../quantity.tab.cpp"
     break;
 
-  case 24: // prefix: 'P'
+  case 24: // prefix: 'E'
 #line 74 "quantity.y"
-          { yylhs.value.as < double > () = 1e15; }
+          { yylhs.value.as < double > () = 1e18; }
 #line 840 "../quantity.tab.cpp"
     break;
 
-  case 25: // prefix: 'T'
+  case 25: // prefix: 'P'
 #line 75 "quantity.y"
-          { yylhs.value.as < double > () = 1e12; }
+          { yylhs.value.as < double > () = 1e15; }
 #line 846 "../quantity.tab.cpp"
     break;
 
-  case 26: // prefix: 'G'
+  case 26: // prefix: 'T'
 #line 76 "quantity.y"
-          { yylhs.value.as < double > () = 1e9; }
+          { yylhs.value.as < double > () = 1e12; }
 #line 852 "../quantity.tab.cpp"
     break;
 
-  case 27: // prefix: 'M'
+  case 27: // prefix: 'G'
 #line 77 "quantity.y"
-          { yylhs.value.as < double > () = 1e6; }
+          { yylhs.value.as < double > () = 1e9; }
 #line 858 "../quantity.tab.cpp"
     break;
 
-  case 28: // prefix: 'k'
+  case 28: // prefix: 'M'
 #line 78 "quantity.y"
-          { yylhs.value.as < double > () = 1e3; }
+          { yylhs.value.as < double > () = 1e6; }
 #line 864 "../quantity.tab.cpp"
     break;
 
-  case 29: // prefix: 'h'
+  case 29: // prefix: 'k'
 #line 79 "quantity.y"
-          { yylhs.value.as < double > () = 1e2; }
+          { yylhs.value.as < double > () = 1e3; }
 #line 870 "../quantity.tab.cpp"
     break;
 
-  case 30: // unit_literal: 'm'
-#line 83 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 1,  0,  0,  0,  0,  0,  0,  0}); }
+  case 30: // prefix: 'h'
+#line 80 "quantity.y"
+          { yylhs.value.as < double > () = 1e2; }
 #line 876 "../quantity.tab.cpp"
     break;
 
-  case 31: // unit_literal: 's'
+  case 31: // unit_literal: 'm'
 #line 84 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 1,  0,  0,  0,  0,  0,  0,  0}); }
 #line 882 "../quantity.tab.cpp"
     break;
 
-  case 32: // unit_literal: 'g'
+  case 32: // unit_literal: 's'
 #line 85 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e-3, { 0,  0,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  0,  0}); }
 #line 888 "../quantity.tab.cpp"
     break;
 
-  case 33: // unit_literal: 'r' 'a' 'd'
+  case 33: // unit_literal: 'g'
 #line 86 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  1,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e-3, { 0,  0,  1,  0,  0,  0,  0,  0}); }
 #line 894 "../quantity.tab.cpp"
     break;
 
-  case 34: // unit_literal: 'K'
+  case 34: // unit_literal: 'r' 'a' 'd'
 #line 87 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  1,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  1,  0,  0,  0,  0}); }
 #line 900 "../quantity.tab.cpp"
     break;
 
-  case 35: // unit_literal: 'm' 'o' 'l'
+  case 35: // unit_literal: 'K'
 #line 88 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  1,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  1,  0,  0,  0}); }
 #line 906 "../quantity.tab.cpp"
     break;
 
-  case 36: // unit_literal: 'A'
+  case 36: // unit_literal: 'm' 'o' 'l'
 #line 89 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  1,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  1,  0,  0}); }
 #line 912 "../quantity.tab.cpp"
     break;
 
-  case 37: // unit_literal: 'c' 'd'
+  case 37: // unit_literal: 'A'
 #line 90 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  0,  1}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  1,  0}); }
 #line 918 "../quantity.tab.cpp"
     break;
 
-  case 38: // unit_literal: 'H' 'z'
+  case 38: // unit_literal: 'c' 'd'
 #line 91 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  0,  0,  0,  0,  1}); }
 #line 924 "../quantity.tab.cpp"
     break;
 
-  case 39: // unit_literal: 's' 'r'
+  case 39: // unit_literal: 'H' 'z'
 #line 92 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
 #line 930 "../quantity.tab.cpp"
     break;
 
-  case 40: // unit_literal: 'N'
+  case 40: // unit_literal: 's' 'r'
 #line 93 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 1, -2,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  0}); }
 #line 936 "../quantity.tab.cpp"
     break;
 
-  case 41: // unit_literal: 'P' 'a'
+  case 41: // unit_literal: 'N'
 #line 94 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 1, -2,  1,  0,  0,  0,  0,  0}); }
 #line 942 "../quantity.tab.cpp"
     break;
 
-  case 42: // unit_literal: 'J'
+  case 42: // unit_literal: 'P' 'a'
 #line 95 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
 #line 948 "../quantity.tab.cpp"
     break;
 
-  case 43: // unit_literal: 'W'
+  case 43: // unit_literal: 'J'
 #line 96 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0,  0,  0}); }
 #line 954 "../quantity.tab.cpp"
     break;
 
-  case 44: // unit_literal: 'C'
+  case 44: // unit_literal: 'W'
 #line 97 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  1,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0,  0,  0}); }
 #line 960 "../quantity.tab.cpp"
     break;
 
-  case 45: // unit_literal: 'V'
+  case 45: // unit_literal: 'C'
 #line 98 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -1,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  1,  0,  0,  0,  0,  1,  0}); }
 #line 966 "../quantity.tab.cpp"
     break;
 
-  case 46: // unit_literal: 'F'
+  case 46: // unit_literal: 'V'
 #line 99 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  4, -1,  0,  0,  0,  2,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -1,  0}); }
 #line 972 "../quantity.tab.cpp"
     break;
 
-  case 47: // unit_literal: 'R'
+  case 47: // unit_literal: 'F'
 #line 100 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -2,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  4, -1,  0,  0,  0,  2,  0}); }
 #line 978 "../quantity.tab.cpp"
     break;
 
-  case 48: // unit_literal: 'S'
+  case 48: // unit_literal: 'R'
 #line 101 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  3, -1,  0,  0,  0,  2,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -3,  1,  0,  0,  0, -2,  0}); }
 #line 984 "../quantity.tab.cpp"
     break;
 
-  case 49: // unit_literal: 'W' 'b'
+  case 49: // unit_literal: 'S'
 #line 102 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -1,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  3, -1,  0,  0,  0,  2,  0}); }
 #line 990 "../quantity.tab.cpp"
     break;
 
-  case 50: // unit_literal: 'T'
+  case 50: // unit_literal: 'W' 'b'
 #line 103 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -2,  1,  0,  0,  0, -1,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -1,  0}); }
 #line 996 "../quantity.tab.cpp"
     break;
 
-  case 51: // unit_literal: 'H'
+  case 51: // unit_literal: 'T'
 #line 104 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -2,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -2,  1,  0,  0,  0, -1,  0}); }
 #line 1002 "../quantity.tab.cpp"
     break;
 
-  case 52: // unit_literal: 'I' 'm'
+  case 52: // unit_literal: 'H'
 #line 105 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  1}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  1,  0,  0,  0, -2,  0}); }
 #line 1008 "../quantity.tab.cpp"
     break;
 
-  case 53: // unit_literal: 'I' 'x'
+  case 53: // unit_literal: 'I' 'm'
 #line 106 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  0,  0,  2,  0,  0,  0,  1}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0,  0,  0,  2,  0,  0,  0,  1}); }
 #line 1014 "../quantity.tab.cpp"
     break;
 
-  case 54: // unit_literal: 'B' 'q'
+  case 54: // unit_literal: 'I' 'x'
 #line 107 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  {-2,  0,  0,  2,  0,  0,  0,  1}); }
 #line 1020 "../quantity.tab.cpp"
     break;
 
-  case 55: // unit_literal: 'G' 'y'
+  case 55: // unit_literal: 'B' 'q'
 #line 108 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  0,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  0,  0,  0}); }
 #line 1026 "../quantity.tab.cpp"
     break;
 
-  case 56: // unit_literal: 'S' 'v'
+  case 56: // unit_literal: 'G' 'y'
 #line 109 "quantity.y"
                   { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  0,  0,  0,  0,  0,  0}); }
 #line 1032 "../quantity.tab.cpp"
     break;
 
-  case 57: // unit_literal: 'k' 'a' 't'
+  case 57: // unit_literal: 'S' 'v'
 #line 110 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  1,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 2, -2,  0,  0,  0,  0,  0,  0}); }
 #line 1038 "../quantity.tab.cpp"
     break;
 
-  case 58: // unit_literal: 'L'
+  case 58: // unit_literal: 'k' 'a' 't'
 #line 111 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e-3, { 3,  0,  0,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e0,  { 0, -1,  0,  0,  0,  1,  0,  0}); }
 #line 1044 "../quantity.tab.cpp"
     break;
 
-  case 59: // unit_literal: 'b' 'a' 'r'
+  case 59: // unit_literal: 'L'
 #line 112 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e5,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e-3, { 3,  0,  0,  0,  0,  0,  0,  0}); }
 #line 1050 "../quantity.tab.cpp"
     break;
 
-  case 60: // unit_literal: 'e' 'V'
+  case 60: // unit_literal: 'b' 'a' 'r'
 #line 113 "quantity.y"
-                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1.60218e-19, {2, -2, 1, 0, 0, 0, 0, 0}); }
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1e5,  {-1, -2,  1,  0,  0,  0,  0,  0}); }
 #line 1056 "../quantity.tab.cpp"
     break;
 
-  case 61: // exponent_group: '(' exponent_group ')'
-#line 117 "quantity.y"
-                          { yylhs.value.as < int > () = yystack_[1].value.as < int > (); }
+  case 61: // unit_literal: 'e' 'V'
+#line 114 "quantity.y"
+                  { yylhs.value.as < ::dim::si::dynamic_quantity > () = ::dim::si::dynamic_quantity(1.60218e-19, {2, -2, 1, 0, 0, 0, 0, 0}); }
 #line 1062 "../quantity.tab.cpp"
     break;
 
-  case 62: // exponent_group: INTEGER
+  case 62: // exponent_group: '(' exponent_group ')'
 #line 118 "quantity.y"
-     { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
+                          { yylhs.value.as < int > () = yystack_[1].value.as < int > (); }
 #line 1068 "../quantity.tab.cpp"
     break;
 
+  case 63: // exponent_group: INTEGER
+#line 119 "quantity.y"
+     { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
+#line 1074 "../quantity.tab.cpp"
+    break;
 
-#line 1072 "../quantity.tab.cpp"
+
+#line 1078 "../quantity.tab.cpp"
 
             default:
               break;
@@ -1257,132 +1263,132 @@ namespace siquant {
 
 
 
-  const signed char parser::yypact_ninf_ = -15;
+  const signed char parser::yypact_ninf_ = -14;
 
-  const signed char parser::yytable_ninf_ = -51;
+  const signed char parser::yytable_ninf_ = -52;
 
   const short
   parser::yypact_[] =
   {
-       0,   -15,    56,   -15,   -15,   -15,   -15,   -15,   -15,   -15,
-     138,   -13,   -15,   -15,   -15,   -15,    -7,    50,    24,   -15,
-      -3,   -15,    27,   -15,    48,   -15,   -15,    44,   -15,   -15,
-      16,   -15,   -15,   -15,   -15,    15,    77,   -14,    41,   -15,
-      62,   106,    43,   -15,    88,   -15,   142,    76,   -15,   -15,
-     -15,    63,   -15,    97,   -15,   -15,   -15,    90,   -15,   -15,
-     -15,   -15,   -15,    56,    56,    -1,    89,   -13,    -7,   -15,
-      24,    -3,   -15,   -15,   -15,   -15,   -15,   -15,   128,   128,
-     -15,    -1,   -15,   129,   -15
+       1,   -14,    58,    58,   -14,   -14,   -14,   -14,   -14,   -14,
+     -14,   140,   -11,   -14,   -14,   -14,   -14,    -6,    51,    25,
+     -14,    47,   -14,    30,   -14,    50,   -14,   -14,    45,   -14,
+     -14,    18,   -14,   -14,   -14,   -14,    17,    79,   -13,    43,
+     -14,    64,   108,    44,   -14,    90,   -14,    44,   144,    78,
+     -14,   -14,   -14,    65,   -14,    99,   -14,   -14,   -14,    92,
+     -14,   -14,   -14,   -14,   -14,    58,    58,     2,    91,   -11,
+      -6,   -14,    25,    47,   -14,   -14,   -14,   -14,   -14,   -14,
+     130,   130,   -14,     2,   -14,   131,   -14
   };
 
   const signed char
   parser::yydefact_[] =
   {
-       0,     3,     0,    11,    12,    13,    14,    15,    16,    17,
+       0,     4,     0,     0,    12,    13,    14,    15,    16,    17,
       18,    19,    20,    21,    22,    23,    24,    25,    26,    27,
-      28,    29,    31,    32,     0,    34,    36,    51,    40,    42,
-      43,    44,    45,    46,    47,    48,     0,     0,     0,    58,
-       0,     0,     2,     8,     0,    10,     0,     0,    37,    41,
-      55,     0,    39,     0,    38,    49,    56,     0,    52,    53,
-      54,    60,     1,     0,     0,     0,    30,     0,     0,    50,
-       0,     0,     9,     4,    35,    57,    33,    59,     7,     6,
-      62,     0,     5,     0,    61
+      28,    29,    30,    32,    33,     0,    35,    37,    52,    41,
+      43,    44,    45,    46,    47,    48,    49,     0,     0,     0,
+      59,     0,     0,     2,     9,     0,    11,     3,     0,     0,
+      38,    42,    56,     0,    40,     0,    39,    50,    57,     0,
+      53,    54,    55,    61,     1,     0,     0,     0,    31,     0,
+       0,    51,     0,     0,    10,     5,    36,    58,    34,    60,
+       8,     7,    63,     0,     6,     0,    62
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-     -15,   -15,    -2,   -15,   -15,    92,    61
+     -14,   -14,    -2,   -14,   -14,    93,    61
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-       0,    41,    42,    43,    44,    45,    82
+       0,    42,    43,    44,    45,    46,    84
   };
 
   const signed char
   parser::yytable_[] =
   {
-      46,     1,    58,    80,    49,    48,    81,     2,    51,     3,
+      47,    48,     1,    60,     2,    51,    82,    50,     3,    83,
        4,     5,     6,     7,     8,     9,    10,    11,    12,    13,
       14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-      24,    25,    59,    50,    26,    27,    28,    29,    30,    31,
-      32,    33,    34,    35,    36,    37,    63,    38,    64,    65,
-     -50,    39,    40,   -50,    54,   -50,   -50,    52,   -50,    53,
-      55,    78,    79,     2,    56,     3,     4,     5,     6,     7,
-       8,     9,    10,    11,    12,    13,    14,    15,    16,    17,
-      18,    19,    20,    21,    22,    23,    24,    25,    57,    60,
-      26,    27,    28,    29,    30,    31,    32,    33,    34,    35,
-      36,    37,    61,    38,    66,    67,    62,    39,    40,    74,
-      68,    69,    70,    75,    71,    76,    22,    23,    24,    25,
-      77,    47,    26,    27,    28,    29,    30,    31,    32,    33,
-      34,    35,    36,    37,    65,    38,    72,    84,   -30,    39,
-      40,   -30,    83,   -30,   -30,    63,   -30,    64,    65,     0,
-      73,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      24,    25,    26,    61,    52,    27,    28,    29,    30,    31,
+      32,    33,    34,    35,    36,    37,    38,    65,    39,    66,
+      67,   -51,    40,    41,   -51,    56,   -51,   -51,    53,   -51,
+      54,    55,    57,    80,    81,     3,    58,     4,     5,     6,
+       7,     8,     9,    10,    11,    12,    13,    14,    15,    16,
+      17,    18,    19,    20,    21,    22,    23,    24,    25,    26,
+      59,    62,    27,    28,    29,    30,    31,    32,    33,    34,
+      35,    36,    37,    38,    63,    39,    68,    69,    64,    40,
+      41,    76,    70,    71,    72,    77,    73,    78,    23,    24,
+      25,    26,    79,    49,    27,    28,    29,    30,    31,    32,
+      33,    34,    35,    36,    37,    38,    67,    39,    74,    86,
+     -31,    40,    41,   -31,    85,   -31,   -31,    65,   -31,    66,
+      67,     0,    75,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      47
+       0,     0,    49
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       2,     1,    16,     4,    11,    18,     7,     7,    11,     9,
-      10,    11,    12,    13,    14,    15,    16,    17,    18,    19,
-      20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
-      30,    31,    46,     9,    34,    35,    36,    37,    38,    39,
-      40,    41,    42,    43,    44,    45,     3,    47,     5,     6,
-       0,    51,    52,     3,    10,     5,     6,    30,     8,    11,
-      44,    63,    64,     7,    49,     9,    10,    11,    12,    13,
-      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
-      24,    25,    26,    27,    28,    29,    30,    31,    11,    48,
-      34,    35,    36,    37,    38,    39,    40,    41,    42,    43,
-      44,    45,    40,    47,    16,    17,     0,    51,    52,    33,
-      22,    23,    24,    50,    26,    18,    28,    29,    30,    31,
-      30,    32,    34,    35,    36,    37,    38,    39,    40,    41,
-      42,    43,    44,    45,     6,    47,    44,     8,     0,    51,
-      52,     3,    81,     5,     6,     3,     8,     5,     6,    -1,
-       8,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+       2,     3,     1,    16,     3,    11,     4,    18,     7,     7,
+       9,    10,    11,    12,    13,    14,    15,    16,    17,    18,
+      19,    20,    21,    22,    23,    24,    25,    26,    27,    28,
+      29,    30,    31,    46,     9,    34,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    45,     3,    47,     5,
+       6,     0,    51,    52,     3,    10,     5,     6,    11,     8,
+      30,    11,    44,    65,    66,     7,    49,     9,    10,    11,
+      12,    13,    14,    15,    16,    17,    18,    19,    20,    21,
+      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
+      11,    48,    34,    35,    36,    37,    38,    39,    40,    41,
+      42,    43,    44,    45,    40,    47,    16,    17,     0,    51,
+      52,    33,    22,    23,    24,    50,    26,    18,    28,    29,
+      30,    31,    30,    32,    34,    35,    36,    37,    38,    39,
+      40,    41,    42,    43,    44,    45,     6,    47,    45,     8,
+       0,    51,    52,     3,    83,     5,     6,     3,     8,     5,
+       6,    -1,     8,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      32
+      -1,    -1,    32
   };
 
   const signed char
   parser::yystos_[] =
   {
-       0,     1,     7,     9,    10,    11,    12,    13,    14,    15,
-      16,    17,    18,    19,    20,    21,    22,    23,    24,    25,
-      26,    27,    28,    29,    30,    31,    34,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    45,    47,    51,
-      52,    54,    55,    56,    57,    58,    55,    32,    18,    11,
-       9,    11,    30,    11,    10,    44,    49,    11,    16,    46,
-      48,    40,     0,     3,     5,     6,    16,    17,    22,    23,
-      24,    26,    58,     8,    33,    50,    18,    30,    55,    55,
-       4,     7,    59,    59,     8
+       0,     1,     3,     7,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    34,    35,    36,
+      37,    38,    39,    40,    41,    42,    43,    44,    45,    47,
+      51,    52,    54,    55,    56,    57,    58,    55,    55,    32,
+      18,    11,     9,    11,    30,    11,    10,    44,    49,    11,
+      16,    46,    48,    40,     0,     3,     5,     6,    16,    17,
+      22,    23,    24,    26,    58,     8,    33,    50,    18,    30,
+      55,    55,     4,     7,    59,    59,     8
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,    53,    54,    54,    55,    55,    55,    55,    55,    56,
-      56,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+       0,    53,    54,    54,    54,    55,    55,    55,    55,    55,
+      56,    56,    57,    57,    57,    57,    57,    57,    57,    57,
       57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
+      57,    58,    58,    58,    58,    58,    58,    58,    58,    58,
       58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
       58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
-      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
-      58,    59,    59
+      58,    58,    59,    59
   };
 
   const signed char
   parser::yyr2_[] =
   {
-       0,     2,     1,     1,     3,     3,     3,     3,     1,     2,
+       0,     2,     1,     2,     1,     3,     3,     3,     3,     1,
+       2,     1,     1,     1,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     3,     1,     3,     1,     2,     2,     2,
-       1,     2,     1,     1,     1,     1,     1,     1,     1,     2,
-       1,     1,     2,     2,     2,     2,     2,     3,     1,     3,
-       2,     3,     1
+       1,     1,     1,     1,     3,     1,     3,     1,     2,     2,
+       2,     1,     2,     1,     1,     1,     1,     1,     1,     1,
+       2,     1,     1,     2,     2,     2,     2,     2,     3,     1,
+       3,     2,     3,     1
   };
 
 
@@ -1408,13 +1414,13 @@ namespace siquant {
   const signed char
   parser::yyrline_[] =
   {
-       0,    43,    43,    44,    48,    49,    50,    51,    52,    56,
-      57,    61,    62,    63,    64,    65,    66,    67,    68,    69,
+       0,    43,    43,    44,    45,    49,    50,    51,    52,    53,
+      57,    58,    62,    63,    64,    65,    66,    67,    68,    69,
       70,    71,    72,    73,    74,    75,    76,    77,    78,    79,
-      83,    84,    85,    86,    87,    88,    89,    90,    91,    92,
+      80,    84,    85,    86,    87,    88,    89,    90,    91,    92,
       93,    94,    95,    96,    97,    98,    99,   100,   101,   102,
      103,   104,   105,   106,   107,   108,   109,   110,   111,   112,
-     113,   117,   118
+     113,   114,   118,   119
   };
 
   void
@@ -1492,9 +1498,9 @@ namespace siquant {
   }
 
 } // siquant
-#line 1496 "../quantity.tab.cpp"
+#line 1502 "../quantity.tab.cpp"
 
-#line 121 "quantity.y"
+#line 122 "quantity.y"
 
 
 int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_parser_driver& io_driver)

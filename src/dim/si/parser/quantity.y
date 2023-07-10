@@ -40,7 +40,8 @@
 %%
 
 output :
-   unit_group             { driver.result = $1; return 0; }      
+   unit_group             { driver.result = $1; return 0; }  
+   | MULTIPLY unit_group  { driver.result = $2; return 0; }    
    | error                { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
    ;
    

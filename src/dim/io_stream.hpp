@@ -92,6 +92,14 @@ class quantity_facet : public std::locale::facet {
     template <class Q, DIM_IS_QUANTITY(Q)>
     Q format(typename Q::scalar const& s, const char* symbol) const
     {
+        // Peel off any multiplication
+        switch (*symbol) {
+            case '.':
+            case '_':
+            case '*':
+            case ' ': symbol++;
+            default:;
+        }
         auto const* base = input_symbol.get(Q::index());
         if (base) {
             auto const* formatter = static_cast<format_map<Q> const*>(base)->get(symbol);
@@ -109,10 +117,18 @@ class quantity_facet : public std::locale::facet {
     template <class S, class System>
     dynamic_quantity<S, System> format(S const& s, const char* symbol) const
     {
+        // Peel off any multiplication
+        switch (*symbol) {
+            case '.':
+            case '_':
+            case '*':
+            case ' ': symbol++;
+            default:;
+        }
         auto const* base = dynamic_input_symbol.get(System::id);
         if (base) {
             auto const* map = static_cast<dynamic_formatter<S, System> const*>(base);
-            auto const* format = map.get(symbol);
+            auto const* format = map->get(symbol);
             if (format) { return format->input(s); }
         }
         auto result = detail::parse_standard_rep<System, S>(symbol);
@@ -373,17 +389,13 @@ bool from_string(Q& o_quantity, std::string const& i_string)
     typename Q::scalar value;
     std::size_t endOfNumber;
     value = std::stod(i_string, &endOfNumber);
-    if (i_string[endOfNumber] == '_') { endOfNumber++; }
-    std::string unit_string = i_string.substr(endOfNumber, i_string.find(","));
-
+    char const* unit_string = i_string.data() + endOfNumber;
     std::locale loc;  // Get the global locale
     if (std::has_facet<quantity_facet>(loc)) {
-        o_quantity = std::use_facet<quantity_facet>(loc).format<Q>(value, unit_string.c_str());
-        if (o_quantity.is_bad()) { return false; }
-    } else if (!parse_quantity<Q>(o_quantity, value, unit_string.c_str())) {
-        return false;
+        o_quantity = std::use_facet<quantity_facet>(loc).format<Q>(value, unit_string);
+        return o_quantity.is_bad() ? false : true;
     }
-    return true;
+    return parse_quantity<Q>(o_quantity, value, unit_string);
 }
 
 }  // end of namespace dim
