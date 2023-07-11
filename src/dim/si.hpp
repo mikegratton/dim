@@ -7,7 +7,7 @@
 #include "dim/si/si_io.hpp"
 
 /**
- * @brief Simplify the namespaces for si. All symbols are in the SI namespace.
+ * @brief Simplify the namespace so that all symbols are in the namespace `si`.
  */
 namespace si = dim::si;
 

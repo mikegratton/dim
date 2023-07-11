@@ -6,13 +6,13 @@ namespace dim {
 namespace si {
 using dynamic_quantity = ::dim::dynamic_quantity<double, si::system>;
 }
-// Parse unit strings using si conventions
-// This is defined in lexer quantity.l
 namespace detail {
+/// Parse unit strings using SI conventions
 template <>
 ::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend);
-}
+}  // namespace detail
 
+/// Print units using the default SI symbols
 template <>
 void print_unit<dim::si::system>(char* buf, dynamic_unit const& unit, bool spaceit);
 

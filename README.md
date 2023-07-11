@@ -182,7 +182,12 @@ we wanted to represent a screw pitch.  We could do
 ```cpp
 using Pitch = decltype(meter/radian);
 ```
-and then Pitch becomes a convenient alias. See the code `example/advanced.cpp`.
+and then Pitch becomes a convenient alias. See the code `example/advanced.cpp`. Alternatively,
+you can work with the template parameters
+```cpp
+using Pitch = quantity<unit_divide_t<Length::unit, Angle::unit>, double>;
+```
+The metafunctions `unit_multiply_t` and `unit_pow_t` are defined similarly.
 
 #### Defining Custom Literal Formatters
 Dim ships with literal formatters based on the NIST standard. But often other formatters are
@@ -218,9 +223,8 @@ Every quantity class holds the typedefs
 
 ### The `dimensionless_cast` Escape Hatch
 Dim allows you to "escape" from the confines of the library at will.  The magnitude of a quantity
-is available via `dimensionless_cast()`.  Accessing the magnitude in this way means potentially
-having dimensional mismatch (that is, the library cannot check you), but this is very useful when 
-serializing or deserializing data.
+is available via `dimensionless_cast()`.  Accessing the magnitude can be useful when 
+serializing data.
 
 ## Guard Values, NaN, and `bad_quantity`
 Dim uses NaN as a guard value in several places. You can construct a "bad" version of a type
@@ -355,19 +359,23 @@ std::cout << "Torque is " << T << "\n";
 ```
 If there's no output formatter for `si::Torque`, the output will be "5_rad^-1_kg_m^2_s^-2".
 
+You can access these basic printing functions directly with `print_unit()` and `print_quantity()`. The former
+prints the unit alone, while the latter will print the scalar and the unit joined by '_'. 
+
 ## Parsing Quantities
 
-Input is a different beast. One interesting part is that because Dim is strongly typed, we know
-the desired destination quantity type.  We need to see that the input string can be parsed to a 
-matching dimension. For example,
+Input is a different beast. Because Dim is strongly typed, we know the desired quantity type.  The task is
+to verify that the input string can be parsed to a matching dimension, then apply the conversion factor for
+that dimension to the scalar part. For example,
 ```cpp
 si::Angle the_angle;
 std::cout << "Enter an angle: ";
 std::cin >> the_angle;
 ```
-If the user enters is `3 rad`, all is well. If the enters `12 ft`, we've got a problem.  As Dim doesn't
-use exceptions, we treat incompatible input dimensions as a "bad quantity" -- a silent `NaN`.  The test
-`the_angle.is_bad()` can check that a valid input was received. 
+If the user enters is `3 deg`, Dim determines that the scalar part is 3 and the symbol is 3*pi/180 rad -- an 
+angle type. All is well. If the user enters `12 ft`, this is a valid quantity, but not a valid angle.  As Dim 
+doesn't use exceptions, we treat incompatible input dimensions as a "bad quantity" -- a silent `NaN`.  The test
+`the_angle.is_bad()` can check if an invalid input was received. 
 
 ### Stream-based Parsing
 The facet maintains a map from input type to symbol for each quantity type indexed by the symbol string.
@@ -389,7 +397,7 @@ are derived from the NIST suggestions. For instance, here's the default length m
         {"nautical_mile", formatter<Length>("nautical_mile", nautical_mile)}
     };
 ```
-Note that `m` and related SI units aren't included because they are handled by the fallback parser
+Note that "m" and related SI ("km", "mm", etc) units aren't included because they are handled by the fallback parser
 below -- SI units are generally easy to parse. But suppose for your domain, you wanted to accept "feet" for 
 "foot" and "nm" for nautical mile (yes, that's a symbol clash with nanometer -- but you know what your users 
 expect).  You could add these to the facet via
@@ -401,10 +409,11 @@ facet->input_formatter(formatter<Length>("nm", nautical_mile));
 Because the map is consulted before the fallback parser is called, you've overridden the meaning of "nm" for 
 your program.
 
-Dim uses a custom flat map for this purpose. The maps are sorted upon each insertion, but are substantially
+Dim uses a custom flat map to store the formatters. The maps are sorted upon each insertion, but are substantially
 faster to search during normal operation of the facet as the data is contiguous in memory.
 
-Dim provides `si::to_string()` and `si::from_string()` to use the facet without stream-based operations.
+Dim provides `si::to_string()` and `si::from_string()` to use the facet without stream-based operations.  Additionally,
+`parse_quantity()` provides an interface that doesn't use `std::string` or the facet.
 
 ### Fallback Parser
 
@@ -413,7 +422,7 @@ parser understands (almost all of) the SI prefixes and symbols defined in NIST S
 `_`, `*` and space as multiplication, `/` as division, and `^` as exponentiation, as well as
 parentheses. 
 
-The symbol tables differ very slightly from the standard so that only ASCII characters are used.
+The symbol tables differ very slightly from the standard, avoiding non-ASCII characters.
 
 | Prefix | Magnitude |
 |--------|-----------|
@@ -437,7 +446,7 @@ The symbol tables differ very slightly from the standard so that only ASCII char
 | k | 1e3 |
 | h | 1e2 |
     
-Note mu (&#956;) has been replaced by "u". 
+*mu (&#956;) has been replaced by "u". 
 
 |Symbol|Name|
 |------|----|
@@ -452,7 +461,7 @@ Note mu (&#956;) has been replaced by "u".
 | Hz   | hertz|
 | sr   | steradian|
 | N    | newton|
-| Pa   | pascale|
+| Pa   | pascal|
 | J    | joule|
 | W    | watt|
 | C    | coulomb|
@@ -471,14 +480,19 @@ Note mu (&#956;) has been replaced by "u".
 | L    | liter|
 | eV   | electron volt|
 | bar  | bar |
+| -- | are**|
 
-Note Omega (&#937;) has been replaced by "R". The are (symbol "a") has been excluded as it makes parsing the 
-units string ambiguous (is "Pa" a pascal or is it a petaare?).  The parser has been designed to avoid memory
-allocation or string copies.
+*Omega (&#937;) has been replaced by "R". 
+
+**The are (symbol "a") has been excluded as it makes parsing the units string ambiguous (is "Pa" a pascal or is it a petaare?).  
+
+The Bison-generated C++ code is part of the Dim project so that you don't need Bison installed to build or use Dim. If you wish to
+modify the grammar, the provided Makefile will regenerate the code. The parser has been designed to avoid memory allocation or string 
+copies. 
 
 ## Simple and Complete Parsing
 
-The `parser_quantity()` function accesses the default unit symbol maps and uses the fallback parser where 
+The `parse_quantity()` function accesses the default unit symbol maps and uses the fallback parser where 
 required. You call it like so:
 ```cpp
 double scale = ...; // Taken from your data source
@@ -488,11 +502,13 @@ if (parse_quantity(f, scale, unit_string)) {
     // Use f
 }
 ```
+This avoids the use of `std::string` or `iostream` while still having access to both layers of the input code. 
+The default symbol map is consulted first, followed by the fallback parser if that map doesn't contain the symbol.
 
 
 # Advanced Topics
 
-## Metaprograming with Quantities
+## Metaprogramming with Quantities
 One pitfall for C++ class templates is that each instantiation is a totally independent class at 
 run time with no relation to any other instantiation.  Thus `si::Length` and `si::Time` are no 
 more related than `std::string` and `double`.  This is often painful for code that wants to handle 
@@ -668,9 +684,9 @@ Note that standard SI notation doesn't appear below as the parser handles it jus
 * "cu_in" : Cubic Inch
 * "in^3" : Cubic Inch
 * "cubic_inch" : Cubic Inch
-* "cu_yd" : Cubic Inch
-* "yd^3" : Cubic Inch
-* "cubic_yard" : Cubic Inch
+* "cu_yd" : Cubic Yard
+* "yd^3" : Cubic Yard
+* "cubic_yard" : Cubic Yard
 
 ## FlowRate
 * "gal/s" : Gallon per Second
