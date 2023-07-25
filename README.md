@@ -46,10 +46,10 @@ Bug fixes:
 
 Features:
 * Use a custom flat map for formatters. These make setting and changing formatters less verbose,
-as well as improving runtime performance.
+as well as improving runtime performance by some 30%.
 * Add unit index to quantity and unit. This is a 64-bit number that uniquely represents each unit.
 * Made major improvements to the Bison-based parser. The new parser does not copy any strings and 
-  is much more efficient.
+  is 10% more efficient.
 
 Changes:
 * Due to the parser changes, the are ("a") and the hectare ("ha") are no longer recognized by the 

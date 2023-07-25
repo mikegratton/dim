@@ -5,6 +5,7 @@ add_executable(dimTest
     si_io_test.cpp
     parser_test.cpp
     format_map_test.cpp
+    parse_timing.cpp
 )
 target_link_libraries(dimTest PUBLIC dim)
 
