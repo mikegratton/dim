@@ -395,7 +395,6 @@ public:
         return value;
     }
 
-
     // = operators
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend type& operator+= (type& lhs, Q2 const& rhs)
@@ -480,8 +479,10 @@ public:
         return !(lhs < rhs);
     }
 
+    Scalar v() const { return value; }
+
     /// Cast away the units to access the raw scalar
-    friend constexpr Scalar const& dimensionless_cast(type const& r) { return r.value; }
+    friend constexpr Scalar dimensionless_cast(type const& r) { return r.value; }
 
     /// Cast away the units to access the raw scalar
     friend constexpr Scalar& dimensionless_cast(type& r) { return r.value; }
@@ -700,6 +701,7 @@ ratpow(Q const& q)
     return quantity<unit_pow_t<unit_root_t<typename Q::unit, Denom>, Num>, typename Q::scalar>
            (std::pow(dimensionless_cast(q), static_cast<typename Q::scalar>(Num) / static_cast<typename Q::scalar>(Denom)));
 }
+
 }
 
 /* clang-format on*/

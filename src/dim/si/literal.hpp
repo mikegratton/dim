@@ -1,7 +1,9 @@
 #pragma once
 #include "definition.hpp"
 
-namespace dim::si::literal {
+namespace dim {
+namespace si {
+namespace literal {
 /// Create literal formatters for both integer and floating point types
 #define DIM_MAKE_LITERAL(symbol, unit)                                                                     \
     inline constexpr ::dim::quantity<decltype(unit)::type, double> operator"" symbol(long double x)        \
@@ -40,4 +42,6 @@ DIM_MAKE_LITERAL(_Im, dim::si::lumen_)
 DIM_MAKE_LITERAL(_Ix, dim::si::lux_)
 DIM_MAKE_LITERAL(_kat, dim::si::katal_)
 
-}  // namespace dim::si::literal
+}  // namespace literal
+}  // namespace si
+}  // namespace dim
