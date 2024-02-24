@@ -1,5 +1,6 @@
 add_executable(dimTest
     main.cpp
+    io_test.cpp
     literal_test.cpp
     si_test.cpp
     si_io_test.cpp

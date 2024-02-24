@@ -1,5 +1,6 @@
 
 set(source
+    dim/io.cpp
     dim/io_stream.cpp
     dim/format_map.cpp
     dim/si/si_io.cpp

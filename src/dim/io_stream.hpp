@@ -304,6 +304,10 @@ std::ostream& operator<<(std::ostream& os, dynamic_quantity<S, System> const& dq
     return os;
 }
 
+namespace detail {
+bool extract_quantity(char* o_buf, char*& o_unit_start, std::size_t bufmax, std::istream& is);
+};
+
 /// Write the unit U to a stream using the default output symbol
 template <class U, DIM_IS_UNIT(U)>
 std::ostream& operator<<(std::ostream& os, unit_base<U> const& u)
@@ -321,21 +325,19 @@ std::ostream& operator<<(std::ostream& os, unit_base<U> const& u)
 template <class Q, DIM_IS_QUANTITY(Q)>
 std::istream& operator>>(std::istream& is, Q& out_q)
 {
-    typename Q::scalar value;
-    char unit_string[128];
-    is >> value >> std::skipws >> unit_string;
-    char* unit_start = unit_string[0] == '_' ? unit_string + 1 : unit_string;
-    for (char* cursor = unit_start; *cursor != 0; cursor++) {
-        if (*cursor == ',') {
-            *cursor = '\0';
-            is.putback(',');
-            break;
+    using Scalar = typename Q::scalar;
+    char quanity_string[128];
+    char* unit;
+    if (detail::extract_quantity(quanity_string, unit, sizeof(quanity_string), is)) {
+        long double s = std::strtold(quanity_string, nullptr);
+        Scalar value(s);
+        if (std::has_facet<quantity_facet>(is.getloc())) {
+            out_q = std::use_facet<quantity_facet>(is.getloc()).format<Q>(value, unit);
+            if (out_q.is_bad()) { is.setstate(std::ios_base::failbit); }
+        } else if (!parse_quantity<Q>(out_q, value, unit)) {
+            is.setstate(std::ios_base::failbit);
         }
-    }
-    if (std::has_facet<quantity_facet>(is.getloc())) {
-        out_q = std::use_facet<quantity_facet>(is.getloc()).format<Q>(value, unit_start);
-        if (out_q.is_bad()) { is.setstate(std::ios_base::failbit); }
-    } else if (!parse_quantity<Q>(out_q, value, unit_start)) {
+    } else {
         is.setstate(std::ios_base::failbit);
     }
     return is;
@@ -347,22 +349,20 @@ std::istream& operator>>(std::istream& is, dynamic_quantity<S, system_tag>& o_q)
 {
     S value;
     char unit_string[128];
-    is >> value >> std::skipws >> unit_string;
-    char* unit_start = unit_string[0] == '_' ? unit_string + 1 : unit_string;
-    for (char* cursor = unit_start; *cursor != 0; cursor++) {
-        if (*cursor == ',') {
-            *cursor = '\0';
-            is.putback(',');
-            break;
+    char quanity_string[128];
+    char* unit;
+    if (detail::extract_quantity(quanity_string, unit, sizeof(quanity_string), is)) {
+        long double s = std::strtold(quanity_string, nullptr);
+        value = S(s);
+        if (std::has_facet<quantity_facet>(is.getloc())) {
+            o_q = std::use_facet<quantity_facet>(is.getloc()).format<S, System>(value, unit);
+            if (o_q.is_bad()) { is.setstate(std::ios_base::failbit); }
+            return is;
         }
+        o_q = detail::parse_standard_rep<System, S>(unit);
+        o_q.value *= value;
     }
-    if (std::has_facet<quantity_facet>(is.getloc())) {
-        o_q = std::use_facet<quantity_facet>(is.getloc()).format<S, System>(value, unit_start);
-        if (o_q.is_bad()) { is.setstate(std::ios_base::failbit); }
-        return is;
-    }
-    o_q = detail::parse_standard_rep<System, S>(unit_string);
-    o_q.value *= value;
+
     if (o_q.is_bad()) { is.setstate(std::ios_base::failbit); }
     return is;
 }
@@ -387,9 +387,9 @@ template <class Q, DIM_IS_QUANTITY(Q)>
 bool from_string(Q& o_quantity, std::string const& i_string)
 {
     typename Q::scalar value;
-    std::size_t endOfNumber;
-    value = std::stod(i_string, &endOfNumber);
-    char const* unit_string = i_string.data() + endOfNumber;
+    char* endOfNumber;
+    value = std::strtold(i_string.data(), &endOfNumber);
+    char const* unit_string = endOfNumber;
     std::locale loc;  // Get the global locale
     if (std::has_facet<quantity_facet>(loc)) {
         o_quantity = std::use_facet<quantity_facet>(loc).format<Q>(value, unit_string);

@@ -141,4 +141,11 @@ struct dynamic_formatter : public detail::container_base {
     const dynamic add;
 };
 
+namespace detail {
+enum char_parse_state { kStart, kSignificand, kFraction, kExponentStart, kExponent, kUnit, kError };
+bool is_unit_char(char c, char_parse_state& io_state);
+
+bool is_float_part(char c, char_parse_state& io_state);
+}  // namespace detail
+
 }  // end of namespace dim
