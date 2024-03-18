@@ -60,7 +60,7 @@ class quantity_facet : public std::locale::facet {
     /**
      * @brief Format a quantity for output (convert to correct scalar value, assign symbol)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     formatted_quantity<typename Q::scalar> format(Q const& q) const
     {
         auto const* base = output_symbol.get(Q::index());
@@ -89,7 +89,7 @@ class quantity_facet : public std::locale::facet {
      * @brief Format a scalar + symbol into a quantity. If the conversion is illegal, the value
      * will be NaN (check with is_bad() method on quantity)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     Q format(typename Q::scalar const& s, const char* symbol) const
     {
         // Peel off any multiplication
@@ -141,7 +141,7 @@ class quantity_facet : public std::locale::facet {
      *
      * @param f The new output formatter for quantity Q
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void output_formatter(formatter<Q> const& f)
     {
         output_symbol.set(f.index(), std::make_unique<formatter<Q>>(f));
@@ -154,7 +154,7 @@ class quantity_facet : public std::locale::facet {
      * @param scale  One unit of symbol is this much of Q
      * @param add    (For affine maps, defaults to zero)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void output_formatter(char const* symbol, Q scale, Q add = Q(0.0))
     {
         output_formatter(formatter<Q>(symbol, scale, add));
@@ -175,7 +175,7 @@ class quantity_facet : public std::locale::facet {
      * for this type, replacing any previous formatter with the same symbol for the
      * same type Q.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void input_formatter(formatter<Q> const& f)
     {
         format_map<Q>* map = static_cast<format_map<Q>*>(input_symbol.get(f.index()));
@@ -191,7 +191,7 @@ class quantity_facet : public std::locale::facet {
     /**
      * @brief Replace the symbol->formatter map for Q with "map"
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void input_formatter(format_map<Q> const& map)
     {
         input_symbol.set(Q::index(), make_unique_map<format_map<Q>>(map));
@@ -228,7 +228,7 @@ class quantity_facet : public std::locale::facet {
     /**
      * @brief Drop input formatters for Q (reverting to default format)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void clear_input_formatter()
     {
         input_symbol.erase(Q::index());
@@ -237,7 +237,7 @@ class quantity_facet : public std::locale::facet {
     /**
      * @brief Drop all output formatters for Q (reverting to default format)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void clear_output_formatter()
     {
         output_symbol.erase(Q::index());
@@ -279,7 +279,7 @@ inline std::ostream& operator<<(std::ostream& os, formatted_quantity<scalar> con
 }
 
 /// Write a quantity Q to a stream using the facet
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 std::ostream& operator<<(std::ostream& os, Q const& q)
 {
     if (std::has_facet<quantity_facet>(os.getloc())) {
@@ -291,7 +291,7 @@ std::ostream& operator<<(std::ostream& os, Q const& q)
 }
 
 /// Write a dynamic_quantity to a stream using the facet
-template <class S, class System, DIM_IS_SCALAR(S)>
+template <ScalarType S, class System>
 std::ostream& operator<<(std::ostream& os, dynamic_quantity<S, System> const& dq)
 {
     if (std::has_facet<quantity_facet>(os.getloc())) {
@@ -309,7 +309,7 @@ bool extract_quantity(char* o_buf, char*& o_unit_start, std::size_t bufmax, std:
 };
 
 /// Write the unit U to a stream using the default output symbol
-template <class U, DIM_IS_UNIT(U)>
+template <UnitType U>
 std::ostream& operator<<(std::ostream& os, U const& u)
 {
     bool spaceit = false;
@@ -322,7 +322,7 @@ std::ostream& operator<<(std::ostream& os, U const& u)
 /**
  * @breif Calls parse_quantity, using the quantity_facet to extract a custom unit map if available.
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 std::istream& operator>>(std::istream& is, Q& out_q)
 {
     using Scalar = typename Q::scalar;
@@ -368,7 +368,7 @@ std::istream& operator>>(std::istream& is, dynamic_quantity<S, system_tag>& o_q)
 }
 
 /// Make a string representation of Q using the facet
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 std::string to_string(Q i_quantity)
 {
     std::locale loc;  // Get the global locale
@@ -383,7 +383,7 @@ std::string to_string(Q i_quantity)
 
 /// Parse a string representation to Q using the facet. If the string
 /// does not represent a quantity of type Q, return false
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 bool from_string(Q& o_quantity, std::string const& i_string)
 {
     typename Q::scalar value;

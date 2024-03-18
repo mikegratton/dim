@@ -64,7 +64,7 @@ dynamic_quantity<scalar, System> parse_standard_rep(const char* unit_str, int ne
  * dimensions, return false.  Otherwise "scale" represents the transform to
  * U's system
  */
-template <class U, class scalar = double, DIM_IS_UNIT(U)>
+template <UnitType U, class scalar = double>
 bool parse_unit_dynamic(scalar& scale, const char* unit_str)
 {
     dynamic_quantity<scalar, typename U::system> dim = parse_standard_rep<typename U::system, scalar>(unit_str);

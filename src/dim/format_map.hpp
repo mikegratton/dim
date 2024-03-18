@@ -45,7 +45,7 @@ class format_symbol_map : public detail::container_base {
     /**
      * @brief Add or modify the formatter for a symbol
      */
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     void set(const char* symbol_, Q const& scale_, Q const& add_ = Q(0))
     {
         set(SymbolFormat(symbol_, scale_, add_));
@@ -166,14 +166,14 @@ class format_index_map : public detail::container_base {
 };
 
 /// Format maps for static quantity types
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 using format_map = format_symbol_map<formatter<Q>>;
 
 /**
  * @brief Create template specializations of this function for your system to control the
  * default formats available for input
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 format_map<Q> const& get_default_format()
 {
     static const format_map<Q> EMPTY;
@@ -191,7 +191,7 @@ using dynamic_format_map = format_symbol_map<dynamic_formatter<S, System>>;
  * (1) Look up unit_str in unit_map (backed by the default_format map if not specified)
  * (2) If not found, use Q::system's dynamic quantity parser
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 bool parse_quantity(Q& o_q, double value, const char* unit_str, format_map<Q> const& unit_map = get_default_format<Q>())
 {
     auto const* formatter = unit_map.get(unit_str);

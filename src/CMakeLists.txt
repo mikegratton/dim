@@ -23,7 +23,7 @@ target_include_directories(dim
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set_target_properties(dim PROPERTIES CXX_STANDARD 11)
+set_target_properties(dim PROPERTIES CXX_STANDARD 20)
 
 install(DIRECTORY dim TYPE INCLUDE
     FILES_MATCHING PATTERN *.hpp)

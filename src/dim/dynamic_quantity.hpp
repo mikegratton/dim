@@ -11,7 +11,7 @@ struct dynamic_quantity_tag {};
 
 using dynamic_unit = std::array<int8_t, 8>;
 
-template <class U, DIM_IS_UNIT(U)>
+template <UnitType U>
 constexpr dynamic_unit toDynamic()
 {
     return {U::length(),      U::time(),   U::mass(),    U::angle(),
@@ -43,7 +43,7 @@ inline bool unitsMatch(dynamic_unit const& i_u1, dynamic_unit const& i_u2)
 
 /// Run-time dimensioned quantities. These are inefficient compared to quantity<>, but
 /// are convenient for input operations
-template <class S, class System, DIM_IS_SCALAR(S)>
+template <ScalarType S, class System>
 struct dynamic_quantity : public dynamic_quantity_tag {
     using scalar = S;
     using system = System;
@@ -54,7 +54,7 @@ struct dynamic_quantity : public dynamic_quantity_tag {
     dynamic_quantity() = default;
     constexpr explicit dynamic_quantity(scalar i_v) : value_(i_v), unit_{0, 0, 0, 0, 0, 0, 0, 0} {}
     constexpr explicit dynamic_quantity(scalar i_v, dynamic_unit const& i_u) : value_(i_v), unit_(i_u) {}
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     constexpr dynamic_quantity(Q const& i_q) : value_(i_q.value), unit_{toDynamic<typename Q::unit>()}
     {
     }
@@ -66,7 +66,7 @@ struct dynamic_quantity : public dynamic_quantity_tag {
     scalar value() const { return value_; }
     void value(scalar v) { value_ = v; }
 
-    template <class Q, DIM_IS_QUANTITY(Q)>
+    template <QuantityType Q>
     constexpr Q as() const
     {
         if (unitsMatch(unit(), toDynamic<typename Q::unit>())) { return Q(value()); }
@@ -280,7 +280,7 @@ struct dynamic_quantity : public dynamic_quantity_tag {
 };
 
 /// Take a power of a dynamic quantity
-template <class S2, class System, DIM_IS_SCALAR(S2)>
+template <ScalarType S2, class System>
 dynamic_quantity<S2, System> power(dynamic_quantity<S2, System> const& a, int n)
 {
     dynamic_quantity<S2, System> c;

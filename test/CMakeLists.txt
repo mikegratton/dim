@@ -10,7 +10,7 @@ add_executable(dimTest
 )
 target_link_libraries(dimTest PUBLIC dim)
 
-set_target_properties(dimTest PROPERTIES CXX_STANDARD 11)
+set_target_properties(dimTest PROPERTIES CXX_STANDARD 20)
 
 add_executable(dimCompileErrors
     main.cpp

@@ -15,7 +15,7 @@ constexpr int kMaxSymbol = 32;
 /**
  * @brief Basic formatting of a quantity's unit. Lowest level version
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 char* print_unit(char* o_unit_str, Q const& q)
 {
     bool spaceit = false;
@@ -26,7 +26,7 @@ char* print_unit(char* o_unit_str, Q const& q)
 /**
  * @brief Basic formatting of a quantity. Lowest level version
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 char* print_quantity(char* o_quant_str, Q const& q)
 {
     int offset = sprintf(o_quant_str, "%g_", dimensionless_cast(q));
@@ -48,7 +48,7 @@ void print_unit(char* buf, dynamic_unit const& unit, bool spaceit)
 /**
  * @brief Formated output helper. The formatter class below produces these for output.
  */
-template <class scalar = double, DIM_IS_SCALAR(scalar)>
+template <ScalarType scalar = double>
 class formatted_quantity {
    public:
     formatted_quantity(const char* symbol_ = nullptr, scalar value_ = static_cast<scalar>(1))
@@ -84,7 +84,7 @@ class formatted_quantity {
  * a Length l and format it as feet for output regardless of the underlying rep.
  *
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
+template <QuantityType Q>
 struct formatter : public detail::container_base {
     using quantity = Q;
     using scalar = typename quantity::scalar;
