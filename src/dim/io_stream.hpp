@@ -310,7 +310,7 @@ bool extract_quantity(char* o_buf, char*& o_unit_start, std::size_t bufmax, std:
 
 /// Write the unit U to a stream using the default output symbol
 template <class U, DIM_IS_UNIT(U)>
-std::ostream& operator<<(std::ostream& os, unit_base<U> const& u)
+std::ostream& operator<<(std::ostream& os, U const& u)
 {
     bool spaceit = false;
     char buf[128];

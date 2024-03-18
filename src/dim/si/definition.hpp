@@ -31,6 +31,8 @@ struct system : system_tag {
         return symbol::specialized_symbol<U>();
     }
     static quantity_facet* make_default_facet();
+
+    using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, system>;
 };
 
 /**

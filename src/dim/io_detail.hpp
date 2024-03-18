@@ -22,7 +22,7 @@ void print_helper(char** out_symbol, int a, int dimension, bool& space)
 }
 
 template <class U>
-void print_unit(char* out_symbol, unit_base<U> const&, bool& spaceit)
+void print_unit(char* out_symbol, U const&, bool& spaceit)
 {
     using System = typename U::system;
     const char* sym = System::template specialized_symbol<U>();

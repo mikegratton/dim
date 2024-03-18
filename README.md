@@ -39,6 +39,11 @@ c-strings for IO.
 
 ## History
 
+### v1.2
+
+Bug fixes:
+* Fixed issue stream extraction for non-whitespace separated quantity strings.
+
 ### v1.1
 
 Bug fixes:

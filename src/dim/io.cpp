@@ -33,6 +33,7 @@ bool is_unit_char(char c, char_parse_state& io_state)
     }
 }
 
+// TODO hexfloat support
 bool is_float_part(char c, char_parse_state& io_state)
 {
     switch (io_state) {
@@ -52,7 +53,7 @@ bool is_float_part(char c, char_parse_state& io_state)
                 return true;
             }
             if (c == 'e' || c == 'E') {
-                io_state = kExponent;
+                io_state = kExponentStart;
                 return true;
             }
             if (c == '.') {

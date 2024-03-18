@@ -71,19 +71,10 @@ struct unit;
 template<class Unit, class Scalar = double>
 class quantity;
 
-
-/**
- * @brief Unifying base class template for units
- */
-template<class T>
-struct unit_base : unit_tag {
-    using type = T;
-};
-
 /********************************************************************************************/
 /// Models the base units in a system (i.e. quantities where the magnitude is 1)
 template<DIM_ARRAY, class System>
-struct unit : public unit_base<unit<DIM_D_ARRAY, System>> {
+struct unit : public unit_tag {
     using system = System;
     using inverse = unit < -Length, -Time, -Mass, -Angle, -Temperature, -Amount, -Current, -Luminosity,
           system >;
@@ -139,14 +130,10 @@ struct unit : public unit_base<unit<DIM_D_ARRAY, System>> {
 };
 
 
-/// Obtain the inverse of U (i.e. if U is L, inverse_t<U> is 1/L)
-template<class U, DIM_IS_UNIT(U)>
-using inverse_t = typename U::inverse;
-
 /**
  * @brief Struct template to perform roots (squareroot, etc)
  */
-template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
+template<class Unit1, int root>
 struct unit_root {
     using type = ::dim::unit <
                  Unit1::length()      / root,
@@ -161,11 +148,11 @@ struct unit_root {
 };
 
 /// Convenience typedef for roots
-template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
+template<class Unit1, int root>
 using unit_root_t = typename unit_root<Unit1, root>::type;
 
 /// Struct template to perform powers on units
-template<class Unit1, int pow, DIM_IS_UNIT(Unit1)>
+template<class Unit1, int pow>
 struct unit_pow {
     using type = ::dim::unit <
                  Unit1::length()*       pow,
@@ -180,11 +167,11 @@ struct unit_pow {
 };
 
 /// Convenience typedef for powers
-template<class Unit1, int root, DIM_IS_UNIT(Unit1)>
+template<class Unit1, int root>
 using unit_pow_t = typename unit_pow<Unit1, root>::type;
 
 /// Struct template to perform unit division
-template<class Unit1, class Unit2, DIM_IS_UNIT(Unit1), DIM_IS_UNIT(Unit2)>
+template<class Unit1, class Unit2>
 struct unit_divide {
     using type = ::dim::unit <
                  Unit1::length()      - Unit2::length(),
@@ -203,7 +190,7 @@ template<class Unit1, class Unit2>
 using unit_divide_t = typename unit_divide<Unit1, Unit2>::type;
 
 /// Struct template to perform unit multiplication
-template<class Unit1, class Unit2, DIM_IS_UNIT(Unit1), DIM_IS_UNIT(Unit2)>
+template<class Unit1, class Unit2>
 struct unit_multiply {
     using type = ::dim::unit <
                  Unit1::length()      + Unit2::length(),
@@ -240,32 +227,26 @@ static_assert(std::is_same<typename U1::system, typename U2::system>::value,\
                   "Systems of units do not match. Explicit conversion is required.");
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Conversion to the underlying scalar type is done by recognizing this type:
- */
-template<class System>
-using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, System>;
-
 /*
  * dimensionless unit specializations
  */
-template<class Other, class System, DIM_IS_SYSTEM(System)>
-constexpr Other operator* (Other const& value, dimensionless_unit<System> const& unit)
+template<class Other, class System>
+constexpr Other operator* (Other const& value, typename System::dimensionless_unit const& unit)
 {
     return value;
 }
-template<class Other, class System, DIM_IS_SYSTEM(System)>
-constexpr Other operator* (dimensionless_unit<System> const& unit, Other const& value)
+template<class Other, class System>
+constexpr Other operator* (typename System::dimensionless_unit  const& unit, Other const& value)
 {
     return value;
 }
-template<class Other, class System, DIM_IS_SYSTEM(System)>
-constexpr Other operator/ (Other const& value, dimensionless_unit<System> const& unit)
+template<class Other, class System>
+constexpr Other operator/ (Other const& value, typename System::dimensionless_unit const& unit)
 {
     return value;
 }
-template<class Other, class System, DIM_IS_SYSTEM(System)>
-constexpr Other operator/ (dimensionless_unit<System> const& unit, Other const& value)
+template<class Other, class System>
+constexpr Other operator/ (typename System::dimensionless_unit const& unit, Other const& value)
 {
     return static_cast<Other>(1.0) / value;
 }
@@ -276,7 +257,7 @@ constexpr Other operator/ (dimensionless_unit<System> const& unit, Other const& 
  /// Unit/unit multiplication operator
 template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_multiply_t<U1, U2>
-operator* (unit_base<U1> const&, unit_base<U2> const&)
+operator* (U1 const&, U2 const&)
 {
     DIM_CHECK_SYSTEMS(U1, U2);;
     return unit_multiply_t<U1, U2>();
@@ -285,7 +266,7 @@ operator* (unit_base<U1> const&, unit_base<U2> const&)
 /// unit/unit division operator
 template<class U1, class U2, DIM_IS_UNIT(U1), DIM_IS_UNIT(U2)>
 constexpr unit_divide_t<U1, U2>
-operator/ (unit_base<U1> const&, unit_base<U2> const&)
+operator/ (U1 const&, U2 const&)
 {
     DIM_CHECK_SYSTEMS(U1, U2);
     return unit_divide_t<U1, U2>();
@@ -294,7 +275,7 @@ operator/ (unit_base<U1> const&, unit_base<U2> const&)
 /// unit/unit power function
 template<class U, int P, DIM_IS_UNIT(U)>
 constexpr unit_pow_t<U, P>
-pow(unit_base<U> const&)
+pow(U const&)
 {
     return unit_pow_t<U, P>();
 }
@@ -340,7 +321,7 @@ public:
     using scalar = Scalar;
     using unit = Unit;
     using type = quantity<unit, scalar>;
-    using dimensionless = dimensionless_unit<typename Unit::system>;
+    using dimensionless = typename unit::system::dimensionless_unit;
 
     constexpr quantity() noexcept { }
     constexpr explicit quantity(Scalar s) noexcept : value(s) { }
@@ -354,7 +335,7 @@ public:
     }
     
     template<class U2, DIM_IS_UNIT(U2)>
-    constexpr quantity(unit const&) noexcept : value(static_cast<scalar>(1.0)) 
+    constexpr quantity(U2 const&) noexcept : value(static_cast<scalar>(1.0)) 
     { 
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
@@ -413,20 +394,18 @@ public:
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
-    friend type& operator+= (type& lhs, unit_base<U> const&)
+    friend type& operator+= (type& lhs, U const&)
     {
-        using U2 =  typename unit_base<U>::type;
-        DIM_CHECK_DIMENSIONS(unit, U2)
-        DIM_CHECK_SYSTEMS(unit, U2)
+        DIM_CHECK_DIMENSIONS(unit, U)
+        DIM_CHECK_SYSTEMS(unit, U)
         lhs.value += static_cast<Scalar>(1.0);
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
-    friend type& operator-= (type& lhs, unit_base<U> const&)
+    friend type& operator-= (type& lhs, U const&)
     {
-        using U2 =  typename unit_base<U>::type;
-        DIM_CHECK_DIMENSIONS(unit, U2)
-        DIM_CHECK_SYSTEMS(unit, U2)
+        DIM_CHECK_DIMENSIONS(unit, U)
+        DIM_CHECK_SYSTEMS(unit, U)
         lhs.value -= static_cast<Scalar>(1.0);
         return lhs;
     }
@@ -521,7 +500,7 @@ public:
 
     // Mult/divide leading to a scalar
     friend constexpr scalar
-    operator* (type const& q1, quantity<inverse_t<unit>, scalar> const& q2)
+    operator* (type const& q1, quantity<typename unit::inverse, scalar> const& q2)
     {
         return dimensionless_cast(q1) * dimensionless_cast(q2);
     }
@@ -547,36 +526,36 @@ public:
     {
         return type(q.value / s);
     }
-    friend constexpr quantity<inverse_t<unit>, scalar>
+    friend constexpr quantity<typename unit::inverse, scalar>
     operator/ (scalar const& s, type const& q)
     {
-        return quantity<inverse_t<unit>, scalar> (s / q.value);
+        return quantity<typename unit::inverse, scalar>(s / q.value);
     }
 
     // Quantity/unit ops
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_multiply_t<unit, U>, scalar>
-    operator* (type const& q, unit_base<U> const&)
+    operator* (type const& q, U const&)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_multiply_t<unit, U>, scalar>(q.value);
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_multiply_t<unit, U>, scalar>
-    operator* (unit_base<U> const& u, type const& q)
+    operator* (U const& u, type const& q)
     {
         return q * u;
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_divide_t<unit, U>, scalar>
-    operator/ (type const& q, unit_base<U> const&)
+    operator/ (type const& q, U const&)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_divide_t<unit, U>, scalar> (q.value);
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_divide_t<U, unit>, scalar>
-    operator/ (unit_base<U> const&, type const& q)
+    operator/ (U const&, type const& q)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_divide_t<U, unit>, scalar> (q.value);
@@ -588,7 +567,7 @@ public:
         return q.value;
     }
     friend constexpr scalar
-    operator* (type const& q, inverse_t<unit> const&)
+    operator* (type const& q, typename unit::inverse const&)
     {
         return q.value;
     }
@@ -599,22 +578,22 @@ public:
  * Scalar on unit -> quantity
  */
 template<class U, class S=double, DIM_IS_UNIT(U), DIM_IS_SCALAR(S) >
-constexpr quantity<U, S> operator* (S const& value, unit_base<U> const&)
+constexpr quantity<U, S> operator* (S const& value, U const&)
 {
     return quantity<U, S> (value);
 }
 template<class U, class S=double, DIM_IS_UNIT(U), DIM_IS_SCALAR(S) >
-constexpr quantity<U, S> operator* (unit_base<U> const& unit, S const& value)
+constexpr quantity<U, S> operator* (U const& unit, S const& value)
 {
     return value * unit;
 }
 template<class U, class S=double, DIM_IS_UNIT(U), DIM_IS_SCALAR(S) >
-constexpr quantity<inverse_t<U>, S> operator/ (S const& value, unit_base<U> const&)
+constexpr quantity<typename U::inverse, S> operator/ (S const& value, U const&)
 {
-    return quantity<inverse_t<U>, S > (value);
+    return quantity<typename U::inverse, S>(value);
 }
 template<class U, class S=double, DIM_IS_UNIT(U), DIM_IS_SCALAR(S) >
-constexpr quantity<U, S> operator/ (unit_base<U> const& unit, S const& value)
+constexpr quantity<U, S> operator/ (U const& unit, S const& value)
 {
     return (static_cast<S>(1.0) / value) * unit;
 }
@@ -675,13 +654,15 @@ std::enable_if_t<std::is_base_of<quantity_tag, Q>::value,
            (std::pow(dimensionless_cast(q), Exponent));
 }
 
-template<int Exponent, class U>
+
+template<int Exponent, class U, DIM_IS_UNIT(U)>
 constexpr
 std::enable_if_t<std::is_base_of<unit_tag, U>::value, unit_pow_t<U, Exponent>>
         pow(U const&)
 {
     return unit_pow_t<U, Exponent>();
 }
+
 
 /**
  * @brief Rational powers of a quantity

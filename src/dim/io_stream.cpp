@@ -24,6 +24,7 @@ bool extract_quantity(char* o_buf, char*& o_unit, std::size_t bufmax, std::istre
             return false;
         }
     }
+    if (state == kStart || state == kExponentStart) { return false; }
     if (i == bufmax) {
         o_buf[i - 1] = '\0';
         o_unit = &o_buf[i - 1];
