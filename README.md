@@ -39,15 +39,15 @@ c-strings for IO.
 
 ## History
 
-### v1.2.1
-
-Bug fixes:
-* Fixed calling of `symbol()` in io.hpp to avoid some issues that can occur when in a source file with CUDA code.
-
 ### v1.2
 
 Bug fixes:
 * Fixed issue stream extraction for non-whitespace separated quantity strings.
+* Fixed calling of `symbol()` in io.hpp to avoid some issues that can occur when in a source file with CUDA code.
+* Removed stray c++14ism
+
+Features:
+* Simplification of templates has reduced compile times slightly
 
 ### v1.1
 
