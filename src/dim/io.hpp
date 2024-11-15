@@ -100,7 +100,10 @@ struct formatter : public detail::container_base {
     scalar non_dim(Q const& q) const { return (q - add) / scale; }
 
     /// Perform output formatting
-    formatted_quantity<scalar> output(Q const& q) const { return formatted_quantity<scalar>(symbol(), non_dim(q)); }
+    formatted_quantity<scalar> output(Q const& q) const
+    {
+        return formatted_quantity<scalar>(this->symbol(), non_dim(q));
+    }
 
     /// Perform input formatting (affine transform)
     Q input(scalar const& s) const { return s * scale + add; }
@@ -130,9 +133,16 @@ struct dynamic_formatter : public detail::container_base {
     dynamic_formatter() = default;
 
     scalar non_dim(dynamic const& q) const { return dimensionless_cast((q + add) / scale); }
-    formatted_quantity<scalar> output(dynamic const& q) const { return formatted_quantity<scalar>(symbol, non_dim(q)); }
+
+    formatted_quantity<scalar> output(dynamic const& q) const
+    {
+        return formatted_quantity<scalar>(this->symbol(), non_dim(q));
+    }
+
     dynamic input(scalar const& s) const { return dynamic(scale.value * s, scale.unit) + add; }
+
     uint64_t index() { return ::dim::index(scale.unit); }
+
     char const* symbol() const { return sym; }
 
    private:

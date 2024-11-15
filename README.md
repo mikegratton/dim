@@ -39,6 +39,11 @@ c-strings for IO.
 
 ## History
 
+### v1.2.1
+
+Bug fixes:
+* Fixed calling of `symbol()` in io.hpp to avoid some issues that can occur when in a source file with CUDA code.
+
 ### v1.2
 
 Bug fixes:
@@ -372,7 +377,7 @@ prints the unit alone, while the latter will print the scalar and the unit joine
 Input is a different beast. Because Dim is strongly typed, we know the desired quantity type.  The task is
 to verify that the input string can be parsed to a matching dimension, then apply the conversion factor for
 that dimension to the scalar part. For example,
-```cpp
+```cppcalculation
 si::Angle the_angle;
 std::cout << "Enter an angle: ";
 std::cin >> the_angle;
