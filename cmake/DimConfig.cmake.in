@@ -1,0 +1,6 @@
+set(DIM_VERSION @PACKAGE_VERSION@)
+@PACKAGE_INIT@
+set_and_check(DIM_INCLUDE_DIR "@PACKAGE_DIM_INCLUDE_INSTALL_DIR@")
+set_and_check(DIM_LIB_DIR "@PACKAGE_DIM_LIB_INSTALL_DIR@")
+include(DimTargets)
+check_required_components(dim)
