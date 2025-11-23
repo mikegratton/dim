@@ -1,7 +1,7 @@
 #pragma once
 
 #include "quantity.tab.hpp"
-#include "si_io.hpp"
+#include "definition.hpp"
 
 namespace dim {
 namespace si {
@@ -43,7 +43,7 @@ class quantity_parser_driver {
         }
     }
 
-    quantity_parser_driver() : result(::dim::si::dynamic_quantity::bad_quantity()) {}
+    quantity_parser_driver() : result(::dim::si::dynamic_quantity::bad_quantity()), corpus(nullptr), corpus_size(0), cursor(nullptr) {}
 };
 
 }  // namespace detail

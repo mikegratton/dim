@@ -1,10 +1,6 @@
 #include "io_stream.hpp"
 
-#include <cctype>
-
-#include "io.hpp"
 namespace dim {
-std::locale::id quantity_facet::id;
 
 namespace detail {
 

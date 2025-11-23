@@ -1,188 +1,375 @@
 #pragma once
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
+#include <vector>
 #include <initializer_list>
-#include <memory>
 
-#include "dim/base.hpp"
 #include "dim/io_detail.hpp"
+#include "dim/tag.hpp"
+#include "dynamic_quantity.hpp"
 #include "io.hpp"
 
-namespace dim {
+namespace dim
+{
 
-/**
- * @brief A specialized flat map of formatters sorted by symbol name.
- */
-template <class SymbolFormat>
-class format_symbol_map : public detail::container_base {
-   protected:
-   public:
-    format_symbol_map() : mapCapacity(8), mapSize(0), map(new SymbolFormat[mapCapacity]) {}
-    ~format_symbol_map() { delete[] map; }
-    format_symbol_map(format_symbol_map const& other) { *this = other; }
+template <class Container, class Key, class Compare, class Equal>
+typename Container::const_iterator find(Container const& container, Key const& key, Compare const& comp, Equal const& equal)
+{
+    auto it = std::lower_bound(container.begin(), container.end(), key, comp);
+    if (it == container.end() || !equal(*it, key)) {
+        return container.end();
+    }
+    return it;
+}
 
-    /**
-     * @brief Construct a map like `format_symbol_map<formatter<dim>>{{"in", si::inch}, {"yd", si::yard}}`;
-     */
-    format_symbol_map(std::initializer_list<SymbolFormat> init)
-        : mapCapacity(std::max<int>(1, init.size())), mapSize(init.size()), map(new SymbolFormat[mapCapacity])
+template <class Container, class Key, class Compare, class Equal>
+typename Container::iterator find(Container& container, Key const& key, Compare const& comp, Equal const& equal)
+{
+    auto it = std::lower_bound(container.begin(), container.end(), key, comp);
+    if (it == container.end() || !equal(*it, key)) {
+        return container.end();
+    }
+    return it;
+}
+
+
+/// Format a scalar plus string to quantity or dynamic_quantity.
+///
+/// Each of these is for a given quantity (denoted by its index aka dynamic_unit).
+/// If a quantity doesn't match this index, this returns a bad quantity.
+template <class Scalar, class System> class input_format_map
+{
+  public:
+    using system = System;
+    using scalar = Scalar;
+    using formatter_type = formatter<Scalar, System>;
+    using quantity_type = dynamic_quantity<Scalar, System>;
+    using unit_type = typename quantity_type::unit_type;
+
+  private:
+    using const_iterator = typename std::vector<formatter_type>::const_iterator;
+    using iterator = typename std::vector<formatter_type>::iterator;
+
+  public:
+
+    explicit input_format_map(unit_type unit_code_)
+        : mindex(unit_code_)
     {
-        unsigned long i = 0;
-        for (auto const& format : init) { memcpy(&map[i++], &format, sizeof(SymbolFormat)); }
-        qsort(map, mapSize, sizeof(SymbolFormat), map_sort);
     }
 
-    format_symbol_map& operator=(format_symbol_map const& other)
+    template<class U, DIM_IS_UNIT(U)>
+    explicit input_format_map(U const& unit_code_)
+        : mindex(unit_code_)
     {
-        delete[] map;
-        mapSize = other.mapSize;
-        mapCapacity = other.mapCapacity;
-        map = new SymbolFormat[mapCapacity];
-        memcpy(map, other.map, sizeof(SymbolFormat) * mapSize);
-        return *this;
     }
 
-    /**
-     * @brief Add or modify the formatter for a symbol
-     */
-    template <class Q, DIM_IS_QUANTITY(Q)>
-    void set(const char* symbol_, Q const& scale_, Q const& add_ = Q(0))
+    explicit input_format_map(formatter_type first_formater)
+        : mindex(first_formater.index())
     {
-        set(SymbolFormat(symbol_, scale_, add_));
+        insert(first_formater);
     }
-
-    /**
-     * @brief Add or modify the formatter for a symbol
-     */
-    void set(SymbolFormat format)
+    
+    input_format_map(std::initializer_list<formatter_type> const& list)
+    : mindex(list.size() > 0? formatter_type(*list.begin()).index() : unit_type(~0ul))
     {
-        auto* found = (SymbolFormat*)bsearch(format.symbol(), map, mapSize, sizeof(SymbolFormat), map_compare);
-        if (found) {
-            memcpy(found, &format, sizeof(SymbolFormat));
-            return;
+        for (auto const& item : list) {            
+            insert(item);
         }
-        if (mapSize == mapCapacity) {
-            mapCapacity *= 2;
-            SymbolFormat* newMap = new SymbolFormat[mapCapacity];
-            memcpy(newMap, map, sizeof(SymbolFormat) * mapSize);
-            delete[] map;
-            map = newMap;
+    }
+
+    template <class Q, DIM_IS_QUANTITY(Q)> static input_format_map make_map() { return input_format_map(::dim::index<Q>()); }
+
+    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* s, Q const& scale, Q const& add = Q(0))
+    {
+        return insert(formatter_type(s, scale, add));
+    }
+
+    bool insert(formatter_type const& item)
+    {
+        if (item.index() != index()) {
+            return false;
         }
-        memcpy(&map[mapSize], &format, sizeof(SymbolFormat));
-        mapSize++;
-        qsort(map, mapSize, sizeof(SymbolFormat), map_sort);
+        auto it = find(item.symbol());
+        if (it != sorted_data.end()) {            
+            *it = item;
+            return true;
+        }
+        sorted_data.push_back(item);
+        std::sort(sorted_data.begin(), sorted_data.end(), compare_formatter);
+        return true;
     }
 
-    /**
-     * @brief Obtain the formatter for a symbol. Returns nullptr if not found
-     */
-    SymbolFormat const* get(char const* symbol) const
+    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(typename Q::scalar const& s, char const* symbol) const
     {
-        return static_cast<SymbolFormat const*>(bsearch(symbol, map, mapSize, sizeof(SymbolFormat), map_compare));
+        if (::dim::index<Q>() != index()) {
+            return Q::bad_quantity();
+        }
+        auto it = find(symbol);
+        return (it != sorted_data.end()? it->template input<Q>(s) : Q::bad_quantity());
     }
 
-    /**
-     * @brief Get the number of entries in the map
-     */
-    unsigned long size() const { return mapSize; }
-
-   protected:
-    /// bsearch() comparison function
-    static int map_compare(void const* vkey, void const* velement)
+    quantity_type to_quantity(Scalar const& s, char const* symbol) const
     {
-        char const* key = (char const*)vkey;
-        SymbolFormat const* element = (SymbolFormat const*)velement;
-        return strncmp(key, element->symbol(), kMaxSymbol);
+        auto it = find(symbol);
+        return (it != sorted_data.end()? it->input(s) : quantity_type::bad_quantity());
     }
 
-    /// qsort() comparison function
-    static int map_sort(void const* velement1, void const* velement2)
+    std::size_t size() const { return sorted_data.size(); }
+
+    void clear() { sorted_data.clear(); }
+
+    unit_type index() const { return mindex; }
+
+    bool erase(char const* symbol) 
     {
-        SymbolFormat const* element1 = (SymbolFormat const*)velement1;
-        SymbolFormat const* element2 = (SymbolFormat const*)velement2;
-        return strncmp(element1->symbol(), element2->symbol(), kMaxSymbol);
+        auto it = find(symbol);
+        if (it != sorted_data.end()) {
+            sorted_data.erase(it);
+            return true;
+        }
+        return false;
     }
 
-    unsigned long mapCapacity;
-    unsigned long mapSize;
-    SymbolFormat* map;
+  private:
+    const_iterator find(char const* symbol) const
+    {
+        return ::dim::find(sorted_data, symbol, compare_item_formatter, equal_item_formatter);
+    }
+
+    iterator find(char const* symbol)
+    {
+        return ::dim::find(sorted_data, symbol, compare_item_formatter, equal_item_formatter);        
+    }
+
+    static bool compare_formatter(formatter_type const& left, formatter_type const& right)
+    {
+        return strncmp(left.symbol(), right.symbol(), kMaxSymbol) < 0;
+    }
+
+    static bool compare_item_formatter(formatter_type const& left, char const* symbol)
+    {
+        return strncmp(left.symbol(), symbol, kMaxSymbol) < 0;
+    }
+
+    static bool equal_item_formatter(formatter_type const& left, char const* symbol)
+    {
+        return strncmp(left.symbol(), symbol, kMaxSymbol) == 0;
+    }
+
+    unit_type mindex;
+    std::vector<formatter_type> sorted_data;
 };
 
-/**
- * @brief A flat map from a unit index to a type-erased container_base object
- */
-class format_index_map : public detail::container_base {
-   protected:
-    struct Node {
-        long index;
-        std::unique_ptr<detail::container_base> payload;
-    };
 
-   public:
-    format_index_map() : mapCapacity(8), mapSize(0), map(new Node[mapCapacity]) {}
-    ~format_index_map() { delete[] map; }
-    format_index_map(format_index_map const& other) { *this = other; }
+/// A group of input_format_maps organized by index. 
+///
+/// For each index, there's an input_format_map of formatters representing
+/// different symbols for that quantity.
+template <class Scalar, class System> class input_format_map_group
+{
+  public:
+    using map_type = input_format_map<Scalar, System>;
+    using formatter_type = typename map_type::formatter_type;
+    using quantity_type = typename map_type::quantity_type;
+    using unit_type = typename quantity_type::unit_type;
 
-    /**
-     * @brief Add or modify the entry for index_
-     */
-    void set(long index_, std::unique_ptr<detail::container_base> payload_);
+  private:
+    using const_iterator = typename std::vector<map_type>::const_iterator;
+    using iterator = typename std::vector<map_type>::iterator;
 
-    /**
-     * @brief Access the entry for index. Returns nullptr if not found
-     */
-    detail::container_base const* get(long index) const;
+  public:
 
-    /**
-     * @brief Access the entry for index. Returns nullptr if not found
-     */
-    detail::container_base* get(long index);
+    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* s, Q const& scale, Q const& add = Q(0))
+    {
+        return insert(formatter_type(s, scale, add));
+    }
 
-    /**
-     * @brief Remove the element with the matching index (if it exists)
-     */
-    void erase(long index);
+    bool insert(formatter_type const& item)
+    {
+        iterator it = find(item.index());
+        if (it != sorted_data.end()) {
+            return it->insert(item);
+        }
+        map_type new_map(item.index());
+        new_map.insert(item);
+        sorted_data.push_back(new_map);
+        std::sort(sorted_data.begin(), sorted_data.end(), compare_formatter);
+        return true;
+    }
 
-    /**
-     * @brief Get the number of entries in the map
-     */
-    unsigned long size() const { return mapSize; }
+    bool insert(map_type const& whole_map)
+    {
+        auto it = find(whole_map.index());
+        if (it != sorted_data.end()) {
+            *it = whole_map;
+            return true;
+        }
+        sorted_data.push_back(whole_map);
+        std::sort(sorted_data.begin(), sorted_data.end(), compare_formatter);
+        return true;
+    }
 
-    /**
-     * @brief Erase all map entries
-     */
-    void clear();
+    bool erase(unit_type index)
+    {
+        auto it = find(index);
+        if (it != sorted_data.end()) {
+            sorted_data.erase(it);
+            return true;
+        }
+        return false;
+    }
 
-   protected:
-    /// bsearch() comparison function
-    static int map_compare(void const* vkey, void const* velement);
+    bool erase(unit_type index, char const* symbol)
+    {
+        auto it = find(index);
+        if (it != sorted_data.end()) {
+            bool status = it->erase(symbol);
+            if (it->size() == 0) {
+                sorted_data.erase(it);
+            }
+            return status;
+        }
+        return false;
+    }
 
-    /// qsort() comparison function
-    static int map_sort(void const* velement1, void const* velement2);
+    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(typename Q::scalar const& s, char const* symbol) const
+    {
+        auto it = find(::dim::index<Q>());
+        return (it != sorted_data.end()? it->template to_quantity<Q>(s, symbol) : Q::bad_quantity());
+    }
 
-    unsigned long mapCapacity;
-    unsigned long mapSize;
-    Node* map;
+    quantity_type to_quantity(Scalar const& s, char const* symbol) const
+    {
+        for (auto const& map : sorted_data) {
+            quantity_type value = map.to_quantity(s, symbol);
+            if (!value.is_bad()) {
+                return value;
+            }
+        }
+        return quantity_type::bad_quantity();
+    }
+
+    void clear() { sorted_data.clear(); }
+
+    std::size_t size() const { return sorted_data.size(); }
+
+  private:
+    const_iterator find(unit_type id) const
+    {
+        return ::dim::find(sorted_data, id, compare_item_formatter, equal_item_formatter);
+    }
+
+    iterator find(unit_type id)
+    {
+        return ::dim::find(sorted_data, id, compare_item_formatter, equal_item_formatter);
+    }
+
+    static bool compare_formatter(map_type const& left, map_type const& right) { return left.index() < right.index(); }
+
+    static bool compare_item_formatter(map_type const& left, unit_type right) { return left.index() < right; }
+
+    static bool equal_item_formatter(map_type const& left, unit_type right) { return left.index() == right; }
+
+    std::vector<map_type> sorted_data;
 };
 
-/// Format maps for static quantity types
-template <class Q, DIM_IS_QUANTITY(Q)>
-using format_map = format_symbol_map<formatter<Q>>;
+/// A map of formatters to turn quantities into (scalar, string) pairs.
+///
+/// Formatters are organized by a quantity's index. Each dynamic_unit 
+/// may have one formatter.
+template <class Scalar, class System> class output_format_map
+{
+  public:
+    using system = System;
+    using scalar = Scalar;
+    using formatter_type = formatter<Scalar, System>;
+    using formatted = typename formatter_type::formatted;
+    using quantity_type = dynamic_quantity<Scalar, System>;
+    using unit_type = typename quantity_type::unit_type;
+
+  private:
+    using const_iterator = typename std::vector<formatter_type>::const_iterator;
+    using iterator = typename std::vector<formatter_type>::iterator;
+
+  public:
+    template <class Q, DIM_IS_QUANTITY(Q)> formatted format(Q const& q) const
+    {
+        auto it = find(::dim::index<Q>());
+        return (it != sorted_data.end()? it->template output<Q>(q) : formatted_quantity<scalar>::bad_format());        
+    }
+
+    formatted format(quantity_type const& q) const
+    {
+        auto it = find(q.unit());
+        return (it != sorted_data.end()? it->output(q) : formatted_quantity<scalar>::bad_format());        
+    }
+
+    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* s, Q const& scale, Q const& add = Q(0))
+    {
+        return insert(formatter_type(s, scale, add));
+    }
+
+    bool insert(formatter_type const& item)
+    {
+        auto it = find(item.index());
+        if (it != sorted_data.end()) {
+            *it = item;
+            return true;
+        }
+        sorted_data.push_back(item);
+        std::sort(sorted_data.begin(), sorted_data.end(), compare_formatter);
+        return true;
+    }
+
+    bool erase(unit_type index)
+    {
+        auto it = find(index);
+        if (it != sorted_data.end()) {
+            sorted_data.erase(it);
+            return true;
+        }
+        return false;
+    }
+
+    void clear() { sorted_data.clear(); }
+
+    std::size_t size() const { return sorted_data.size(); }
+
+  private:
+    const_iterator find(unit_type id) const
+    {
+        return ::dim::find(sorted_data, id, compare_item_formatter, equal_item_formatter);
+    }
+
+    iterator find(unit_type id)
+    {
+        return ::dim::find(sorted_data, id, compare_item_formatter, equal_item_formatter);        
+    }
+
+    static bool compare_formatter(formatter_type const& left, formatter_type const& right)
+    {
+        return left.index() < right.index();
+    }
+
+    static bool compare_item_formatter(formatter_type const& left, unit_type right) { return left.index() < right; }
+
+    static bool equal_item_formatter(formatter_type const& left, unit_type right) { return left.index() == right; }
+
+    std::vector<formatter_type> sorted_data;
+};
+
+template <class Q> using static_input_format_map = input_format_map<typename Q::scalar, typename Q::unit::system>;
 
 /**
  * @brief Create template specializations of this function for your system to control the
  * default formats available for input
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
-format_map<Q> const& get_default_format()
+template <class Q> input_format_map<typename Q::scalar, typename Q::system> const& get_default_format()
 {
-    static const format_map<Q> EMPTY;
+    input_format_map<typename Q::scalar, typename Q::system> const static EMPTY(::dim::index<Q>());
     return EMPTY;
 }
-
-/// Format maps for dynamic quantity types
-template <class S, class System>
-using dynamic_format_map = format_symbol_map<dynamic_formatter<S, System>>;
 
 /**
  * @brief Default input parsing for quantities.
@@ -192,21 +379,29 @@ using dynamic_format_map = format_symbol_map<dynamic_formatter<S, System>>;
  * (2) If not found, use Q::system's dynamic quantity parser
  */
 template <class Q, DIM_IS_QUANTITY(Q)>
-bool parse_quantity(Q& o_q, double value, const char* unit_str, format_map<Q> const& unit_map = get_default_format<Q>())
+bool parse_quantity(Q& o_q, typename Q::scalar value, char const* unit_str,
+                    input_format_map<typename Q::scalar, typename Q::system> const& unit_map = get_default_format<Q>())
 {
-    auto const* formatter = unit_map.get(unit_str);
-    if (formatter) {
-        o_q = formatter->input(value);
+    o_q = unit_map.template to_quantity<Q>(value, unit_str);
+    if (!o_q.is_bad()) {
         return true;
     }
-    using scalar = typename Q::scalar;
-    scalar scale;
-    if (detail::parse_unit_dynamic<typename Q::unit, scalar>(scale, unit_str)) {
-        o_q = Q(value * scale);
-        return true;
-    }
-    o_q = Q::bad_quantity();
-    return false;
+    auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(unit_str);
+    o_q = (value * dynamic_q).template as<Q>();
+    return !(o_q.is_bad());    
 }
 
-}  // namespace dim
+template <class Scalar, class System>
+bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, Scalar value, char const* unit_str,
+                    input_format_map<Scalar, System> const& unit_map)
+{
+    o_q = unit_map.to_quantity(value, unit_str);
+    if (!o_q.is_bad()) {
+        return true;
+    }    
+    o_q = value * detail::parse_standard_rep<Scalar, System>(unit_str);
+    return !o_q.is_bad();
+}
+
+} // namespace dim
+

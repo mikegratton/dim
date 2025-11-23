@@ -1,6 +1,7 @@
 #include <cstring>
 #include <sstream>
 
+#include "dim/io_stream.hpp"
 #include "dim/si.hpp"
 #include "doctest.h"
 

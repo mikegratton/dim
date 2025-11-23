@@ -2,51 +2,13 @@
 #include <cstdio>
 #include <cstring>
 #include <limits>
-
-#include "base.hpp"
-#include "dynamic_quantity.hpp"
 #include "io_detail.hpp"
-#include "system_creation_helper.hpp"
+#include "dynamic_quantity.hpp"
 
 namespace dim {
 
-constexpr int kMaxSymbol = 32;
-
 /**
- * @brief Basic formatting of a quantity's unit. Lowest level version
- */
-template <class Q, DIM_IS_QUANTITY(Q)>
-char* print_unit(char* o_unit_str, Q const& q)
-{
-    bool spaceit = false;
-    detail::print_unit<typename Q::unit>(o_unit_str, typename Q::unit(), spaceit);
-    return o_unit_str;
-}
-
-/**
- * @brief Basic formatting of a quantity. Lowest level version
- */
-template <class Q, DIM_IS_QUANTITY(Q)>
-char* print_quantity(char* o_quant_str, Q const& q)
-{
-    int offset = sprintf(o_quant_str, "%g_", dimensionless_cast(q));
-    print_unit(o_quant_str + offset, q);
-    return o_quant_str;
-}
-
-/**
- * @brief Print a dynamic unit (specialized by each system)
- */
-template <class System>
-void print_unit(char* buf, dynamic_unit const& unit, bool spaceit)
-{
-    if (spaceit) { buf += sprintf(buf, "_"); }
-    sprintf(buf, "[%d %d %d %d %d %d %d %d]", (int)unit[0], (int)unit[1], (int)unit[2], (int)unit[3], (int)unit[4],
-            (int)unit[5], (int)unit[6], (int)unit[7]);
-}
-
-/**
- * @brief Formated output helper. The formatter class below produces these for output.
+ * @brief A quantity represented as a scalar number and a symbol (char* string).
  */
 template <class scalar = double, DIM_IS_SCALAR(scalar)>
 class formatted_quantity {
@@ -55,6 +17,10 @@ class formatted_quantity {
         : m_symbol(symbol_), m_value(value_)
     {
     }
+
+    static formatted_quantity bad_format() { return formatted_quantity(nullptr, std::numeric_limits<scalar>::quiet_NaN()); }
+
+    bool is_bad() const { return isbad__(m_value); }
 
     scalar value() const { return m_value; }
 
@@ -72,90 +38,115 @@ class formatted_quantity {
     char m_dyn_symbol[kMaxSymbol];
 };
 
+
 /**
- *@brief Instructions on how to format type Q.
+ * @brief Instructions on how to format type Q.
  *
- * Links a symbol to an affine transform.
- * For input of a scalar s matching the symbol, Q <- s*scale + add
- * For output of q into s,symbol ("formatted_quantity"), s <- (q-add)/scale
+ * Links a symbol to an affine transform. For input of a scalar s matching the
+ * symbol, Q <- s*scale + add. For output, a formatted_quantity is produced via
+ * formatted_quantity(symbol, (q-add)/scale)
  *
- * Example: formatter("feet", foot) creats a formatter that can take a double representing
- * "ft" and transform it into a Length in the same system as "foot", and it can take
- * a Length l and format it as feet for output regardless of the underlying rep.
+ * Example: formatter("feet", foot) creats a formatter that can take a double
+ * representing "ft" and transform it into a Length in the same system as
+ * "foot", and it can take a Length l and format it as feet for output
+ * regardless of the underlying rep.
+ *
+ * Formatters have the quantity type erased, tracking it at runtime via a unit_code.
  *
  */
-template <class Q, DIM_IS_QUANTITY(Q)>
-struct formatter : public detail::container_base {
-    using quantity = Q;
-    using scalar = typename quantity::scalar;
-
-    formatter() : scale(Q(1.0)), add(Q(0.0)) { sym[0] = 0; }
-
-    formatter(const char* symbol_, Q const& scale_, Q const& add_ = Q(0)) : scale(scale_), add(add_)
-    {
-        strncpy(sym, symbol_, kMaxSymbol);
-    }
-
-    /// Obtain the scalar value of q nondimensionalized by the transform in this formatter
-    scalar non_dim(Q const& q) const { return (q - add) / scale; }
-
-    /// Perform output formatting
-    formatted_quantity<scalar> output(Q const& q) const
-    {
-        return formatted_quantity<scalar>(this->symbol(), non_dim(q));
-    }
-
-    /// Perform input formatting (affine transform)
-    Q input(scalar const& s) const { return s * scale + add; }
-
-    static constexpr uint64_t index() { return Q::index(); }
-
-    char const* symbol() const { return sym; }
-
-   private:
-    char sym[kMaxSymbol];
-    const Q scale;
-    const Q add;
-};
-
-/// Format dynamic_quantities
-template <class S, class System>
-struct dynamic_formatter : public detail::container_base {
+template <class S, class System> class formatter
+{
+  public:
     using scalar = S;
-    using dynamic = dynamic_quantity<S, System>;
+    using dynamic_type = dynamic_quantity<S, System>;
+    using formatted = formatted_quantity<scalar>;
 
-    dynamic_formatter(const char* symbol_, dynamic const& scale_, dynamic const& add_ = dynamic::bad())
-        : scale(scale_), add(add_)
+    formatter(char const* symbol_, dynamic_type const& scale_, dynamic_type const& add_ = dynamic_type::bad())
+        : scale(scale_),
+          add(add_)
     {
-        strncpy(sym, symbol_, kMaxSymbol);
-        if (add.is_bad()) { add = dynamic(0, scale.unit); }
+        strncpy(m_symbol, symbol_, kMaxSymbol - 1);
+        if (add.is_bad()) {
+            add = dynamic_type(0, scale.unit());
+        }
+        if (add.unit() != scale.unit()) {
+            add = dynamic_type::bad_quantity();
+            scale = dynamic_type::bad_quantity();
+            strncpy(m_symbol, "INCONSISTENT", kMaxSymbol - 1);
+        }
     }
-    dynamic_formatter() = default;
 
-    scalar non_dim(dynamic const& q) const { return dimensionless_cast((q + add) / scale); }
-
-    formatted_quantity<scalar> output(dynamic const& q) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    formatter(char const* symbol_, Q const& scale_, Q const& add_ = Q(0))
+        : formatter(symbol_, dynamic_type(scale_), dynamic_type(add_))
     {
-        return formatted_quantity<scalar>(this->symbol(), non_dim(q));
     }
 
-    dynamic input(scalar const& s) const { return dynamic(scale.value * s, scale.unit) + add; }
+    template <class Q, DIM_IS_QUANTITY(Q)> scalar non_dim(Q const& q) const { return non_dim(dynamic_type(q)); }
 
-    uint64_t index() { return ::dim::index(scale.unit); }
+    scalar non_dim(dynamic_type const& q) const 
+    { 
+        dynamic_type result = (q + add) / scale;
+        return ( result.dimensionless()? dimensionless_cast(result) : std::numeric_limits<scalar>::quiet_NaN() );
+    }
 
-    char const* symbol() const { return sym; }
+    formatted output(dynamic_type const& q) const
+    {
+        return formatted(symbol(), non_dim(q));
+    }
+
+    template <class Q, DIM_IS_QUANTITY(Q)> formatted output(Q const& q) const
+    {
+        return formatted(symbol(), non_dim(q));
+    }
+
+    template<class Q, DIM_IS_QUANTITY(Q)>
+    Q input(scalar const& s) const { return (s * scale + add).template as<Q>(); }
+
+    dynamic_type input(scalar const& s) const { return scale * dynamic_type(s) + add; }
+
+    dynamic_unit<System> index() const { return scale.unit(); }
+
+    char const* symbol() const { return m_symbol; }
 
    private:
-    char sym[kMaxSymbol];
-    const dynamic scale;
-    const dynamic add;
+    char m_symbol[kMaxSymbol];
+    dynamic_type scale;
+    dynamic_type add;
 };
 
-namespace detail {
-enum char_parse_state { kStart, kSignificand, kFraction, kExponentStart, kExponent, kUnit, kError };
-bool is_unit_char(char c, char_parse_state& io_state);
 
-bool is_float_part(char c, char_parse_state& io_state);
-}  // namespace detail
+/**
+ * @brief Basic formatting of a quantity's unit. Lowest level version
+ */
+template <class Q, DIM_IS_QUANTITY(Q)>
+char* print_unit(char* o_unit_str)
+{
+    bool spaceit = false;
+    detail::print_unit(o_unit_str, dim::index<Q>(), spaceit);
+    return o_unit_str;
+}
+
+/**
+ * @brief Basic formatting of a dynamic_unit. Lowest level version
+ */
+template <class System, DIM_IS_SYSTEM(System)>
+char* print_unit(char* buf, dynamic_unit<System> const& unit)
+{
+    bool spaceit = false;
+    detail::print_unit(buf, unit);
+    return buf;
+}
+
+/**
+ * @brief Basic formatting of a quantity. Lowest level version
+ */
+template <class Q, DIM_IS_QUANTITY(Q)>
+char* print_quantity(char* o_quant_str, Q const& q)
+{
+    int offset = sprintf(o_quant_str, "%g_", dimensionless_cast(q));    
+    print_unit<Q>(o_quant_str + offset);
+    return o_quant_str;
+}
 
 }  // end of namespace dim

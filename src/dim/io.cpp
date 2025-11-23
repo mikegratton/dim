@@ -1,7 +1,24 @@
 #include "io.hpp"
 
 namespace dim {
+    
 namespace detail {
+
+char const* advance_past_separator(char const* unit_string)
+{
+    for (; *unit_string; ++unit_string) {    
+        switch (*unit_string) {
+            case ' ':
+            case '*':
+            case '_':                
+                break;
+            default:
+                return unit_string;
+        }
+    }
+    return unit_string;
+}
+
 bool is_unit_char(char c, char_parse_state& io_state)
 {
     switch (io_state) {

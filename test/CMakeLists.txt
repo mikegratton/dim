@@ -1,16 +1,24 @@
 add_executable(dimTest
-    main.cpp
-    io_test.cpp
-    literal_test.cpp
-    si_test.cpp
-    si_io_test.cpp
-    parser_test.cpp
+    dynamic_test.cpp
+    facet_test.cpp
     format_map_test.cpp
+    format_test.cpp
+    formatter_test.cpp
+    io_stream_test.cpp    
+    literal_test.cpp
+    main.cpp
     parse_timing.cpp
+    parser_test.cpp
+    io_test.cpp    
+    si_io_test.cpp
+    si_test.cpp
+    test_utilities.cpp
 )
 target_link_libraries(dimTest PUBLIC dim)
 
-set_target_properties(dimTest PROPERTIES CXX_STANDARD 11)
+if (DIM_FORCE_CXX_11)
+    set_target_properties(dimTest PROPERTIES CXX_STANDARD 11)
+endif()
 
 add_executable(dimCompileErrors
     main.cpp

@@ -1,36 +1,24 @@
 #include "si_io.hpp"
 
-/*
-#include <iostream>
-#include <string>
-
-std::ostream& operator<<(std::ostream& os, ::dim::dynamic_quantity<double, ::dim::si::system> const& dq) {
-    os << dq.value << " [ ";
-    for (int i=0; i<dq.unit.size(); i++) {
-        os << (int) dq.unit[i] << " ";
-    }
-    os << "]";
-    return os;
-}
-*/
-
 namespace dim {
 
+namespace detail {
 template <>
-void print_unit<dim::si::system>(char* buf, dynamic_unit const& unit, bool spaceit)
+void print_unit<dim::si::system>(char* buf, dim::si::dynamic_unit const& unit, bool spaceit)
 {
     if (spaceit) { buf += sprintf(buf, "_"); }
-    for (std::size_t i = 0; i < unit.size(); i++) {
-        detail::print_helper<::dim::si::system>(&buf, unit[i], i, spaceit);
+    for (int i = 0; i < unit.size(); i++) {
+        detail::print_helper<::dim::si::system>(&buf, unit.get(i), i, spaceit);
     }
 }
+} // namespace detail
 
 using namespace si;
 
 // clang-format off
 
-template<> format_map<Temperature> const& get_default_format<Temperature>() {
-    static const format_map<Temperature> s_known {
+template<> si::input_format_map const& get_default_format<Temperature>() {
+    static const si::input_format_map s_known {
         {"F", 5./9.*kelvin, 255.37*kelvin},
         {"R", 5./9.*kelvin},
         {"C", 1.*kelvin, 273.15*kelvin}
@@ -39,8 +27,8 @@ template<> format_map<Temperature> const& get_default_format<Temperature>() {
 }
 
 template<>
-format_map<Length> const& get_default_format<Length>() {
-    static const format_map<Length> s_known {
+si::input_format_map const& get_default_format<Length>() {
+    static const si::input_format_map s_known {
         {"in", inch },
         {"inch", inch},
         {"ft", foot},
@@ -56,8 +44,8 @@ format_map<Length> const& get_default_format<Length>() {
 }
 
 template<>
-format_map<Time> const& get_default_format<Time>() {
-    static const format_map<Time> s_known {
+si::input_format_map const& get_default_format<Time>() {
+    static const si::input_format_map s_known {
         {"min", minute},
         {"h", hour},
         {"hr", hour},
@@ -68,8 +56,8 @@ format_map<Time> const& get_default_format<Time>() {
 }
 
 template<>
-format_map<Mass> const& get_default_format<Mass>() {
-    static const format_map<Mass> s_known {
+si::input_format_map const& get_default_format<Mass>() {
+    static const si::input_format_map s_known {
         {"oz", pound_mass / 16.0},
         {"lb", pound_mass},
         {"lbm", pound_mass},
@@ -82,8 +70,8 @@ format_map<Mass> const& get_default_format<Mass>() {
 }
 
 template<>
-format_map<Angle> const& get_default_format<Angle>() {
-    static const format_map<Angle> s_known {
+si::input_format_map const& get_default_format<Angle>() {
+    static const si::input_format_map s_known {
         {"radian", radian},
         {"deg", degree},
         {"mil", 1e-3 * radian},
@@ -101,8 +89,8 @@ format_map<Angle> const& get_default_format<Angle>() {
 }
 
 template<>
-format_map<SolidAngle> const& get_default_format<SolidAngle>() {
-    static const format_map<SolidAngle> s_known {
+si::input_format_map const& get_default_format<SolidAngle>() {
+    static const si::input_format_map s_known {
         {"steradian", steradian},
         {"sp", 4.0 * M_PI * steradian},
         {"spat", 4.0 * M_PI * steradian}
@@ -112,8 +100,8 @@ format_map<SolidAngle> const& get_default_format<SolidAngle>() {
 
 
 template<>
-format_map<Force> const& get_default_format<Force>() {
-    static const format_map<Force> s_known {
+si::input_format_map const& get_default_format<Force>() {
+    static const si::input_format_map s_known {
         {"dyn", dyne},
         {"lb", pound_force},
         {"lbf", pound_force},
@@ -124,8 +112,8 @@ format_map<Force> const& get_default_format<Force>() {
 }
 
 template<>
-format_map<Pressure> const& get_default_format<Pressure>() {
-    static const format_map<Pressure> s_known {
+si::input_format_map const& get_default_format<Pressure>() {
+    static const si::input_format_map s_known {
         {"lbf/in^2", pound_force / inch / inch},
         {"lbf_in^-2", pound_force / inch / inch},
         {"lb/in^2", pound_force / inch / inch},
@@ -140,8 +128,8 @@ format_map<Pressure> const& get_default_format<Pressure>() {
 }
 
 template<>
-format_map<Energy> const& get_default_format<Energy>() {
-    static const format_map<Energy> s_known {
+si::input_format_map const& get_default_format<Energy>() {
+    static const si::input_format_map s_known {
         {"kW_hr", 1e3*watt*hour},
         {"kW_hr", 1e3*watt*hour},
         {"kW_hr", 1e3*watt*hour},
@@ -155,16 +143,16 @@ format_map<Energy> const& get_default_format<Energy>() {
 }
 
 template<>
-format_map<Power> const& get_default_format<Power>() {
-    static const format_map<Power> s_known {
+si::input_format_map const& get_default_format<Power>() {
+    static const si::input_format_map s_known {
         {"hp", 33e3 * foot* pound_force / minute}
     };
     return s_known;
 }
 
 template<>
-format_map<Area> const& get_default_format<Area>() {
-    static const format_map<Area> s_known {
+si::input_format_map const& get_default_format<Area>() {
+    static const si::input_format_map s_known {
         {"acre", acre},
         {"sq_mi", mile * mile},
         {"mi^2", mile * mile},
@@ -179,8 +167,8 @@ format_map<Area> const& get_default_format<Area>() {
 }
 
 template<>
-format_map<Volume> const& get_default_format<Volume>() {
-    static const format_map<Volume> s_known {
+si::input_format_map const& get_default_format<Volume>() {
+    static const si::input_format_map s_known {
         {"cc", 1e-6 * meter3},
         {"gal", gallon},
         {"gallon", gallon},
@@ -200,8 +188,8 @@ format_map<Volume> const& get_default_format<Volume>() {
 }
 
 template<>
-format_map<FlowRate> const& get_default_format<FlowRate>() {
-    static const format_map<FlowRate> s_known {
+si::input_format_map const& get_default_format<FlowRate>() {
+    static const si::input_format_map s_known {
         {"gal/s", gallon / second},
         {"gal/min", gallon / minute},
         {"meter3/second", meter3 / second},
@@ -212,8 +200,8 @@ format_map<FlowRate> const& get_default_format<FlowRate>() {
     return s_known;
 }
 template<>
-format_map<Speed> const& get_default_format<Speed>() {
-    static const format_map<Speed> s_known {
+si::input_format_map const& get_default_format<Speed>() {
+    static const si::input_format_map s_known {
         {"mps", meter/second},
         {"kph", 1e3*meter/hour},
         {"mph", mile / hour},
@@ -227,16 +215,16 @@ format_map<Speed> const& get_default_format<Speed>() {
     return s_known;
 }
 template<>
-format_map<Acceleration> const& get_default_format<Acceleration>() {
-    static const format_map<Acceleration> s_known {
+si::input_format_map const& get_default_format<Acceleration>() {
+    static const si::input_format_map s_known {
         {"ft/s^2", foot / second / second},
         {"feet_per_second2", foot / second / second}
     };
     return s_known;
 }
 template<>
-format_map<AngularRate> const& get_default_format<AngularRate>() {
-    static const format_map<AngularRate> s_known {
+si::input_format_map const& get_default_format<AngularRate>() {
+    static const si::input_format_map s_known {
         {"deg/s", degree / second},
         {"degrees_per_second", degree / second},
         {"radians_per_second", radian / second}
@@ -244,8 +232,8 @@ format_map<AngularRate> const& get_default_format<AngularRate>() {
     return s_known;
 }
 template<>
-format_map<AngularAcceleration> const& get_default_format<AngularAcceleration>() {
-    static const format_map<AngularAcceleration> s_known {
+si::input_format_map const& get_default_format<AngularAcceleration>() {
+    static const si::input_format_map s_known {
         {"deg/s^2", degree / second / second},
         {"degrees_per_second2", degree / second / second},
         {"radians_per_second2", radian / second / second}
@@ -253,8 +241,8 @@ format_map<AngularAcceleration> const& get_default_format<AngularAcceleration>()
     return s_known;
 }
 template<>
-format_map<Torque> const& get_default_format<Torque>() {
-    static const format_map<Torque> s_known {
+si::input_format_map const& get_default_format<Torque>() {
+    static const si::input_format_map s_known {
         {"ft*lbf", foot* pound_force/radian},
         {"ft_lbf", foot* pound_force/radian},
         {"ft*lb", foot* pound_force/radian},
@@ -273,7 +261,7 @@ namespace dim {
 namespace detail {
 
 template <>
-::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend)
+::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(const char* unit_str, int nend)
 {
     dim::si::detail::quantity_parser_driver driver;
     driver.parse(unit_str, nend);

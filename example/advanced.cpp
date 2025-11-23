@@ -20,16 +20,18 @@ using namespace dim::si::literal;
 
 int main(int argc, char** argv)
 {
-    si::Torque T = 3_N * 2_m / 1.2_rad;
-    std::cout << "Torque is " << T << "\n";
+    si::system::install_facet();
+    si::Torque T = 3_N * 2_m / 1.2_rad;    
+    std::cout << "Torque is " << T << "\n";    
     // Let's format as inches and degrees
-    auto* facet = si::system::make_default_facet();
-    facet->output_formatter(dim::formatter<si::Length>("in", si::inch));
-    facet->output_formatter(dim::formatter<si::Angle>("deg", si::degree));
-    facet->output_formatter(dim::formatter<Pitch>("in/deg", si::inch/si::degree));    
-    si::add_to_global_locale(facet);    
+    auto* facet = si::make_default_facet();
+    facet->output_formatter(si::formatter("in", si::inch));
+    facet->output_formatter(si::formatter("deg", si::degree));
+    facet->output_formatter(si::formatter("in/deg", si::inch/si::degree));
+    std::locale enhanced_locale(std::locale{}, facet);
+    std::locale::global(enhanced_locale);    
     
-    Pitch screw = 2.0 * si::inch / 30.0_deg;
-    std::cout << "Screw pitch is " << screw << "\n";
+    Pitch screw = 2.0 * si::inch / 30.0_deg;    
+    std::cout << "Screw pitch is " << screw << "\n";    
     return 0;
 }

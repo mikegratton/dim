@@ -1,11 +1,10 @@
 #pragma once
-#include "dim/base.hpp"
+#include "dim/quantity.hpp"
 #include "dim/system_creation_helper.hpp"
+#include "si_quantity_facet.hpp"
 /* clang-format off */
 namespace dim
 {
-
-class quantity_facet;
 
 /// Namespace forthe International System (SI) of units
 namespace si
@@ -19,10 +18,11 @@ constexpr const char* specialized_symbol() { return "\0"; }
 
 struct system : system_tag {
     static const long id;
-    static const char* SYMBOL[];
+    static const char* kSymbol[];
+    
     constexpr static const char* symbol_for(int dimension)
     {
-        return SYMBOL[dimension];
+        return kSymbol[dimension];
     }
 
     template<class U>
@@ -30,18 +30,16 @@ struct system : system_tag {
     {
         return symbol::specialized_symbol<U>();
     }
-    static quantity_facet* make_default_facet();
 
     using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, system>;
+
+    using facet = ::dim::si::facet;    
+    static facet* make_default_facet() { return ::dim::si::make_default_facet(); }
+    static void install_facet(si::facet* fac = make_default_facet()) { ::dim::si::install_facet(fac); }
 };
 
-/**
- * @brief Install the facet into the global locale. If specialized is nullptr,
- * then install the default facet for si.
- */
-void add_to_global_locale(quantity_facet* specialized = nullptr);
-
-// Fundamental dimensions to types and base unit definitions
+// clang-format off
+// Fundamental dimensions and their associated unit types, quantity types, and symbols
 DEFINE_QUANTITY_S(Length,      meter,     system, double, 1, 0, 0, 0, 0, 0, 0, 0, "m")
 DEFINE_QUANTITY_S(Time,        second,    system, double, 0, 1, 0, 0, 0, 0, 0, 0, "s")
 DEFINE_QUANTITY_S(Mass,        kilogram,  system, double, 0, 0, 1, 0, 0, 0, 0, 0, "kg")
@@ -51,32 +49,33 @@ DEFINE_QUANTITY_S(Amount,      mole,      system, double, 0, 0, 0, 0, 0, 1, 0, 0
 DEFINE_QUANTITY_S(Current,     ampere,    system, double, 0, 0, 0, 0, 0, 0, 1, 0, "A")
 DEFINE_QUANTITY_S(Luminosity,  candela,   system, double, 0, 0, 0, 0, 0, 0, 0, 1, "cd")
 
-// Derived units
-DEFINE_QUANTITY_S(Frequency,           hertz,   system, double, 0, -1, 0, 0, 0, 0, 0, 0, "Hz")
-DEFINE_QUANTITY_S(SolidAngle,       steradian,  system, double, 0, 0, 0, 2, 0, 0, 0, 0, "sr")
-DEFINE_QUANTITY_S(Force,               newton,  system, double, 1, -2, 1, 0, 0, 0, 0, 0, "N")
-DEFINE_QUANTITY_S(Pressure,            pascal,  system, double, -1, -2, 1, 0, 0, 0, 0, 0, "Pa")
-DEFINE_QUANTITY_S(Energy,              joule,   system, double, 2, -2, 1, 0, 0, 0, 0, 0, "J")
-DEFINE_QUANTITY_S(Power,               watt,    system, double, 2, -3, 1, 0, 0, 0, 0, 0, "W")
-DEFINE_QUANTITY_S(Charge,              coulomb, system, double, 0, 1, 0, 0, 0, 0, 1, 0, "C")
-DEFINE_QUANTITY_S(Voltage,             volt,    system, double, 2, -3, 1, 0, 0, 0, -1, 0, "V")
-DEFINE_QUANTITY_S(Capacitance,         farad,   system, double, -2, 4, -1, 0, 0, 0, 1, 0, "F")
-DEFINE_QUANTITY_S(Resistance,          ohm,     system, double, 2, -3, 1, 0, 0, 0, -2, 0, "R")
-DEFINE_QUANTITY_S(Conductance,         siemens, system, double, -2, 3, -1, 0, 0, 0, 2, 0, "S")
-DEFINE_QUANTITY_S(MagneticFlux,        weber,   system, double, 2, -2, 1, 0, 0, 0, -1, 0, "Wb")
-DEFINE_QUANTITY_S(MagneticFluxDensity, tesla,   system, double, 0, -2, 1, 0, 0, 0, -1, 0, "T")
-DEFINE_QUANTITY_S(Inductance,          henry,   system, double, 2, -2, 1, 0, 0, 0, -2, 0, "H")
-DEFINE_QUANTITY_S(LuminousFlux,        lumen,   system, double, 0, 0, 0, 2, 0, 0, 0, 1, "Im")
-DEFINE_QUANTITY_S(Luminance,           lux,     system, double, -2, 0, 0, 2, 0, 0, 0, 1, "Ix")
-DEFINE_QUANTITY_S(CatalyticActivity,   katal,   system, double, 0, -1, 0, 0, 0, 1, 0, 0, "kat")
-DEFINE_QUANTITY_S(Viscosity,           poiseuille, system, double, -1, -1, 1, 0, 0, 0, 0, 0, "Pl")
+// Derived units and their associated quantity types, and symbols
+DEFINE_QUANTITY_S(Frequency,           hertz,      system, double,  0, -1,  0,  0,  0,  0,  0,  0, "Hz")
+DEFINE_QUANTITY_S(SolidAngle,          steradian,  system, double,  0,  0,  0,  2,  0,  0,  0,  0, "sr")
+DEFINE_QUANTITY_S(Force,               newton,     system, double,  1, -2,  1,  0,  0,  0,  0,  0, "N")
+DEFINE_QUANTITY_S(Pressure,            pascal,     system, double, -1, -2,  1,  0,  0,  0,  0,  0, "Pa")
+DEFINE_QUANTITY_S(Energy,              joule,      system, double,  2, -2,  1,  0,  0,  0,  0,  0, "J")
+DEFINE_QUANTITY_S(Power,               watt,       system, double,  2, -3,  1,  0,  0,  0,  0,  0, "W")
+DEFINE_QUANTITY_S(Charge,              coulomb,    system, double,  0,  1,  0,  0,  0,  0,  1,  0, "C")
+DEFINE_QUANTITY_S(Voltage,             volt,       system, double,  2, -3,  1,  0,  0,  0, -1,  0, "V")
+DEFINE_QUANTITY_S(Capacitance,         farad,      system, double, -2,  4, -1,  0,  0,  0,  1,  0, "F")
+DEFINE_QUANTITY_S(Resistance,          ohm,        system, double,  2, -3,  1,  0,  0,  0, -2,  0, "R")
+DEFINE_QUANTITY_S(Conductance,         siemens,    system, double, -2,  3, -1,  0,  0,  0,  2,  0, "S")
+DEFINE_QUANTITY_S(MagneticFlux,        weber,      system, double,  2, -2,  1,  0,  0,  0, -1,  0, "Wb")
+DEFINE_QUANTITY_S(MagneticFluxDensity, tesla,      system, double,  0, -2,  1,  0,  0,  0, -1,  0, "T")
+DEFINE_QUANTITY_S(Inductance,          henry,      system, double,  2, -2,  1,  0,  0,  0, -2,  0, "H")
+DEFINE_QUANTITY_S(LuminousFlux,        lumen,      system, double,  0,  0,  0,  2,  0,  0,  0,  1, "Im")
+DEFINE_QUANTITY_S(Luminance,           lux,        system, double, -2,  0,  0,  2,  0,  0,  0,  1, "Ix")
+DEFINE_QUANTITY_S(CatalyticActivity,   katal,      system, double,  0, -1,  0,  0,  0,  1,  0,  0, "kat")
+DEFINE_QUANTITY_S(Viscosity,           poiseuille, system, double, -1, -1,  1,  0,  0,  0,  0,  0, "Pl")
 
-// Compound units without specialized unit names
+// Compound units without specialized unit names or symbols
 DEFINE_QUANTITY(Area,                  meter2,  system, double, 2, 0, 0, 0, 0, 0, 0, 0)
 DEFINE_QUANTITY(Volume,                meter3,  system, double, 3, 0, 0, 0, 0, 0, 0, 0)
 constexpr unit_multiply_t<Time::unit, Time::unit> second2;
+// clang-format on
 
-// Compound quantities with specialized names but not specialized units
+// Compound quantities with specialized names but without specialized unit nmaes
 using FlowRate            = quantity<unit_divide_t<Volume::unit, Time::unit>, double>;
 using Speed               = quantity<unit_divide_t<Length::unit, Time::unit>, double>;
 using Acceleration        = quantity<unit_divide_t<Speed::unit, Time::unit>, double>;
@@ -85,6 +84,8 @@ using AngularAcceleration = quantity<unit_divide_t<AngularRate::unit, Time::unit
 using Torque              = quantity<unit_divide_t<Energy::unit, Angle::unit>, double>;
 using Density             = quantity<unit_divide_t<Mass::unit, Volume::unit>, double>;
 using KinematicViscosity  = quantity<unit_divide_t<Area::unit, Time::unit>, double>;
+
+
 /*****************************************************************************
  * CONVERSIONS
  *****************************************************************************
@@ -142,11 +143,13 @@ constexpr inline double toCelsiusValue(Temperature arg_t) { return (arg_t/kelvin
 constexpr inline Temperature fahrenheit(double temp_f) { return (temp_f + 459.67)*rankine; }
 constexpr inline double toFahrenheitValue(Temperature arg_t) { return (arg_t/rankine - 459.67); }
 
-/**********************************************************************
- * Trig function overloads inside dim::si
- *********************************************************************/
+using dynamic_unit = ::dim::dynamic_unit<si::system>;
 
 } // end of namespace si
+
+// Some explicit template instantiations
+extern template class dynamic_unit<si::system>;
+
 } // end of namespace dim
 
 #ifndef DIMENSION_NO_MATH
@@ -155,6 +158,11 @@ namespace dim
 {
 namespace si
 {
+
+/**********************************************************************
+ * Trig function overloads inside dim::si
+ *********************************************************************/
+
 inline double sin(Angle const& q) { return ::std::sin(dimensionless_cast(q)); }
 inline double cos(Angle const& q) { return ::std::cos(dimensionless_cast(q)); }
 inline double tan(Angle const& q) { return ::std::tan(dimensionless_cast(q)); }

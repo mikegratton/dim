@@ -1,3 +1,4 @@
+#include "dim/si/definition.hpp"
 #include <cassert>
 #include <iostream>
 #include <dim/si.hpp> // 1
@@ -11,11 +12,12 @@ Length compute_distance(Time t, Speed v) { return t*v; }
 
 int main(int argc, char** argv)
 {
+    si::system::install_facet();
     Time my_time = 3.0_s; // 4
     Speed my_speed = 2.0 * foot/second; // 5
-    Length my_distance = compute_distance(my_time, my_speed);
+    Length my_distance = compute_distance(my_time, my_speed);    
     std::cout << "In " << my_time << ", an object traveling at speed " << my_speed 
-              << " travels " << my_distance << "\n";
+              << " travels " << my_distance << "\n";    
     assert(sizeof(my_distance) == sizeof(double));
     return 0;
 }

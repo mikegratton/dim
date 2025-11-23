@@ -39,8 +39,3 @@
         return Symbol;                                                                            \
     }                                                                                             \
     }
-
-/// Convenience enum for accessing dynamic_quantity dimensions
-struct base_dimension {
-    enum types { Length = 0, Time, Mass, Angle, Temperature, Amount, Current, Luminosity };
-};

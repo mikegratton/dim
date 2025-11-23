@@ -1,58 +1,39 @@
 #pragma once
 #include "definition.hpp"
-#include "dim/format_map.hpp"
 
-namespace dim {
-namespace si {
-using dynamic_quantity = ::dim::dynamic_quantity<double, si::system>;
-}
-namespace detail {
+namespace dim
+{
+
+namespace detail
+{
 /// Parse unit strings using SI conventions
-template <>
-::dim::si::dynamic_quantity parse_standard_rep<si::system, double>(const char* unit_str, int nend);
-}  // namespace detail
+template <>::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(char const* unit_str, int nend);
 
 /// Print units using the default SI symbols
-template <>
-void print_unit<dim::si::system>(char* buf, dynamic_unit const& unit, bool spaceit);
+template <> void print_unit<dim::si::system>(char* buf, dim::si::dynamic_unit const& unit, bool spaceit);
 
-template <>
-format_map<si::Length> const& get_default_format<si::Length>();
-template <>
-format_map<si::Time> const& get_default_format<si::Time>();
-template <>
-format_map<si::Mass> const& get_default_format<si::Mass>();
-template <>
-format_map<si::Angle> const& get_default_format<si::Angle>();
-template <>
-format_map<si::SolidAngle> const& get_default_format<si::SolidAngle>();
-template <>
-format_map<si::Temperature> const& get_default_format<si::Temperature>();
+} // namespace detail
 
-template <>
-format_map<si::Force> const& get_default_format<si::Force>();
-template <>
-format_map<si::Pressure> const& get_default_format<si::Pressure>();
-template <>
-format_map<si::Energy> const& get_default_format<si::Energy>();
-template <>
-format_map<si::Power> const& get_default_format<si::Power>();
 
-template <>
-format_map<si::Area> const& get_default_format<si::Area>();
-template <>
-format_map<si::Volume> const& get_default_format<si::Volume>();
-template <>
-format_map<si::FlowRate> const& get_default_format<si::FlowRate>();
-template <>
-format_map<si::Speed> const& get_default_format<si::Speed>();
-template <>
-format_map<si::Acceleration> const& get_default_format<si::Acceleration>();
-template <>
-format_map<si::AngularRate> const& get_default_format<si::AngularRate>();
-template <>
-format_map<si::AngularAcceleration> const& get_default_format<si::AngularAcceleration>();
-template <>
-format_map<si::Torque> const& get_default_format<si::Torque>();
+template <> si::input_format_map const& get_default_format<si::Length>();
+template <> si::input_format_map const& get_default_format<si::Time>();
+template <> si::input_format_map const& get_default_format<si::Mass>();
+template <> si::input_format_map const& get_default_format<si::Angle>();
+template <> si::input_format_map const& get_default_format<si::SolidAngle>();
+template <> si::input_format_map const& get_default_format<si::Temperature>();
 
-}  // namespace dim
+template <> si::input_format_map const& get_default_format<si::Force>();
+template <> si::input_format_map const& get_default_format<si::Pressure>();
+template <> si::input_format_map const& get_default_format<si::Energy>();
+template <> si::input_format_map const& get_default_format<si::Power>();
+
+template <> si::input_format_map const& get_default_format<si::Area>();
+template <> si::input_format_map const& get_default_format<si::Volume>();
+template <> si::input_format_map const& get_default_format<si::FlowRate>();
+template <> si::input_format_map const& get_default_format<si::Speed>();
+template <> si::input_format_map const& get_default_format<si::Acceleration>();
+template <> si::input_format_map const& get_default_format<si::AngularRate>();
+template <> si::input_format_map const& get_default_format<si::AngularAcceleration>();
+template <> si::input_format_map const& get_default_format<si::Torque>();
+
+} // namespace dim

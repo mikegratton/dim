@@ -1,108 +1,146 @@
+#include "dim/dynamic_quantity.hpp"
 #include "dim/format_map.hpp"
 
 #include <iostream>
 #include <string>
-
-#include "dim/io.hpp"
 #include "dim/io_detail.hpp"
 #include "dim/si.hpp"
 #include "dim/si/definition.hpp"
+#include "dim/si/si_io.hpp"
+#include "dim/si/si_quantity_facet.hpp"
 #include "doctest.h"
 
-TEST_CASE("format_map")
+TEST_CASE("input_format_map")
 {
-    using LengthMap = dim::format_map<si::Length>;
-    LengthMap map1, map2;
-    map1.set(dim::formatter<si::Length>("in", si::inch));
-    si::Length ell(5);
-    CHECK(map1.get("in") != nullptr);
-    auto result = map1.get("in")->output(ell);
-    CHECK(result.value() > 196.84);
+    using LengthMap = si::input_format_map;    
+    LengthMap map1(si::formatter("in", si::inch));        
+    auto result = map1.to_quantity(5.0, "in");
+    CHECK(dimensionless_cast(result / si::dynamic_quantity(si::inch)) == doctest::Approx(5.0));
+    CHECK(dimensionless_cast(result / si::dynamic_quantity(si::inch)) == doctest::Approx(5.0));
+    auto result2 = map1.to_quantity<si::Length>(5.0, "in");
+    CHECK(result2 / si::inch == doctest::Approx(5.0));
 
-    // Symbol replacement
-    map1.set("in", si::yard);
-    CHECK(map1.get("in") != nullptr);
-    result = map1.get("in")->output(ell);
-    CHECK(result.value() < 5.47);
-
-    // Map resize
-    const char* static_text = "abcdefghijklmnopqrstuvwxyz";
-    for (int i = 0; i < 12; i++) { map1.set(dim::formatter<si::Length>(&static_text[i], si::mile)); }
-    CHECK(map1.size() == 13);
-    CHECK(map1.get("in") != nullptr);
-    result = map1.get("in")->output(ell);
-    CHECK(result.value() < 5.47);
-
-    // Map copy
-    map2 = map1;
-    CHECK(map2.size() == 13);
-    CHECK(map2.get("in") != nullptr);
-    result = map2.get("in")->output(ell);
-    CHECK(result.value() < 5.47);
+    // Symbol replacement    
+    map1.insert("in", si::yard);    
+    result = map1.to_quantity(5.0, "in");
+    CHECK(result.value() == doctest::Approx(15.0 * si::foot / si::meter));
 
     // Bulk init
-    LengthMap map3{{"in", si::inch}, {"yd", si::yard}, {"mi", si::mile}, {"nmi", si::nautical_mile}};
-    CHECK(map3.get("yd") != nullptr);
-    CHECK(map3.get("in") != nullptr);
-    CHECK(map3.get("mi") != nullptr);
-    CHECK(map3.get("nmi") != nullptr);
+    LengthMap map2{{"in", si::inch}, {"yd", si::yard}, {"mi", si::mile}, {"nmi", si::nautical_mile}};
+    CHECK(map2.size() == 4);
+    CHECK(dimensionless_cast(map2.to_quantity(2.0, "mi")) == doctest::Approx(dimensionless_cast(2.0 * si::mile)));
+    CHECK(dimensionless_cast(map2.to_quantity(2.0, "nmi")) == doctest::Approx(dimensionless_cast(2.0 * si::nautical_mile)));
+    CHECK(dimensionless_cast(map2.to_quantity(2.0, "yd")) == doctest::Approx(dimensionless_cast(2.0 * si::yard)));
+    CHECK(dimensionless_cast(map2.to_quantity(2.0, "in")) == doctest::Approx(dimensionless_cast(2.0 * si::inch)));    
+
+    // Clear the map
+    map2.clear();
+    CHECK(map2.size() == 0);
 }
 
-TEST_CASE("format_index_map")
+static std::string print(si::dynamic_unit unit)
 {
-    dim::format_index_map imap;
-    std::unique_ptr<dim::format_map<dim::si::Length>> lengthMap(new dim::format_map<dim::si::Length>);
-    *lengthMap = si::get_default_format<si::Length>();
-    imap.set(dim::formatter<si::Length>::index(), std::move(lengthMap));
-    std::unique_ptr<dim::format_map<si::Temperature>> temperatureMap(new dim::format_map<si::Temperature>);
-    *temperatureMap = si::get_default_format<si::Temperature>();
-    imap.set(dim::formatter<si::Temperature>::index(), std::move(temperatureMap));
-    std::unique_ptr<dim::format_map<si::Time>> timeMap(new dim::format_map<si::Time>);
-    *timeMap = si::get_default_format<si::Time>();
-    imap.set(dim::formatter<si::Time>::index(), std::move(timeMap));
-    std::unique_ptr<dim::format_map<si::Mass>> massMap(new dim::format_map<si::Mass>);
-    *massMap = si::get_default_format<si::Mass>();
-    imap.set(dim::formatter<si::Mass>::index(), std::move(massMap));
-
-    auto* m = static_cast<dim::format_map<si::Length>*>(imap.get(dim::formatter<si::Length>::index()));
-    REQUIRE(m != nullptr);
-    CHECK(m->size() == si::get_default_format<si::Length>().size());
-    auto* m2 = static_cast<dim::format_map<si::Time>*>(imap.get(dim::formatter<si::Time>::index()));
-    REQUIRE(m2 != nullptr);
-    CHECK(m2->size() == si::get_default_format<si::Time>().size());
-    auto* m3 = static_cast<dim::format_map<si::Temperature>*>(imap.get(dim::formatter<si::Temperature>::index()));
-    REQUIRE(m3 != nullptr);
-    CHECK(m3->size() == si::get_default_format<si::Temperature>().size());
-    auto* m4 = static_cast<dim::format_map<si::Mass>*>(imap.get(dim::formatter<si::Mass>::index()));
-    REQUIRE(m4 != nullptr);
-    CHECK(m4->size() == si::get_default_format<si::Mass>().size());
-
-    imap.erase(si::Mass::index());
-    m4 = static_cast<dim::format_map<si::Mass>*>(imap.get(dim::formatter<si::Mass>::index()));
-    CHECK(m4 == nullptr);
+    std::string rep = "[";
+    for (int i=0; i<unit.size(); i++) {
+        rep += std::to_string(static_cast<int>(unit.get(i))) + " ";
+    }
+    rep += "]";
+    return rep;
 }
 
-template <class Q>
-void add_format(dim::format_index_map& io_map, char const* symbol, Q scale, Q add = Q(0.0))
+TEST_CASE("input_format_map_group")
 {
-    std::unique_ptr<dim::formatter<Q>> f(new dim::formatter<Q>(symbol, scale, add));
-    io_map.set(Q::index(), std::move(f));
-}
-
-TEST_CASE("format_index_map2")
-{
-    dim::format_index_map imap;
-    add_format(imap, "in", si::inch);
-    add_format(imap, "hr", si::hour);
-    add_format(imap, "K", si::kelvin);
-    add_format(imap, "deg", si::degree);
+    si::input_format_map_group imap;
+    // Fill the map by inserting input_format_maps 
+    imap.insert(si::get_default_format<si::Length>());
+    imap.insert(si::get_default_format<si::Temperature>());
+    imap.insert(si::get_default_format<si::Time>());
+    imap.insert(si::get_default_format<si::Mass>());
     CHECK(imap.size() == 4);
-    auto const* f = static_cast<dim::formatter<si::Time> const*>(imap.get(si::Time::index()));
-    REQUIRE(f != nullptr);
-    CHECK(std::string("hr") == f->symbol());
+
+    // Erase a whole unit class
+    CHECK(imap.erase(dim::index<si::Length>()));
+    CHECK(imap.size() == 3);
+
+    // Insert a formatter for a new unit
+    imap.insert(si::formatter("in", si::inch));
+    CHECK(imap.size() == 4);
+    imap.insert(si::formatter("yd", si::yard));
+
+    // ... and take it out again
+    CHECK(imap.erase(dim::index<si::Length>(), "in"));
+    CHECK(imap.size() == 4);
+    // When the last element is removed, check that the whole length map was removed
+    CHECK(imap.erase(dim::index<si::Length>(), "yd"));
+    CHECK(imap.size() == 3);
+
+    // Check we can access the formatters
+    auto result = imap.to_quantity(5.0, "hr");
+    CHECK_FALSE(result.is_bad());    
+    CHECK(result.unit() == dim::index<si::Time>());    
+    CHECK(dimensionless_cast(result) == doctest::Approx(5.0 * si::hour / si::second));
+    
+
+    // Access with a specified quantity
+    auto result2 = imap.to_quantity<si::Mass>(5.0, "lbm");
+    CHECK(index(result2) == dim::index<si::Mass>());
+    CHECK_FALSE(result2.is_bad());
+    CHECK(dimensionless_cast(result2) == doctest::Approx(5.0 * si::pound_mass / si::kilogram));
+
+    // Try to access a non-existant format for dynamic types
+    auto result3 = imap.to_quantity(3.0, "smoot");
+    CHECK(result3.is_bad());
+
+    // Try to access the wrong quantity
+    auto result4 = imap.to_quantity<si::Mass>(4.0, "hr");
+    CHECK(result4.is_bad());
+
+    // Clear the map
+    imap.clear();
+    CHECK(imap.size() == 0);
 }
 
-TEST_CASE("index")
+TEST_CASE("output_format_map")
 {
-    CHECK(si::Frequency::index() != si::AngularRate::index());
+    si::output_format_map omap;
+    omap.insert(si::formatter("hr", si::hour));
+    omap.insert("smoot", 1.7018 * si::meter);
+    CHECK(omap.size() == 2);
+
+    // Replace a type
+    omap.insert(si::formatter("min", si::minute));
+    CHECK(omap.size() == 2);
+
+    // Format a static type
+    auto result = omap.format(2.0 * si::meter);
+    CHECK_FALSE(dim::isbad__(result.value()));
+    CHECK(strncmp(result.symbol(), "smoot", dim::kMaxSymbol) == 0);
+    CHECK(result.value() == doctest::Approx(2.0 / 1.7018));
+
+    // Format a dynamic type 
+    result = omap.format(si::dynamic_quantity(2.0, dim::index<si::Length>()));
+    CHECK_FALSE(dim::isbad__(result.value()));
+    CHECK(strncmp(result.symbol(), "smoot", dim::kMaxSymbol) == 0);
+    CHECK(result.value() == doctest::Approx(2.0 / 1.7018));
+
+    // Clear the map
+    omap.clear();
+    CHECK(omap.size() == 0);
+}
+
+TEST_CASE("quantity_index")
+{
+    CHECK(dim::index<si::Frequency>() != dim::index<si::AngularRate>());
+}
+
+TEST_CASE("parse_quantity")
+{
+    si::input_format_map input_format(si::meter_);
+    input_format.insert("yd", si::yard);
+    si::dynamic_quantity dq;
+    CHECK(parse_quantity(dq, 2.0, "yd", input_format));
+    CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::yard / si::meter));
+    si::Length q;
+    CHECK(parse_quantity(q, 2.0, "yd", input_format));
+    CHECK(dimensionless_cast(q) == doctest::Approx(2.0 * si::yard / si::meter));
 }

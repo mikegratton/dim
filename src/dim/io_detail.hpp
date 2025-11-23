@@ -1,10 +1,13 @@
 #pragma once
 #include <cstdio>
+#include <cstring>
 
-#include "base.hpp"
 #include "dynamic_quantity.hpp"
 
 namespace dim {
+
+constexpr int kMaxSymbol = 32;
+
 namespace detail {
 
 template <class System>
@@ -21,7 +24,7 @@ void print_helper(char** out_symbol, int a, int dimension, bool& space)
     space = true;
 }
 
-template <class U>
+template <class U, DIM_IS_UNIT(U)>
 void print_unit(char* out_symbol, U const&, bool& spaceit)
 {
     using System = typename U::system;
@@ -34,29 +37,55 @@ void print_unit(char* out_symbol, U const&, bool& spaceit)
         return;
     }
     char** tmp_symbol = &out_symbol;
-    print_helper<System>(tmp_symbol, U::angle(), base_dimension::Angle, spaceit);
-    print_helper<System>(tmp_symbol, U::mass(), base_dimension::Mass, spaceit);
-    print_helper<System>(tmp_symbol, U::length(), base_dimension::Length, spaceit);
-    print_helper<System>(tmp_symbol, U::temperature(), base_dimension::Temperature, spaceit);
-    print_helper<System>(tmp_symbol, U::amount(), base_dimension::Amount, spaceit);
-    print_helper<System>(tmp_symbol, U::current(), base_dimension::Current, spaceit);
-    print_helper<System>(tmp_symbol, U::luminosity(), base_dimension::Luminosity, spaceit);
-    print_helper<System>(tmp_symbol, U::time(), base_dimension::Time, spaceit);
+    print_helper<System>(tmp_symbol, U::angle(),       static_cast<int>(base_dimension::Angle), spaceit);
+    print_helper<System>(tmp_symbol, U::mass(),        static_cast<int>(base_dimension::Mass), spaceit);
+    print_helper<System>(tmp_symbol, U::length(),      static_cast<int>(base_dimension::Length), spaceit);
+    print_helper<System>(tmp_symbol, U::temperature(), static_cast<int>(base_dimension::Temperature), spaceit);
+    print_helper<System>(tmp_symbol, U::amount(),      static_cast<int>(base_dimension::Amount), spaceit);
+    print_helper<System>(tmp_symbol, U::current(),     static_cast<int>(base_dimension::Current), spaceit);
+    print_helper<System>(tmp_symbol, U::luminosity(),  static_cast<int>(base_dimension::Luminosity), spaceit);
+    print_helper<System>(tmp_symbol, U::time(),        static_cast<int>(base_dimension::Time), spaceit);
 }
 
-struct char_less {
-    bool operator()(const char* const& c1, const char* const& c2) const { return (std::strcmp(c1, c2) < 0); }
-};
 
-// Tag type for generic format map containers
-struct container_base {
-    virtual ~container_base() {}
-};
-
-template <class System, class scalar = double>
-dynamic_quantity<scalar, System> parse_standard_rep(const char* unit_str, int nend = -1)
+/**
+ * @brief Print a dynamic unit (specialized by each system)
+ */
+template <class System, DIM_IS_SYSTEM(System)>
+void print_unit(char* buf, dynamic_unit<System> const& unit, bool spaceit)
 {
-    return dynamic_quantity<scalar, System>::bad();
+    if (spaceit) { buf += sprintf(buf, "_"); }
+    sprintf(buf, "[%d %d %d %d %d %d %d %d]", 
+        static_cast<int>(unit.get(0)), 
+        static_cast<int>(unit.get(1)), 
+        static_cast<int>(unit.get(2)), 
+        static_cast<int>(unit.get(3)), 
+        static_cast<int>(unit.get(4)),
+        static_cast<int>(unit.get(5)), 
+        static_cast<int>(unit.get(6)), 
+        static_cast<int>(unit.get(7)));
+}
+
+char const* advance_past_separator(char const* unit_string);
+
+/**
+ * @brief Parse a symbol consisting of only standard dimension symbols.
+ *
+ * @param symbol -- Symbol string to parse
+ * @param nend   -- Size of symbol or -1 to indicate a null-terminated string
+ *
+ * This base version just reports failure for all cases
+ */
+template <class Scalar, class System>
+dynamic_quantity<Scalar, System> parse_standard_rep(const char*, int)
+{
+    return dynamic_quantity<Scalar, System>::bad_quantity();
+}
+
+template <class Scalar, class System>
+dynamic_quantity<Scalar, System> parse_standard_rep(const char* symbol)
+{
+    return parse_standard_rep<Scalar, System>(symbol, -1);
 }
 
 /*
@@ -64,13 +93,19 @@ dynamic_quantity<scalar, System> parse_standard_rep(const char* unit_str, int ne
  * dimensions, return false.  Otherwise "scale" represents the transform to
  * U's system
  */
-template <class U, class scalar = double, DIM_IS_UNIT(U)>
-bool parse_unit_dynamic(scalar& scale, const char* unit_str)
+template <class U, class Scalar = double, DIM_IS_UNIT(U)>
+bool parse_unit_dynamic(Scalar& scale, const char* unit_str)
 {
-    dynamic_quantity<scalar, typename U::system> dim = parse_standard_rep<typename U::system, scalar>(unit_str);
+    dynamic_quantity<Scalar, typename U::system> dim = parse_standard_rep<Scalar, typename U::system>(unit_str);
     scale = dim.value();
-    return unitsMatch(dim.unit(), toDynamic<U>());
+    return (dim.unit() == index<U>());
 }
+
+// Tools to examine a string, separating the floating point parts.
+enum char_parse_state { kStart, kSignificand, kFraction, kExponentStart, kExponent, kUnit, kError };
+bool is_unit_char(char c, char_parse_state& io_state);
+
+bool is_float_part(char c, char_parse_state& io_state);
 
 }  // end of namespace detail
 
