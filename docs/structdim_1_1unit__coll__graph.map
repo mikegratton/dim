@@ -1,0 +1,5 @@
+<map id="dim::unit&lt; DIM_ARRAY, System &gt;" name="dim::unit&lt; DIM_ARRAY, System &gt;">
+<area shape="rect" id="Node000001" title="Models the base units in a system (i.e. quantities where the magnitude is 1)" alt="" coords="5,79,180,119"/>
+<area shape="rect" id="Node000002" href="$structdim_1_1unit__tag.html" title="Tag type for units." alt="" coords="39,5,147,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="dim::dynamic_unit_tag" name="dim::dynamic_unit_tag">
+<area shape="rect" id="Node000001" title="Tag type for dynamic_unit." alt="" coords="87,5,257,31"/>
+<area shape="rect" id="Node000002" href="$classdim_1_1dynamic__unit.html" title=" " alt="" coords="5,79,160,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,42,106,81,102,77,147,38"/>
+<area shape="rect" id="Node000003" href="$classdim_1_1dynamic__unit.html" title="dynamic_units are a compact representation of the dimension string plus the system tag." alt="" coords="184,79,339,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,38,242,77,238,81,194,42"/>
+</map>
