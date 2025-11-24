@@ -134,7 +134,7 @@ template <class System, DIM_IS_SYSTEM(System)>
 char* print_unit(char* buf, dynamic_unit<System> const& unit)
 {
     bool spaceit = false;
-    detail::print_unit(buf, unit);
+    detail::print_unit(buf, unit, spaceit);
     return buf;
 }
 

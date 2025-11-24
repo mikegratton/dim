@@ -20,6 +20,8 @@ target_include_directories(dim
 
 if (DIM_FORCE_CXX_11)
     set_target_properties(dim PROPERTIES CXX_STANDARD 11)
+else()
+    set_target_properties(dim PROPERTIES CXX_STANDARD 20)
 endif()
 
 # Warnings

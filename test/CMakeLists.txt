@@ -16,8 +16,11 @@ add_executable(dimTest
 )
 target_link_libraries(dimTest PUBLIC dim)
 
+
 if (DIM_FORCE_CXX_11)
     set_target_properties(dimTest PROPERTIES CXX_STANDARD 11)
+else()
+    set_target_properties(dimTest PROPERTIES CXX_STANDARD 20)
 endif()
 
 add_executable(dimCompileErrors

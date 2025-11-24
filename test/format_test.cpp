@@ -1,6 +1,16 @@
+#include "dim/dynamic_quantity.hpp"
+#include "dim/io.hpp"
+#include "dim/si/definition.hpp"
+#include "dim/si/si_quantity_facet.hpp"
+#include "dim/tag.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
 #include "dim/io_format.hpp"
+#include <concepts>
+#include <format>
+#include <locale>
+
+using namespace dim::si::literal;
 
 TEST_CASE("from_string")
 {
@@ -25,4 +35,11 @@ TEST_CASE("to_string")
     CHECK(text == "0.090757_rad");    
 }
 
-// TODO std::format test
+#if __cplusplus >= 202002L
+TEST_CASE("std_format")
+{
+    //si::system::install_facet();
+    std::cout << std::format("This is a dynamic quantity: {}\n", si::dynamic_quantity(5.0_m));
+    std::cout << std::format("This is a length: {}\n", 5.0_m);
+}
+#endif
