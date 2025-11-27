@@ -135,3 +135,17 @@ bool is_separator_character(char c);
 }  // end of namespace detail
 
 }  // end of namespace dim
+
+// For compatibility, replicate from_chars_result for
+// C++ < 17
+#if __cplusplus < 201703L
+#include <system_error>
+namespace std
+{
+struct from_chars_result 
+{
+    char* ptr;
+    errc ec;
+};
+}
+#endif

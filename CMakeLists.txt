@@ -10,8 +10,8 @@ if (DIM_SANITIZER_BUILD)
 endif()
 
 # Compatibility builds
-option(DIM_FORCE_CXX_11 "Force c++11 mode (for compatibility testing)" OFF)
-mark_as_advanced(DIM_FORCE_CXX_11)
+set(DIM_CXX_VERSION "Default" CACHE STRING "Build with a specific C++ version")
+set_property(CACHE DIM_CXX_VERSION PROPERTY STRINGS "Default" "11" "14" "17" "20")
 
 add_subdirectory(src)
 

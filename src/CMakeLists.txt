@@ -17,10 +17,8 @@ target_include_directories(dim
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-if (DIM_FORCE_CXX_11)
-    set_target_properties(dim PROPERTIES CXX_STANDARD 11)
-else()
-    set_target_properties(dim PROPERTIES CXX_STANDARD 20)
+if (NOT("${DIM_CXX_VERSION}" STREQUAL "Default"))
+    set_target_properties(dim PROPERTIES CXX_STANDARD ${DIM_CXX_VERSION})
 endif()
 
 # Warnings
