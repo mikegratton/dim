@@ -1,3 +1,4 @@
 #pragma once
-#define DIM_NO_STREAM
-#include "si.hpp"
+#include "dim/si/definition.hpp"
+#include "dim/si/literal.hpp"
+#include "dim/si/si_io.hpp"

@@ -1,8 +1,9 @@
 #pragma once
 #include "dim/quantity.hpp"
 #include "dim/system_creation_helper.hpp"
-#include "si_quantity_facet.hpp"
-/* clang-format off */
+#include "si_facet.hpp"
+
+
 namespace dim
 {
 
@@ -10,12 +11,17 @@ namespace dim
 namespace si
 {
 
+using dynamic_unit = ::dim::dynamic_unit<si::system>;
+
 namespace symbol
 {
+/// If there's no specialized symbol for U, just returnn a null char
 template<class U>
 constexpr const char* specialized_symbol() { return "\0"; }
 }
 
+/// The si::system contains symbols for the dimensions, access to specialized
+/// symbols for units, and information about the si locale facet.
 struct system : system_tag {
     static const long id;
     static const char* kSymbol[];
@@ -30,11 +36,20 @@ struct system : system_tag {
     {
         return symbol::specialized_symbol<U>();
     }
+    
+    static const char* specialized_symbol(dynamic_unit const& u);
+    static void set_specialized_symbol(dynamic_unit const& u, char const* symbol);
 
     using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, system>;
 
-    using facet = ::dim::si::facet;    
+    using facet = ::dim::si::facet;
+
+    /// Obtain a pointer to a new si::facet. To avoid a memory leak, you must
+    /// either delete this pointer or install it in a locale.
     static facet* make_default_facet() { return ::dim::si::make_default_facet(); }
+
+    /// Install the facet in the global locale. Imbue all standard streams with
+    /// this enhanced locale.
     static void install_facet(si::facet* fac = make_default_facet()) { ::dim::si::install_facet(fac); }
 };
 
@@ -143,8 +158,6 @@ constexpr inline double toCelsiusValue(Temperature arg_t) { return (arg_t/kelvin
 constexpr inline Temperature fahrenheit(double temp_f) { return (temp_f + 459.67)*rankine; }
 constexpr inline double toFahrenheitValue(Temperature arg_t) { return (arg_t/rankine - 459.67); }
 
-using dynamic_unit = ::dim::dynamic_unit<si::system>;
-
 } // end of namespace si
 
 // Some explicit template instantiations
@@ -169,11 +182,9 @@ inline double tan(Angle const& q) { return ::std::tan(dimensionless_cast(q)); }
 inline Angle asin(double const& x) { return ::std::asin(x)*radian; }
 inline Angle acos(double const& x) { return ::std::acos(x)*radian; }
 inline Angle atan(double const& x) { return ::std::atan(x)*radian; }
+inline Angle atan2(double const& x, double const& y) { return ::std::atan2(x, y)*radian; }
 template<class Q, DIM_IS_QUANTITY(Q)>
 inline Angle atan2(Q const& x, Q const& y) { return ::std::atan2(dimensionless_cast(x), dimensionless_cast(y))*radian; }
-inline Angle atan2(double const& x, double const& y) { return ::std::atan2(x, y)*radian; }
 }
 }
 #endif
-
-/* clang-format on */

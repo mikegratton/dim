@@ -2,8 +2,6 @@
 #include "tag.hpp"
 #include <algorithm>
 #include <cstdint>
-#include <cstring>
-#include <initializer_list>
 
 /// The dim namespace encloses all dim symbols
 namespace dim

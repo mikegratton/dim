@@ -1,15 +1,8 @@
 #include <cstdlib>
 #include <iostream>
-#include <locale>
-#include <sstream>
-
-#include "dim/dynamic_quantity.hpp"
-#include "dim/io_format.hpp"
-#include "dim/si/literal.hpp"
 #include "dim/si/definition.hpp"
-#include "dim/si/si_quantity_facet.hpp"
+#include "dim/si/literal.hpp"
 #include "doctest.h"
-#include "dim/io_stream.hpp"
 
 using namespace dim::si;
 using namespace dim;
@@ -93,47 +86,41 @@ TEST_CASE("SiParse")
 TEST_CASE("print_unit")
 {
     char buf[256];
+    char* end = buf + sizeof(buf);
 
-    detail::print_unit(buf, index(si::meter), false);
+    print_unit(buf, end, index(si::meter));
     CHECK(std::string("m") == buf);
 
-    detail::print_unit(buf, index(si::second), false);
+    print_unit(buf, end, index(si::second));
     CHECK(std::string("s") == buf);
 
-
-    detail::print_unit(buf, index(si::kilogram), false);
+    print_unit(buf, end, index(si::kilogram));
     CHECK(std::string("kg") == buf);
 
-
-    detail::print_unit(buf, index(si::radian), false);
+    print_unit(buf, end, index(si::radian));
     CHECK(std::string("rad") == buf);
 
-
-    detail::print_unit(buf, index(si::kelvin), false);
+    print_unit(buf, end, index(si::kelvin));
     CHECK(std::string("K") == buf);
 
-
-    detail::print_unit(buf, index(si::mole), false);
+    print_unit(buf, end, index(si::mole));
     CHECK(std::string("mol") == buf);
 
-
-    detail::print_unit(buf, index(si::ampere), false);
+    print_unit(buf, end, index(si::ampere));
     CHECK(std::string("A") == buf);
 
-
-    detail::print_unit(buf, index(si::candela), false);
+    print_unit(buf, end, index(si::candela));
     CHECK(std::string("cd") == buf);
 
     // Compound
-
-    detail::print_unit(buf, index<si::Speed>(), false);
+    print_unit(buf, end, index<si::Speed>());
     CHECK(std::string("m_s^-1") == buf);
 
     auto q = si::meter / pow<2>(si::second) / pow<3>(si::radian);
-    detail::print_unit(buf, index(q), false);
-    CHECK(std::string("m_s^-2_rad^-3") == buf);
+    print_unit(buf, end, index(q));
+    CHECK(std::string("rad^-3_m_s^-2") == buf);
 
-    detail::print_unit(buf, pow(index(si::meter), 5), false);
+    print_unit(buf, end, pow(index(si::meter), 5));
     CHECK(std::string("m^5") == buf);
 }
 

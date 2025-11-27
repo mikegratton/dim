@@ -1,9 +1,8 @@
 
 set(source
     dim/io.cpp
-    dim/io_stream.cpp
     dim/si/si_io.cpp
-    dim/si/si_quantity_facet.cpp
+    dim/si/si_facet.cpp
     dim/si/quantity.tab.cpp
     dim/si/definition.cpp
 )

@@ -4,12 +4,12 @@ add_executable(dimTest
     format_map_test.cpp
     format_test.cpp
     formatter_test.cpp
-    io_stream_test.cpp    
+    iostream_test.cpp
+    io_test.cpp    
     literal_test.cpp
     main.cpp
     parse_timing.cpp
-    parser_test.cpp
-    io_test.cpp    
+    parser_test.cpp    
     si_io_test.cpp
     si_test.cpp
     test_utilities.cpp

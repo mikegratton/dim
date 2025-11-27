@@ -1,6 +1,6 @@
 #include <chrono>
 #include <iostream>
-#include "dim/io_format.hpp"
+#include "dim/ioformat.hpp"
 #include "dim/si.hpp"
 #include "doctest.h"
 

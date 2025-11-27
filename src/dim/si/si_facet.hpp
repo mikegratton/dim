@@ -1,6 +1,5 @@
 #pragma once
-#include "dim/io.hpp"
-#include "dim/quantity_facet.hpp"
+#include "dim/facet.hpp"
 
 namespace dim
 {

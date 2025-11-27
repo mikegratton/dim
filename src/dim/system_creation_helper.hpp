@@ -1,4 +1,5 @@
 #pragma once
+#include "dim/unit.hpp"
 /*
  * DEFINE_QUANTITY -- declare a new type for a given dimension.
  *
@@ -38,4 +39,6 @@
     {                                                                                             \
         return Symbol;                                                                            \
     }                                                                                             \
-    }
+    }                                                                                             
+
+    

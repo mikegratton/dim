@@ -1,25 +1,33 @@
-#include "io.hpp"
+#include "io_detail.hpp"
+#include <cassert>
+#if __cplusplus >= 201703L
+#include <charconv>
+#endif
 
 namespace dim {
     
 namespace detail {
 
-char const* advance_past_separator(char const* unit_string)
+bool is_separator_character(char c)
 {
-    for (; *unit_string; ++unit_string) {    
-        switch (*unit_string) {
-            case ' ':
-            case '*':
-            case '_':                
-                break;
-            default:
-                return unit_string;
+    switch (c) {
+        case '.': 
+        case '_':
+        case '*':
+        case ' ':
+            return true;
+        default:
+            return false;
         }
-    }
-    return unit_string;
 }
 
-bool is_unit_char(char c, char_parse_state& io_state)
+char const* advance_past_separator(char const* symbol, char const* end)
+{
+    for (; symbol < end && is_separator_character(*symbol); ++symbol) {  }
+    return symbol;
+}
+
+bool is_unit_char(char c, unit_parse_state& io_state)
 {
     switch (io_state) {
         case kUnit:
@@ -50,62 +58,57 @@ bool is_unit_char(char c, char_parse_state& io_state)
     }
 }
 
-// TODO hexfloat support
-bool is_float_part(char c, char_parse_state& io_state)
+
+// requires at most 4 chars of space, no null terminator
+#if __cplusplus >= 201703L
+char* print_int8(char* o_buf, int8_t d)
 {
-    switch (io_state) {
-        case kStart:
-            if (c == '-' || c == '+') {
-                io_state = kSignificand;
-                return true;
-            }
-            if (c >= '0' && c <= '9') {
-                io_state = kSignificand;
-                return true;
-            }
-            return false;
-        case kSignificand:
-            if (c >= '0' && c <= '9') {
-                io_state = kSignificand;
-                return true;
-            }
-            if (c == 'e' || c == 'E') {
-                io_state = kExponentStart;
-                return true;
-            }
-            if (c == '.') {
-                io_state = kFraction;
-                return true;
-            }
-            return false;
-        case kFraction:
-            if (c >= '0' && c <= '9') {
-                io_state = kFraction;
-                return true;
-            }
-            if (c == 'e' || c == 'E') {
-                io_state = kExponentStart;
-                return true;
-            }
-            return false;
-        case kExponentStart:
-            if (c == '-' || c == '+') {
-                io_state = kExponent;
-                return true;
-            }
-            if (c >= '0' && c <= '9') {
-                io_state = kExponent;
-                return true;
-            }
-            return false;
-        case kExponent:
-            if (c >= '0' && c <= '9') {
-                io_state = kExponent;
-                return true;
-            }
-            return false;
-        default: return false;
+    auto result = std::to_chars(o_buf, o_buf+4, d);
+    assert(result.ec == std::errc{});
+    return result.ptr;
+}
+#else
+char* print_int8(char* o_buf, int8_t d)
+{
+    // first, deal with tje sign
+    unsigned int big_d;
+    if (d < 0) {
+        *o_buf++ = '-';
+        big_d = static_cast<unsigned int>(-static_cast<int>(d));
+    } else {
+        big_d = static_cast<unsigned int>(d);
     }
+
+    // Determine the number of digits
+    unsigned int scale = 100;
+    unsigned int digits = 3;
+    while (big_d / scale == 0 && scale > 1) {
+        scale /= 10;
+        digits--;
+    }
+
+    for (unsigned int i = 0; i < digits; i++) {
+        unsigned int digit = big_d / scale;
+        big_d -= digit * scale;
+        scale /= 10;
+        *o_buf++ = static_cast<char>(digit) + '0';
+    }
+    return o_buf;
+}
+#endif
+
+char* print_exponentiated_symbol(char* out_symbol, char const* end, int8_t exponent, char const* symbol, bool& spaceit)
+{
+    // "_in^5" -- Spacer, symbol, caret, exponent    
+    if (exponent == 0 || out_symbol == end) { return out_symbol; }
+    if (spaceit) { *out_symbol++ = '_'; }     
+    while (*symbol && out_symbol < end) { *out_symbol++ = *symbol++; }
+    if (out_symbol < end && exponent != 1) {
+        *out_symbol++ = '^'; 
+        out_symbol = print_int8(out_symbol, exponent);
+    }
+    spaceit = true;
+    return out_symbol;
 }
 
 }  // namespace detail

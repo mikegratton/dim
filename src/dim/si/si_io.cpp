@@ -2,17 +2,6 @@
 
 namespace dim {
 
-namespace detail {
-template <>
-void print_unit<dim::si::system>(char* buf, dim::si::dynamic_unit const& unit, bool spaceit)
-{
-    if (spaceit) { buf += sprintf(buf, "_"); }
-    for (int i = 0; i < unit.size(); i++) {
-        detail::print_helper<::dim::si::system>(&buf, unit.get(i), i, spaceit);
-    }
-}
-} // namespace detail
-
 using namespace si;
 
 // clang-format off

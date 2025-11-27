@@ -1,12 +1,9 @@
 #pragma once
 #include <algorithm>
-#include <cstdlib>
 #include <cstring>
 #include <vector>
 #include <initializer_list>
-
 #include "dim/io_detail.hpp"
-#include "dim/tag.hpp"
 #include "dynamic_quantity.hpp"
 #include "io.hpp"
 
@@ -113,6 +110,12 @@ template <class Scalar, class System> class input_format_map
     {
         auto it = find(symbol);
         return (it != sorted_data.end()? it->input(s) : quantity_type::bad_quantity());
+    }
+
+    formatter_type const* get(char const* symbol) const 
+    {
+        auto it = find(symbol);
+        return (it != sorted_data.end()? &(*it) : nullptr);
     }
 
     std::size_t size() const { return sorted_data.size(); }
@@ -250,6 +253,12 @@ template <class Scalar, class System> class input_format_map_group
         return quantity_type::bad_quantity();
     }
 
+    map_type const* get(unit_type const& u) const 
+    {
+        auto it = find(u);
+        return (it != sorted_data.end()? &(*it) : nullptr);
+    }
+
     void clear() { sorted_data.clear(); }
 
     std::size_t size() const { return sorted_data.size(); }
@@ -322,6 +331,12 @@ template <class Scalar, class System> class output_format_map
         return true;
     }
 
+    formatter_type const* get(unit_type const& u) const 
+    {
+        auto it = find(u);
+        return (it != sorted_data.end()? &(*it) : nullptr);
+    }
+
     bool erase(unit_type index)
     {
         auto it = find(index);
@@ -379,28 +394,58 @@ template <class Q> input_format_map<typename Q::scalar, typename Q::system> cons
  * (2) If not found, use Q::system's dynamic quantity parser
  */
 template <class Q, DIM_IS_QUANTITY(Q)>
-bool parse_quantity(Q& o_q, typename Q::scalar value, char const* unit_str,
+bool parse_quantity(Q& o_q, formatted_quantity<typename Q::scalar> const& formatted,
                     input_format_map<typename Q::scalar, typename Q::system> const& unit_map = get_default_format<Q>())
 {
-    o_q = unit_map.template to_quantity<Q>(value, unit_str);
+    o_q = unit_map.template to_quantity<Q>(formatted.value(), formatted.symbol());
     if (!o_q.is_bad()) {
         return true;
     }
-    auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(unit_str);
-    o_q = (value * dynamic_q).template as<Q>();
+    auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(formatted.symbol());
+    o_q = (formatted.value() * dynamic_q).template as<Q>();
     return !(o_q.is_bad());    
 }
 
 template <class Scalar, class System>
-bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, Scalar value, char const* unit_str,
+bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, formatted_quantity<Scalar> const& formatted,
                     input_format_map<Scalar, System> const& unit_map)
 {
-    o_q = unit_map.to_quantity(value, unit_str);
+    o_q = unit_map.to_quantity(formatted.value(), formatted.symbol());
     if (!o_q.is_bad()) {
         return true;
     }    
-    o_q = value * detail::parse_standard_rep<Scalar, System>(unit_str);
+    o_q = formatted.value() * detail::parse_standard_rep<Scalar, System>(formatted.symbol());
     return !o_q.is_bad();
+}
+
+template <class Q, DIM_IS_QUANTITY(Q)>
+bool format_quantity(formatted_quantity<typename Q::scalar>& o_formatted, Q const& i_q,
+                     output_format_map<typename Q::scalar, typename Q::system> const* out_map = nullptr)
+{
+    if (out_map) {
+        o_formatted = out_map->format(i_q);
+        if (!o_formatted.is_bad()) {
+            return true;
+        }
+    }
+    o_formatted = formatted_quantity<typename Q::scalar>(nullptr, dimensionless_cast(i_q));
+    print_unit(o_formatted.set_symbol(), o_formatted.set_symbol() + kMaxSymbol, i_q);
+    return true;
+}
+
+template <class Scalar, class System>
+bool format_quantity(formatted_quantity<Scalar>& o_formatted, dynamic_quantity<Scalar, System> const& i_q,
+                     output_format_map<Scalar, System> const* out_map = nullptr)
+{
+    if (out_map) {
+        o_formatted = out_map->format(i_q);
+        if (!o_formatted.is_bad()) {
+            return true;
+        }
+    }
+    o_formatted = formatted_quantity<Scalar>(nullptr, dimensionless_cast(i_q));
+    print_unit(o_formatted.set_symbol(), o_formatted.set_symbol() + kMaxSymbol, i_q);
+    return !o_formatted.is_bad();
 }
 
 } // namespace dim

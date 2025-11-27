@@ -1,4 +1,5 @@
 #pragma once
+#include "dim/io.hpp"
 #include "format_map.hpp"
 #include <locale>
 
@@ -34,14 +35,9 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     template <class Q, DIM_IS_QUANTITY(Q)> formatted format(Q const& q) const
     {
-        formatted map_result = output_symbol.format(q);
-        if (!map_result.is_bad()) {
-            return map_result;
-        }
-        formatted fq(nullptr, dimensionless_cast(q));
-        bool spaceit = false;
-        detail::print_unit<typename Q::unit>(fq.set_symbol(), typename Q::unit(), spaceit);
-        return fq;
+        formatted result;
+        format_quantity(result, q, &output_symbol);
+        return result;
     }
 
     /**
@@ -49,14 +45,9 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     formatted format(dynamic_type const& q) const
     {
-        formatted map_result = output_symbol.format(q);
-        if (!map_result.is_bad()) {
-            return map_result;
-        }
-        formatted fq(nullptr, dimensionless_cast(q));
-        bool spaceit = false;
-        detail::print_unit<System>(fq.set_symbol(), q.unit(), spaceit);
-        return fq;
+        formatted result;
+        format_quantity(result, q, &output_symbol);
+        return result;
     }
 
     /**
@@ -65,24 +56,21 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     template <class Q, DIM_IS_QUANTITY(Q)> Q format(typename Q::scalar const& s, char const* symbol) const
     {
-        // Peel off any multiplication
-        switch (*symbol) {
-        case '.':
-        case '_':
-        case '*':
-        case ' ':
-            symbol++;
-        default:;
-        }
         Q result = input_symbol.template to_quantity<Q>(s, symbol);
         if (!result.is_bad()) {
             return result;
         }
-        double scale;
-        if (detail::parse_unit_dynamic<typename Q::unit>(scale, symbol)) {
-            return Q(s * scale);
-        }
-        return Q::bad_quantity();
+        auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(symbol);
+        return (s * dynamic_q).template as<Q>();        
+    }
+
+    /**
+     * @brief Format a scalar + symbol into a quantity. If the conversion is illegal, the value
+     * will be NaN (check with is_bad() method on quantity)
+     */
+    template <class Q, DIM_IS_QUANTITY(Q)> Q format(formatted const& f) const
+    {
+        return format<Q>(f.value(), f.symbol());
     }
 
     /**
@@ -90,20 +78,19 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     dynamic_type format(Scalar const& s, char const* symbol) const
     {
-        // Peel off any multiplication
-        switch (*symbol) {
-        case '.':
-        case '_':
-        case '*':
-        case ' ':
-            symbol++;
-        default:;
-        }
         dynamic_type map_result = input_symbol.to_quantity(s, symbol);
         if (!map_result.is_bad()) {
             return map_result;
         }
         return detail::parse_standard_rep<Scalar, System>(symbol) * dynamic_type(s);        
+    }
+
+    /**
+     * @brief Format a scalar and a symbol to a dynamic_quantity
+     */
+    dynamic_type format(formatted const& f)
+    {
+        return format(f.value(), f.symbol());        
     }
 
     /**

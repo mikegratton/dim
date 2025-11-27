@@ -1,14 +1,5 @@
-#include "dim/dynamic_quantity.hpp"
-#include "dim/io.hpp"
-#include "dim/si/definition.hpp"
-#include "dim/si/si_quantity_facet.hpp"
-#include "dim/tag.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
-#include "dim/io_format.hpp"
-#include <concepts>
-#include <format>
-#include <locale>
 
 using namespace dim::si::literal;
 
@@ -38,8 +29,11 @@ TEST_CASE("to_string")
 #if __cplusplus >= 202002L
 TEST_CASE("std_format")
 {
-    //si::system::install_facet();
-    std::cout << std::format("This is a dynamic quantity: {}\n", si::dynamic_quantity(5.0_m));
-    std::cout << std::format("This is a length: {}\n", 5.0_m);
+    auto message = std::format("{:.3f}", M_SQRT2 * si::meter);
+    CHECK(message == "1.414_m");
+    message = std::format("{}", si::dynamic_quantity(2.0 * si::weber));
+    CHECK(message == "2_Wb");
+    message = std::format("Lots of {} go in {} for {}", "sheep", 1.0, si::second);
+    CHECK(message == "Lots of sheep go in 1 for 1_s");
 }
 #endif

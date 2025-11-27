@@ -16,16 +16,13 @@ using enable_if_t = typename ::std::enable_if<B,T>::type;
 namespace dim
 {
 /// Tag type for units
-struct unit_tag {
-};
+struct unit_tag {};
 
 /// Tag type for quantities
-struct quantity_tag {
-};
+struct quantity_tag {};
 
 /// Tag type for systems
-struct system_tag {
-};
+struct system_tag {};
 
 /// Tag type for dynamic_quantity
 struct dynamic_quantity_tag {};
@@ -58,6 +55,6 @@ struct dynamic_unit_tag {};
 #define DIM_D_ARRAY Length, Time, Mass, Angle, Temperature, Amount, Current, Luminosity
 
 /// Convenience enum for accessing dynamic_quantity dimensions
-enum class base_dimension { Length = 0, Time, Mass, Angle, Temperature, Amount, Current, Luminosity };
+enum class base_dimension { DIM_D_ARRAY };
 
 } // namespace dim

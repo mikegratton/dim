@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <string>
+#include "dim/io.hpp"
 #include "dim/io_detail.hpp"
 #include "dim/si.hpp"
 #include "dim/si/definition.hpp"
 #include "dim/si/si_io.hpp"
-#include "dim/si/si_quantity_facet.hpp"
+#include "dim/si/si_facet.hpp"
 #include "doctest.h"
 
 TEST_CASE("input_format_map")
@@ -137,10 +138,33 @@ TEST_CASE("parse_quantity")
 {
     si::input_format_map input_format(si::meter_);
     input_format.insert("yd", si::yard);
+    si::formatted_quantity fq("yd", 2.0);
     si::dynamic_quantity dq;
-    CHECK(parse_quantity(dq, 2.0, "yd", input_format));
+    CHECK(parse_quantity(dq, fq, input_format));
     CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::yard / si::meter));
     si::Length q;
-    CHECK(parse_quantity(q, 2.0, "yd", input_format));
+    CHECK(parse_quantity(q, fq, input_format));
     CHECK(dimensionless_cast(q) == doctest::Approx(2.0 * si::yard / si::meter));
+}
+
+TEST_CASE("format_quantity")
+{
+    si::formatted_quantity formatted;
+    si::dynamic_quantity dq(3.0 * si::poiseuille);
+    dim::format_quantity(formatted, dq);
+    CHECK(formatted.value() == 3.0);
+    CHECK(std::string(formatted.symbol()) == std::string("Pl"));
+    dim::format_quantity(formatted, 5.0 * si::volt);
+    CHECK(formatted.value() == 5.0);
+    CHECK(std::string(formatted.symbol()) == std::string("V"));
+
+    si::output_format_map map;
+    map.insert(si::formatter("in", si::inch));
+    dim::format_quantity(formatted, 1.0*si::meter, &map);
+    CHECK(formatted.value() == doctest::Approx(si::meter/si::inch));
+    CHECK(formatted.symbol() == std::string("in"));
+    map.insert(si::formatter("in", si::inch));
+    dim::format_quantity(formatted, si::dynamic_quantity(1.0*si::meter), &map);
+    CHECK(formatted.value() == doctest::Approx(si::meter/si::inch));
+    CHECK(formatted.symbol() == std::string("in"));
 }

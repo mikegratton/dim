@@ -9,9 +9,6 @@ namespace detail
 /// Parse unit strings using SI conventions
 template <>::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(char const* unit_str, int nend);
 
-/// Print units using the default SI symbols
-template <> void print_unit<dim::si::system>(char* buf, dim::si::dynamic_unit const& unit, bool spaceit);
-
 } // namespace detail
 
 

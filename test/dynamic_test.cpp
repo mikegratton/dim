@@ -1,5 +1,5 @@
 #include "dim/si/definition.hpp"
-#include "dim/si/si_quantity_facet.hpp"
+#include "dim/si/si_facet.hpp"
 #include "dim/unit.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
