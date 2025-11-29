@@ -17,16 +17,17 @@ bool extract_formatted_quantity(formatted_quantity<Scalar>& formatted, std::istr
     std::size_t i = 0;
     char* cursor = formatted.symbol();
     is >> formatted.value();    
-    while (is && detail::is_separator_character(is.peek())) { is.ignore(); }
-    detail::unit_parse_state state = detail::kUnit;
+    while (is && detail::isseparator(is.peek())) { is.ignore(); }
+    detail::unit_parse_state state = detail::kStart;
     char* end = formatted.symbol() + kMaxSymbol;
-    while (is && detail::is_unit_char(is.peek(), state) && cursor < end) { is.get(*cursor++); }
+    detail::unit_string_scanner scanner;
+    while (is && scanner.accept(is.peek()) && cursor < end) { is.get(*cursor++); }
     if (cursor < end) { 
         *cursor = '\0';
     } else {
         *(end-1) = '\0';
     }
-    return !(formatted.is_bad() || formatted.symbol() == cursor);
+    return !(formatted.is_bad() || scanner.state() == kError || formatted.symbol() == cursor);
 }
 }  // namespace detail
 

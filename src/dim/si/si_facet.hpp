@@ -23,7 +23,8 @@ class facet : public quantity_facet<typename dynamic_quantity::scalar, typename 
 };
 
 /**
- * @brief Obtain the default quantity_facet for si.
+ * @brief Obtain the default quantity_facet for si.  You must either pass this pointer to
+ * the locale or delete it to avoid a memory leak.
  */
 facet* make_default_facet();
 

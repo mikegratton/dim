@@ -1,6 +1,7 @@
 #pragma once
 #include "io.hpp"
 #include "format_map.hpp"
+#include <locale>
 #include <string>
 #if __cplusplus >= 202002L
 #include <format>

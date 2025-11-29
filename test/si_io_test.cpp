@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include "dim/io_detail.hpp"
 #include "dim/si/definition.hpp"
 #include "dim/si/literal.hpp"
 #include "doctest.h"
@@ -11,13 +12,11 @@ void doParseCheck(char const* text, double value, si::dynamic_unit const& unit)
 {
     char* endptr;
     double v = strtod(text, &endptr);
-    endptr++;
+    if (detail::isseparator(*endptr)) { endptr++; }    
     using namespace dim::detail;
-    auto q = v * dim::detail::parse_standard_rep<double, dim::si::system>(endptr, strlen(endptr));
-    CHECK(q.is_bad() == false);
-    if (q.is_bad()) {
-        std::cout << "Failed to parse " << text << ", got v = " << v << ", unit = " << endptr << std::endl;
-    }
+    auto q = v * dim::detail::parse_standard_rep<double, dim::si::system>(endptr, endptr + strlen(endptr));
+    
+    CHECK_MESSAGE(q.is_bad() == false, "Failed to parse ", std::string(text), ", got v = ", v, ", unit = ", std::string(endptr));
     CHECK(q.value() == doctest::Approx(value));
     CHECK(q.unit() == unit);
 }
@@ -25,12 +24,15 @@ void doParseCheck(char const* text, double value, si::dynamic_unit const& unit)
 void doParseFailCheck(char const* text)
 {
     using namespace dim::detail;
-    auto q = dim::detail::parse_standard_rep<double, dim::si::system>(text, strlen(text));
+    auto q = dim::detail::parse_standard_rep<double, dim::si::system>(text, text + strlen(text));
     CHECK(q.is_bad() == true);
 }
 
 TEST_CASE("SiParse")
 {
+    // Dimensionless
+    doParseCheck("0.1", 0.1, {0, 0, 0, 0, 0, 0, 0, 0});
+
     // Base units
     doParseCheck("0_m", 0.0, {1, 0, 0, 0, 0, 0, 0, 0});
     doParseCheck("0_s", 0.0, {0, 1, 0, 0, 0, 0, 0, 0});
@@ -81,6 +83,10 @@ TEST_CASE("SiParse")
     doParseCheck("1_eV", 1.60218e-19, {2, -2, 1, 0, 0, 0, 0, 0});
     // doParseCheck("1_a", 1e2, {2, 0, 0, 0, 0, 0, 0, 0});
     doParseCheck("1_bar", 1e5, {-1, -2, 1, 0, 0, 0, 0, 0});
+
+    // UTF-8 support
+    doParseCheck("1_μm", 1e-6, {1, 0, 0, 0, 0, 0, 0, 0});
+    doParseCheck("1_Ω", 1.0, si::dynamic_unit(si::Resistance::unit{}));
 }
 
 TEST_CASE("print_unit")

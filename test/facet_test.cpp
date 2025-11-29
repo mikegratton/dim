@@ -20,6 +20,8 @@ TEST_CASE("facet")
 
     dq = std::use_facet<si::facet>(loc).format(2.0, "in");
     CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::inch / si::meter));
+    dq = std::use_facet<si::facet>(loc).format(si::formatted_quantity(2.0, "in"));
+    CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::inch / si::meter));
 
     si::Length q = 5.0 * si::inch;
     fq = std::use_facet<si::facet>(loc).format(q);
@@ -27,5 +29,7 @@ TEST_CASE("facet")
     CHECK_MESSAGE(strncmp(fq.symbol(), "in", 2) == 0, "Expected in, got ", std::string(fq.symbol()));
 
     q = std::use_facet<si::facet>(loc).format<si::Length>(2.0, "in");
+    CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::inch / si::meter));
+    q = std::use_facet<si::facet>(loc).format<si::Length>(si::formatted_quantity(2.0, "in"));
     CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::inch / si::meter));
 }

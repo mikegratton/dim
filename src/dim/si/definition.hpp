@@ -15,7 +15,7 @@ using dynamic_unit = ::dim::dynamic_unit<si::system>;
 
 namespace symbol
 {
-/// If there's no specialized symbol for U, just returnn a null char
+/// If there's no specialized symbol for U, just return a null char
 template<class U>
 constexpr const char* specialized_symbol() { return "\0"; }
 }

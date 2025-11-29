@@ -115,3 +115,51 @@ TEST_CASE("io_stream")
     ss << 5.0 * poiseuille;
     CHECK(ss.str() == "5_Pl");
 }
+
+
+TEST_CASE("extract_quantity")
+{
+    si::formatted_quantity formatted;
+    {
+        std::stringstream ss;
+        ss.str("+123.456E-123_m^2");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == true);
+        CHECK(std::string(formatted.symbol()) == "m^2");
+        CHECK(formatted.value() == +123.456E-123);        
+    }
+    {
+        std::stringstream ss;
+        ss.str("12a3 km");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == true);
+        CHECK(formatted.value() == 12);
+        CHECK(std::string(formatted.symbol()) == "a");
+    }
+    {
+        std::stringstream ss;
+        ss.str("12e+-1 km");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == false);
+    }
+    {
+        std::stringstream ss;
+        ss.str("1+2e km");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == false);
+    }
+    {
+        std::stringstream ss;
+        ss.str("1e km");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == false);
+    }
+    {
+        std::stringstream ss;
+        ss.str("1_km");        
+        bool status = dim::detail::extract_formatted_quantity(formatted, ss);
+        CHECK(status == true);        
+        CHECK(std::string(formatted.symbol()) == "km");
+        CHECK(formatted.value() == 1);  
+    }
+}

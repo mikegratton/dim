@@ -67,7 +67,7 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
     // clang-format on
 
     template <class U, DIM_IS_UNIT(U)>
-    explicit constexpr dynamic_unit(U const& u) : dynamic_unit(from<U>()) { }
+    explicit constexpr dynamic_unit(U const&) : dynamic_unit(from<U>()) { }
 
     template <class U, DIM_IS_UNIT(U)> static constexpr dynamic_unit from()
     {
@@ -108,6 +108,10 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
     constexpr bool operator>=(dynamic_unit rhs) const { return !(*this < rhs); }
 
     constexpr static dynamic_unit dimensionless() { return dynamic_unit(0L); }
+
+    constexpr static dynamic_unit bad_unit() { return dynamic_unit(~0L); }
+
+    constexpr bool is_bad() const { return *this == bad_unit(); }
 
     // clang-format off
     constexpr dynamic_unit multiply(dynamic_unit const& other) const

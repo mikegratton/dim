@@ -7,7 +7,7 @@ namespace dim
 namespace detail
 {
 /// Parse unit strings using SI conventions
-template <>::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(char const* unit_str, int nend);
+template <>::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(char const* unit_str, char const* end);
 
 } // namespace detail
 

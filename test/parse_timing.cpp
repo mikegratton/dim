@@ -21,7 +21,7 @@ TEST_CASE("LookupTiming" * doctest::skip())
 
     start = std::chrono::system_clock::now();
     char const* unit_literal = "Mg*m/s^2";
-    for (int i = 0; i < N; i++) { dim::detail::parse_standard_rep<double, dim::si::system>(unit_literal, -1); }
+    for (int i = 0; i < N; i++) { dim::detail::parse_standard_rep<double, dim::si::system>(unit_literal, unit_literal + 9); }
     stop = std::chrono::system_clock::now();
     elapsed = (stop - start) / std::chrono::nanoseconds(1) * 1e-9;
     std::cout << "Parsed " << N << " quantities from fallback parser in " << elapsed << ", " << N / elapsed

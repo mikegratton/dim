@@ -16,6 +16,22 @@ TEST_CASE("from_string")
     std::string text3 = "12*kN/m";
     decltype(si::newton / si::meter) result;
     CHECK(from_string(result, text3));
+
+    text = "not right";
+    CHECK_FALSE(from_string(angle, text));
+    CHECK(angle.is_bad());
+
+    text = "1deg";
+    CHECK(from_string(angle, text));
+    CHECK(angle / dim::si::degree == doctest::Approx(1.0));
+
+    text = "1degdegdeg";
+    CHECK_FALSE(from_string(angle, text));
+    CHECK(angle.is_bad());
+
+    text = "1deg*";
+    CHECK_FALSE(from_string(angle, text));
+    CHECK(angle.is_bad());
 }
 
 TEST_CASE("to_string")

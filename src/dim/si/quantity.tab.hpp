@@ -450,8 +450,9 @@ namespace siquant {
     SIQUANTEOF = 0,                // "end of file"
     SIQUANTerror = 256,            // error
     SIQUANTUNDEF = 257,            // "invalid token"
-    MULTIPLY = 258,                // MULTIPLY
-    INTEGER = 259                  // INTEGER
+    BAD_INTEGER = 258,             // BAD_INTEGER
+    MULTIPLY = 259,                // MULTIPLY
+    INTEGER = 260                  // INTEGER
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -468,68 +469,69 @@ namespace siquant {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 53, ///< Number of tokens.
+        YYNTOKENS = 54, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_MULTIPLY = 3,                          // MULTIPLY
-        S_INTEGER = 4,                           // INTEGER
-        S_5_ = 5,                                // '/'
-        S_6_ = 6,                                // '^'
-        S_7_ = 7,                                // '('
-        S_8_ = 8,                                // ')'
-        S_9_y_ = 9,                              // 'y'
-        S_10_z_ = 10,                            // 'z'
-        S_11_a_ = 11,                            // 'a'
-        S_12_f_ = 12,                            // 'f'
-        S_13_p_ = 13,                            // 'p'
-        S_14_n_ = 14,                            // 'n'
-        S_15_u_ = 15,                            // 'u'
-        S_16_m_ = 16,                            // 'm'
-        S_17_c_ = 17,                            // 'c'
-        S_18_d_ = 18,                            // 'd'
-        S_19_Y_ = 19,                            // 'Y'
-        S_20_Z_ = 20,                            // 'Z'
-        S_21_E_ = 21,                            // 'E'
-        S_22_P_ = 22,                            // 'P'
-        S_23_T_ = 23,                            // 'T'
-        S_24_G_ = 24,                            // 'G'
-        S_25_M_ = 25,                            // 'M'
-        S_26_k_ = 26,                            // 'k'
-        S_27_h_ = 27,                            // 'h'
-        S_28_s_ = 28,                            // 's'
-        S_29_g_ = 29,                            // 'g'
-        S_30_r_ = 30,                            // 'r'
-        S_31_K_ = 31,                            // 'K'
-        S_32_o_ = 32,                            // 'o'
-        S_33_l_ = 33,                            // 'l'
-        S_34_A_ = 34,                            // 'A'
-        S_35_H_ = 35,                            // 'H'
-        S_36_N_ = 36,                            // 'N'
-        S_37_J_ = 37,                            // 'J'
-        S_38_W_ = 38,                            // 'W'
-        S_39_C_ = 39,                            // 'C'
-        S_40_V_ = 40,                            // 'V'
-        S_41_F_ = 41,                            // 'F'
-        S_42_R_ = 42,                            // 'R'
-        S_43_S_ = 43,                            // 'S'
-        S_44_b_ = 44,                            // 'b'
-        S_45_I_ = 45,                            // 'I'
-        S_46_x_ = 46,                            // 'x'
-        S_47_B_ = 47,                            // 'B'
-        S_48_q_ = 48,                            // 'q'
-        S_49_v_ = 49,                            // 'v'
-        S_50_t_ = 50,                            // 't'
-        S_51_L_ = 51,                            // 'L'
-        S_52_e_ = 52,                            // 'e'
-        S_YYACCEPT = 53,                         // $accept
-        S_output = 54,                           // output
-        S_unit_group = 55,                       // unit_group
-        S_unit = 56,                             // unit
-        S_prefix = 57,                           // prefix
-        S_unit_literal = 58,                     // unit_literal
-        S_exponent_group = 59                    // exponent_group
+        S_BAD_INTEGER = 3,                       // BAD_INTEGER
+        S_MULTIPLY = 4,                          // MULTIPLY
+        S_INTEGER = 5,                           // INTEGER
+        S_6_ = 6,                                // '/'
+        S_7_ = 7,                                // '^'
+        S_8_ = 8,                                // '('
+        S_9_ = 9,                                // ')'
+        S_10_y_ = 10,                            // 'y'
+        S_11_z_ = 11,                            // 'z'
+        S_12_a_ = 12,                            // 'a'
+        S_13_f_ = 13,                            // 'f'
+        S_14_p_ = 14,                            // 'p'
+        S_15_n_ = 15,                            // 'n'
+        S_16_u_ = 16,                            // 'u'
+        S_17_m_ = 17,                            // 'm'
+        S_18_c_ = 18,                            // 'c'
+        S_19_d_ = 19,                            // 'd'
+        S_20_Y_ = 20,                            // 'Y'
+        S_21_Z_ = 21,                            // 'Z'
+        S_22_E_ = 22,                            // 'E'
+        S_23_P_ = 23,                            // 'P'
+        S_24_T_ = 24,                            // 'T'
+        S_25_G_ = 25,                            // 'G'
+        S_26_M_ = 26,                            // 'M'
+        S_27_k_ = 27,                            // 'k'
+        S_28_h_ = 28,                            // 'h'
+        S_29_s_ = 29,                            // 's'
+        S_30_g_ = 30,                            // 'g'
+        S_31_r_ = 31,                            // 'r'
+        S_32_K_ = 32,                            // 'K'
+        S_33_o_ = 33,                            // 'o'
+        S_34_l_ = 34,                            // 'l'
+        S_35_A_ = 35,                            // 'A'
+        S_36_H_ = 36,                            // 'H'
+        S_37_N_ = 37,                            // 'N'
+        S_38_J_ = 38,                            // 'J'
+        S_39_W_ = 39,                            // 'W'
+        S_40_C_ = 40,                            // 'C'
+        S_41_V_ = 41,                            // 'V'
+        S_42_F_ = 42,                            // 'F'
+        S_43_R_ = 43,                            // 'R'
+        S_44_S_ = 44,                            // 'S'
+        S_45_b_ = 45,                            // 'b'
+        S_46_I_ = 46,                            // 'I'
+        S_47_x_ = 47,                            // 'x'
+        S_48_B_ = 48,                            // 'B'
+        S_49_q_ = 49,                            // 'q'
+        S_50_v_ = 50,                            // 'v'
+        S_51_t_ = 51,                            // 't'
+        S_52_L_ = 52,                            // 'L'
+        S_53_e_ = 53,                            // 'e'
+        S_YYACCEPT = 54,                         // $accept
+        S_output = 55,                           // output
+        S_unit_group = 56,                       // unit_group
+        S_unit = 57,                             // unit
+        S_prefix = 58,                           // prefix
+        S_unit_literal = 59,                     // unit_literal
+        S_exponent_group = 60                    // exponent_group
       };
     };
 
@@ -872,6 +874,21 @@ switch (yykind)
       make_SIQUANTUNDEF ()
       {
         return symbol_type (token::SIQUANTUNDEF);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BAD_INTEGER ()
+      {
+        return symbol_type (token::BAD_INTEGER);
+      }
+#else
+      static
+      symbol_type
+      make_BAD_INTEGER ()
+      {
+        return symbol_type (token::BAD_INTEGER);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1221,7 +1238,7 @@ switch (yykind)
 
 
 } // siquant
-#line 1225 "../quantity.tab.hpp"
+#line 1242 "../quantity.tab.hpp"
 
 
 

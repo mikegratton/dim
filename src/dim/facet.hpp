@@ -1,5 +1,6 @@
 #pragma once
 #include "dim/io.hpp"
+#include "dim/io_detail.hpp"
 #include "format_map.hpp"
 #include <locale>
 
@@ -56,11 +57,12 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     template <class Q, DIM_IS_QUANTITY(Q)> Q format(typename Q::scalar const& s, char const* symbol) const
     {
+        // FIXME length of symbol?
         Q result = input_symbol.template to_quantity<Q>(s, symbol);
         if (!result.is_bad()) {
             return result;
         }
-        auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(symbol);
+        auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(symbol, symbol + kMaxSymbol);
         return (s * dynamic_q).template as<Q>();        
     }
 
@@ -82,13 +84,13 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
         if (!map_result.is_bad()) {
             return map_result;
         }
-        return detail::parse_standard_rep<Scalar, System>(symbol) * dynamic_type(s);        
+        return detail::parse_standard_rep<Scalar, System>(symbol, symbol + kMaxSymbol) * dynamic_type(s);        
     }
 
     /**
      * @brief Format a scalar and a symbol to a dynamic_quantity
      */
-    dynamic_type format(formatted const& f)
+    dynamic_type format(formatted const& f) const
     {
         return format(f.value(), f.symbol());        
     }

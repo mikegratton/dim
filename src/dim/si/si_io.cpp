@@ -250,10 +250,10 @@ namespace dim {
 namespace detail {
 
 template <>
-::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(const char* unit_str, int nend)
+::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(const char* unit_str, char const* end)
 {
     dim::si::detail::quantity_parser_driver driver;
-    driver.parse(unit_str, nend);
+    driver.parse(unit_str, end);
     return driver.result;
 }
 }  // namespace detail

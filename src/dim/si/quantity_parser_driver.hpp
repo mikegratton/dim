@@ -1,28 +1,33 @@
 #pragma once
 
-#include "quantity.tab.hpp"
 #include "definition.hpp"
+#include "dim/si/si_facet.hpp"
+#include "quantity.tab.hpp"
 
-namespace dim {
-namespace si {
-namespace detail {
+namespace dim
+{
+namespace si
+{
+namespace detail
+{
 
 /**
  * Communication between bison parser and output
  */
-class quantity_parser_driver {
-   public:
+class quantity_parser_driver
+{
+  public:
     // Result of the parse
     ::dim::si::dynamic_quantity result;
 
     // Text being parsed
     char const* corpus;
 
-    // Size of text (or -1 for null terminated text)
-    int corpus_size;
-
     // Current location in the text
     char const* cursor;
+
+    // Size of text (or -1 for null terminated text)
+    char const* corpus_end;
 
     /**
      * @brief Parse the text into a dynamic_quantity, setting result by side-effect
@@ -30,22 +35,29 @@ class quantity_parser_driver {
      * @param text Text to parse
      * @param text_size Size of text, or -1 for null-terminated text
      */
-    int parse(char const* text, int text_size)
+    int parse(char const* text, char const* text_end)
     {
+        result = si::dynamic_quantity(1.0, si::dynamic_unit::dimensionless());
         corpus = cursor = text;
-        corpus_size = text_size;
-        siquant::parser parse(*this);
+        corpus_end = text_end;
+        siquant::parser bison_parser(*this);
         try {
-            return parse();
+            return bison_parser();
         } catch (...) {
             result = ::dim::si::dynamic_quantity::bad_quantity();
             return -1;
         }
     }
 
-    quantity_parser_driver() : result(::dim::si::dynamic_quantity::bad_quantity()), corpus(nullptr), corpus_size(0), cursor(nullptr) {}
+    quantity_parser_driver()
+        : result(::dim::si::dynamic_quantity::bad_quantity()),
+          corpus(nullptr),
+          cursor(nullptr),
+          corpus_end(nullptr)
+    {
+    }
 };
 
-}  // namespace detail
-}  // namespace si
-}  // namespace dim
+} // namespace detail
+} // namespace si
+} // namespace dim

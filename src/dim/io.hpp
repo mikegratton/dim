@@ -17,12 +17,12 @@ namespace dim
 template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
 {
   public:
-    formatted_quantity(char const* symbol_ = nullptr, scalar value_ = std::numeric_limits<scalar>::quiet_NaN())
+    formatted_quantity(scalar value_ = std::numeric_limits<scalar>::quiet_NaN(), char const* symbol_ = "")
         : m_value(value_),
           m_symbol{'\0'}
     {
         constexpr int kStop = kMaxSymbol - 1;
-        if (symbol_) {
+        if (symbol_ && *symbol_) {
             int i = 0;
             for (; *symbol_ && i < kStop; i++) {
                 m_symbol[i] = *symbol_++;
@@ -33,7 +33,7 @@ template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
 
     static formatted_quantity bad_format()
     {
-        return formatted_quantity(nullptr, std::numeric_limits<scalar>::quiet_NaN());
+        return formatted_quantity(std::numeric_limits<scalar>::quiet_NaN(), nullptr);
     }
 
     bool is_bad() const { return isbad__(m_value); }
@@ -48,8 +48,6 @@ template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
 
     char* symbol() { return m_symbol; }
 
-    char* set_symbol() { return m_symbol; }
-
   private:
     scalar m_value;
     char m_symbol[kMaxSymbol];
@@ -60,7 +58,7 @@ template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
  *
  * Links a symbol to an affine transform. For input of a scalar s matching the
  * symbol, Q <- s*scale + add. For output, a formatted_quantity is produced via
- * formatted_quantity(symbol, (q-add)/scale)
+ * formatted_quantity((q-add)/scale, symbol)
  *
  * Example: formatter("feet", foot) creats a formatter that can take a double
  * representing "ft" and transform it into a Length in the same system as
@@ -106,11 +104,11 @@ template <class S, class System> class formatter
         return (result.dimensionless() ? dimensionless_cast(result) : std::numeric_limits<scalar>::quiet_NaN());
     }
 
-    formatted output(dynamic_type const& q) const { return formatted(symbol(), non_dim(q)); }
+    formatted output(dynamic_type const& q) const { return formatted(non_dim(q), symbol()); }
 
     template <class Q, DIM_IS_QUANTITY(Q)> formatted output(Q const& q) const
     {
-        return formatted(symbol(), non_dim(q));
+        return formatted(non_dim(q), symbol());
     }
 
     template <class Q, DIM_IS_QUANTITY(Q)> Q input(scalar const& s) const { return (s * scale + add).template as<Q>(); }
@@ -184,7 +182,7 @@ char* print_unit(char* buf, char* end, dynamic_quantity<Scalar, System> const& q
  * @brief Transform a region of characters into a formatted_quantity.
  *
  * result_out_of_range -- scalar is too large to reprensent
- * invalid_argument -- couldn't parse start of string to scalar
+ * invalid_argument -- couldn't parse start of string to scalar or scanner detected unit string errors
  * no_buffer_space -- symbol too long for symbol buffer
  * no_message -- symbol is zero length
  */
@@ -207,21 +205,23 @@ std::from_chars_result from_chars(char const* start, char const* end, formatted_
         return result;
     }
     formatted.value(s);
-    result.ptr = detail::advance_past_separator(result.ptr, end);
+    if (detail::isseparator(*result.ptr)) { ++result.ptr; }    
     char* cursor = formatted.symbol();
     char* symbolEnd = formatted.symbol() + kMaxSymbol;
-    detail::unit_parse_state parse_state = detail::kUnit;
-    while (cursor < symbolEnd && result.ptr < end && detail::is_unit_char(*result.ptr, parse_state)) {
+    detail::unit_string_scanner scanner;
+    while (cursor < symbolEnd && result.ptr < end && scanner.accept(*result.ptr)) {
         *cursor++ = *result.ptr++;
     }
-    if (cursor < symbolEnd) {
-        *cursor = '\0';
-    } else {
+    // Ensure the string is nul terminated
+    if (cursor == symbolEnd) {
         result.ec = std::errc::no_buffer_space;
-        formatted.symbol()[kMaxSymbol - 1] = '\0';
+        formatted.symbol()[kMaxSymbol - 1] = '\0';        
+    } else {
+        *cursor = '\0';
     }
-    if (cursor == formatted.symbol() && result.ec == std::errc{}) {
-        result.ec = std::errc::no_message;
+    // Pack in scanner errors
+    if (scanner.state() == detail::kError) {        
+        result.ec = std::errc::invalid_argument;
     }
     return result;
 }

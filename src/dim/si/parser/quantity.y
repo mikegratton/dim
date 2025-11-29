@@ -28,6 +28,7 @@
 
 }
 
+%token BAD_INTEGER
 %token MULTIPLY
 %token <int> INTEGER
 %type <int> exponent_group
@@ -40,7 +41,8 @@
 %%
 
 output :
-   unit_group             { driver.result = $1; return 0; }  
+   %empty
+   | unit_group             { driver.result = $1; return 0; }  
    | MULTIPLY unit_group  { driver.result = $2; return 0; }    
    | error                { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
    ;
@@ -116,17 +118,17 @@ unit_literal :
 
 exponent_group:
    '(' exponent_group ')' { $$ = $2; }
-   | INTEGER            
+   | INTEGER        
    ;
-    
+ 
 %%
 
 int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_parser_driver& io_driver)
 {
-    if (io_driver.corpus_size > 0 && io_driver.cursor - io_driver.corpus >= io_driver.corpus_size) {
+    if (io_driver.cursor >= io_driver.corpus_end) {
         return siquant::parser::token::SIQUANTEOF;
     }
-    char c = *io_driver.cursor++;
+    unsigned char c = static_cast<unsigned char>(*io_driver.cursor++);
     switch(c) {
         case '.':
         case '*':
@@ -147,8 +149,38 @@ int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_pa
         case '9': {
             char* endPtr;
             o_typePtr->emplace<int>(strtol(io_driver.cursor-1, &endPtr, 10));
-            io_driver.cursor = endPtr;
-            return siquant::parser::token::INTEGER;
+            if (endPtr == io_driver.cursor-1) {
+                return siquant::parser::token::BAD_INTEGER;
+            } else {
+                io_driver.cursor = endPtr;
+                return siquant::parser::token::INTEGER;
+            }
+        }
+        case 0xce : {
+            unsigned char d = static_cast<unsigned char>(*io_driver.cursor++);
+            switch(d) {
+                case 0xa9 :
+                    return 'R';
+                case 0xbc :
+                    return 'u';
+                default:
+                    return siquant::parser::token::BAD_INTEGER;
+            }
+        }
+        case 0xe2 : {
+            unsigned char d = static_cast<unsigned char>(*io_driver.cursor++);
+            if (d != 0x84) {
+                return siquant::parser::token::BAD_INTEGER;
+            }
+            d = static_cast<unsigned char>(*io_driver.cursor++);            
+            switch(d) {
+                case 0xaa :
+                    return 'K';
+                case 0xa6 :
+                    return 'R';
+                default:
+                    return siquant::parser::token::BAD_INTEGER;
+            }
         }
         default:
             return c;

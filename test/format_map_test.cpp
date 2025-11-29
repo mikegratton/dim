@@ -1,15 +1,8 @@
-#include "dim/dynamic_quantity.hpp"
-#include "dim/format_map.hpp"
-
-#include <iostream>
-#include <string>
-#include "dim/io.hpp"
-#include "dim/io_detail.hpp"
-#include "dim/si.hpp"
-#include "dim/si/definition.hpp"
-#include "dim/si/si_io.hpp"
 #include "dim/si/si_facet.hpp"
 #include "doctest.h"
+
+#include <string>
+#include "dim/si.hpp"
 
 TEST_CASE("input_format_map")
 {
@@ -20,10 +13,14 @@ TEST_CASE("input_format_map")
     CHECK(dimensionless_cast(result / si::dynamic_quantity(si::inch)) == doctest::Approx(5.0));
     auto result2 = map1.to_quantity<si::Length>(5.0, "in");
     CHECK(result2 / si::inch == doctest::Approx(5.0));
+    result2 = map1.to_quantity<si::Length>(si::formatted_quantity(5.0, "in"));
+    CHECK(result2 / si::inch == doctest::Approx(5.0));
 
     // Symbol replacement    
     map1.insert("in", si::yard);    
     result = map1.to_quantity(5.0, "in");
+    CHECK(result.value() == doctest::Approx(15.0 * si::foot / si::meter));
+    result = map1.to_quantity(si::formatted_quantity(5.0, "in"));
     CHECK(result.value() == doctest::Approx(15.0 * si::foot / si::meter));
 
     // Bulk init
@@ -80,10 +77,18 @@ TEST_CASE("input_format_map_group")
     CHECK_FALSE(result.is_bad());    
     CHECK(result.unit() == dim::index<si::Time>());    
     CHECK(dimensionless_cast(result) == doctest::Approx(5.0 * si::hour / si::second));
+    result = imap.to_quantity(si::formatted_quantity(5.0, "hr"));
+    CHECK_FALSE(result.is_bad());    
+    CHECK(result.unit() == dim::index<si::Time>());    
+    CHECK(dimensionless_cast(result) == doctest::Approx(5.0 * si::hour / si::second));
     
 
     // Access with a specified quantity
     auto result2 = imap.to_quantity<si::Mass>(5.0, "lbm");
+    CHECK(index(result2) == dim::index<si::Mass>());
+    CHECK_FALSE(result2.is_bad());
+    CHECK(dimensionless_cast(result2) == doctest::Approx(5.0 * si::pound_mass / si::kilogram));
+    result2 = imap.to_quantity<si::Mass>(si::formatted_quantity(5.0, "lbm"));
     CHECK(index(result2) == dim::index<si::Mass>());
     CHECK_FALSE(result2.is_bad());
     CHECK(dimensionless_cast(result2) == doctest::Approx(5.0 * si::pound_mass / si::kilogram));
@@ -138,13 +143,18 @@ TEST_CASE("parse_quantity")
 {
     si::input_format_map input_format(si::meter_);
     input_format.insert("yd", si::yard);
-    si::formatted_quantity fq("yd", 2.0);
+    si::formatted_quantity fq(2.0, "yd");
     si::dynamic_quantity dq;
     CHECK(parse_quantity(dq, fq, input_format));
     CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::yard / si::meter));
     si::Length q;
     CHECK(parse_quantity(q, fq, input_format));
     CHECK(dimensionless_cast(q) == doctest::Approx(2.0 * si::yard / si::meter));
+
+    si::input_format_map_group input_group;
+    input_group.insert(input_format);
+    parse_quantity(dq, fq, input_group);
+    CHECK(dimensionless_cast(dq) == doctest::Approx(2.0 * si::yard / si::meter));
 }
 
 TEST_CASE("format_quantity")

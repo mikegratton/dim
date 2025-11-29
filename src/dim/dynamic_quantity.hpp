@@ -71,7 +71,7 @@ template <class S, class System, DIM_IS_SCALAR(S)> class dynamic_quantity : publ
     }
 #endif
 
-    static constexpr type bad_quantity() { return type(std::numeric_limits<scalar>::quiet_NaN()); }
+    static constexpr type bad_quantity() { return type(std::numeric_limits<scalar>::quiet_NaN(), unit_type::bad_unit()); }
     constexpr bool is_bad() const { return isbad__(value_); }
 
     constexpr bool dimensionless() const { return (unit_ == unit_type::dimensionless()); }

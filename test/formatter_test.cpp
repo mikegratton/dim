@@ -1,3 +1,5 @@
+#include "dim/io_detail.hpp"
+#include "dim/si/si_facet.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
 
@@ -14,7 +16,7 @@ TEST_CASE("formatter")
     auto ff = f.output(l);
     CHECK(ff.value() == doctest::Approx(in_inch));
     CHECK(strcmp(ff.symbol(), "in") == 0);
-    sprintf(ff.set_symbol(), "%s", "moose");
+    sprintf(ff.symbol(), "%s", "moose");
     CHECK(strcmp(ff.symbol(), "moose") == 0);
     dim::si::Length l2 = f.input<si::Length>(in_inch);
     CHECK(dimensionless_cast(l2) == doctest::Approx(dimensionless_cast(l)));
@@ -37,4 +39,24 @@ TEST_CASE("formatter")
     CHECK(f.output(si::second).is_bad());
     dq = si::dynamic_quantity(si::second);
     CHECK(f.output(dq).is_bad());
+
+    f = si::formatter("blah", si::yard, si::second);
+    CHECK(std::string(f.symbol()) == "INCONSISTENT");
+    CHECK(std::isnan(f.non_dim(si::meter)));
+}
+
+TEST_CASE("formatted_quantity")
+{
+    si::formatted_quantity fq(1.0, "01234567890123456789012345678901");
+    std::string symbolString = fq.symbol();
+    CHECK(symbolString.size() == dim::kMaxSymbol - 1);
+    CHECK_MESSAGE(symbolString.back() == '0', "Expected 0, found ", symbolString.back());
+    CHECK(fq.value() == 1.0);
+
+    fq = si::formatted_quantity();
+    CHECK(fq.is_bad());
+    CHECK(strlen(fq.symbol()) == 0);
+    fq.value(2.0);
+    sprintf(fq.symbol(), "moose");
+    CHECK(std::string(fq.symbol()) == "moose");
 }
