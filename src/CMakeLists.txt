@@ -1,3 +1,7 @@
+option(DIM_STREAM "Include <iostream> functionality" ON)
+option(DIM_STRING "Include <string> functionality" ON)
+option(DIM_EXCEPTIONS "[EXPERIMENTAL] Throw exceptions in dynamic_quantity and during parsing" OFF)
+configure_file(config.hpp.in config.hpp)
 
 set(source
     dim/io.cpp
@@ -10,15 +14,17 @@ set(source
 add_library(dim ${source})
 
 target_include_directories(dim
-    INTERFACE
+    PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    INTERFACE
         $<INSTALL_INTERFACE:include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 if (NOT("${DIM_CXX_VERSION}" STREQUAL "Default"))
-    set_target_properties(dim PROPERTIES CXX_STANDARD ${DIM_CXX_VERSION})
+    target_compile_features(dim PUBLIC cxx_std_${DIM_CXX_VERSION})
 endif()
 
 # Warnings
@@ -56,6 +62,15 @@ install(
     FILES_MATCHING PATTERN
         "*.hpp"    
 )
+
+# Configuration
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/config.hpp
+    DESTINATION
+        ${DIM_INCLUDE_INSTALL_DIR}/dim
+)
+
 
 # Targets
 install(

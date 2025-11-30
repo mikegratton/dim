@@ -1,3 +1,5 @@
+#include "dim/incommensurable_exception.hpp"
+#include "dim/io_detail.hpp"
 #include "dim/si/definition.hpp"
 #include "dim/si/si_facet.hpp"
 #include "dim/unit.hpp"
@@ -7,6 +9,18 @@
 #include <bitset>
 #include <iostream>
 #include "test_utilities.hpp"
+
+namespace dim
+{
+template<class S, class T>
+doctest::String toString(dynamic_quantity<S, T> const& value) {
+    doctest::String s = doctest::toString(value.value()) + "_";
+    char buf[256];
+    detail::print_unit(buf, buf + sizeof(buf), nullptr, value.unit());
+    s += buf;
+    return s;
+}
+}
 
 TEST_CASE("dynamic_unit.named")
 {
@@ -198,6 +212,14 @@ TEST_CASE("dynamic_quantity.operators")
     CHECK(result.value() == doctest::Approx(0.0));
     CHECK(result.unit() == q.unit());
 
+#ifdef DIM_EXCEPTIONS    
+    CHECK_THROWS_AS(q + s, dim::incommensurable_exception);
+    CHECK_THROWS_AS(q - s, dim::incommensurable_exception);
+    si::dynamic_quantity t = q;
+    CHECK_THROWS_AS(t += s, dim::incommensurable_exception);
+    t = q;
+    CHECK_THROWS_AS(t -= s, dim::incommensurable_exception);
+#else
     result = q + s;
     CHECK(result.is_bad());
     result = q - s;
@@ -208,6 +230,7 @@ TEST_CASE("dynamic_quantity.operators")
     result = q;
     result -= s;
     CHECK(result.is_bad());
+#endif
 
     CHECK(q == q);
     CHECK(q <= q);
@@ -240,6 +263,12 @@ TEST_CASE("dynamic_quanity.scalar")
     CHECK( result.unit() == inverse(q.unit()));
     CHECK( result.value() == doctest::Approx(0.4));
 
+    #ifdef DIM_EXCEPTIONS
+    CHECK_THROWS_AS(2 + q, dim::incommensurable_exception);
+    CHECK_THROWS_AS(q + 2, dim::incommensurable_exception);
+    CHECK_THROWS_AS(2 - q, dim::incommensurable_exception);
+    CHECK_THROWS_AS(q - 2, dim::incommensurable_exception);
+    #else
     result = 2 + q;
     CHECK(result.is_bad());
 
@@ -251,6 +280,7 @@ TEST_CASE("dynamic_quanity.scalar")
 
     result = q + 2;
     CHECK(result.is_bad());
+    #endif
 
     si::dynamic_quantity dimless(2.0);
     
@@ -304,6 +334,12 @@ TEST_CASE("dynamic_quanity.unit")
     CHECK( result.dimensionless());
     CHECK( result.value() == doctest::Approx(0.2));
 
+#ifdef DIM_EXCEPTIONS
+    CHECK_THROWS_AS(u2 + q, dim::incommensurable_exception);
+    CHECK_THROWS_AS(q + u2, dim::incommensurable_exception);
+    CHECK_THROWS_AS(u2 - q, dim::incommensurable_exception);
+    CHECK_THROWS_AS(q - u2, dim::incommensurable_exception);
+#else
     result = u2 + q;
     CHECK(result.is_bad());
 
@@ -313,8 +349,9 @@ TEST_CASE("dynamic_quanity.unit")
     result = u2 - q;
     CHECK(result.is_bad());
 
-    result = q + u2;
+    result = q - u2;
     CHECK(result.is_bad());
+#endif
 
     result = u1 + q;
     CHECK(result.unit() == q.unit());

@@ -1,9 +1,11 @@
 #pragma once
-#ifndef DIM_NO_STREAM
+#include "config.hpp"
+#include "si_no_stream.hpp"
+#include "ioformat.hpp"
+#ifdef DIM_STREAM
 #include "iostream.hpp"
 #endif
-#include "si_no_stream.hpp"
-#include "dim/ioformat.hpp"
+
 
 /**
  * @brief Simplify the namespace so that all symbols are in the namespace `si`.

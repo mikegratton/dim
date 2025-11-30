@@ -110,9 +110,11 @@ TEST_CASE("Temperature") {
     CHECK(celsius(0.0)/(273.15*kelvin) == doctest::Approx(1.0));
     CHECK(celsius(1.0)/(274.15*kelvin) == doctest::Approx(1.0));
     CHECK(toCelsiusValue(celsius(0.0)) == doctest::Approx(0.0));
+    CHECK(toCelsiusValue(celsius(1.0)) == doctest::Approx(1.0));
     CHECK(fahrenheit(32.0)/celsius(0.0) == doctest::Approx(1.0));
     CHECK(fahrenheit(33.0)/celsius(5./9.) == doctest::Approx(1.0));
     CHECK(toFahrenheitValue(fahrenheit(0.0)) == doctest::Approx(0.0));
+    CHECK(toFahrenheitValue(fahrenheit(1.0)) == doctest::Approx(1.0));
 }
 
 TEST_CASE("Math") {

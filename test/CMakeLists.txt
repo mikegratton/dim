@@ -16,10 +16,7 @@ add_executable(dimTest
 )
 target_link_libraries(dimTest PUBLIC dim)
 
-
-if (NOT("${DIM_CXX_VERSION}" STREQUAL "Default"))
-    set_target_properties(dim PROPERTIES CXX_STANDARD ${DIM_CXX_VERSION})
-endif()
+target_compile_definitions(dimTest PUBLIC DOCTEST_CONFIG_SUPER_FAST_ASSERTS)
 
 add_executable(dimCompileErrors
     main.cpp
@@ -29,6 +26,5 @@ add_executable(dimCompileErrors
 target_link_libraries(dimCompileErrors PUBLIC dim)
 
 set_target_properties(dimCompileErrors PROPERTIES
-    CXX_STANDARD 17
     EXCLUDE_FROM_ALL ON
 )

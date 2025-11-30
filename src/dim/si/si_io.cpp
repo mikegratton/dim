@@ -8,9 +8,11 @@ using namespace si;
 
 template<> si::input_format_map const& get_default_format<Temperature>() {
     static const si::input_format_map s_known {
-        {"F", 5./9.*kelvin, 255.37*kelvin},
-        {"R", 5./9.*kelvin},
-        {"C", 1.*kelvin, 273.15*kelvin}
+        {"F", 5./9.*kelvin, (273.15 - 5./9.*32.)*kelvin},
+        {"℉", 5./9.*kelvin, (273.15 - 5./9.*32.)*kelvin},
+        {"R", rankine},
+        {"C", kelvin, 273.15*kelvin},
+        {"℃", kelvin, 273.15*kelvin}
     };
     return s_known;
 }
@@ -18,6 +20,7 @@ template<> si::input_format_map const& get_default_format<Temperature>() {
 template<>
 si::input_format_map const& get_default_format<Length>() {
     static const si::input_format_map s_known {
+        {"metre", meter},
         {"in", inch },
         {"inch", inch},
         {"ft", foot},
@@ -27,7 +30,8 @@ si::input_format_map const& get_default_format<Length>() {
         {"mi", mile},
         {"mile", mile},
         {"nmi", nautical_mile},
-        {"nautical_mile", nautical_mile}
+        {"nautical_mile", nautical_mile},
+        {"Å", 1e-10 * meter}
     };
     return s_known;
 }
@@ -63,15 +67,21 @@ si::input_format_map const& get_default_format<Angle>() {
     static const si::input_format_map s_known {
         {"radian", radian},
         {"deg", degree},
+        {"°", degree},
         {"mil", 1e-3 * radian},
         {"mrad", 1e-3 * radian},
         {"milliradian", 1e-3 * radian},
         {"turn", 2.0 * M_PI * radian},
+        {"tr", 2.0 * M_PI * radian},
+        {"rev", 2.0 * M_PI * radian},
+        {"cyc", 2.0 * M_PI * radian},
         {"'", degree / 60.0},
+        {"m", degree / 60.0},
         {"min", degree / 60.0},
         {"minute", degree / 60.0},
         {"\"", degree / 3600.0},
         {"s", degree / 3600.0},
+        {"sec", degree / 3600.0},
         {"second", degree / 3600.0}
     };
     return s_known;
@@ -81,6 +91,7 @@ template<>
 si::input_format_map const& get_default_format<SolidAngle>() {
     static const si::input_format_map s_known {
         {"steradian", steradian},
+        {"sr", steradian},
         {"sp", 4.0 * M_PI * steradian},
         {"spat", 4.0 * M_PI * steradian}
     };
@@ -92,6 +103,7 @@ template<>
 si::input_format_map const& get_default_format<Force>() {
     static const si::input_format_map s_known {
         {"dyn", dyne},
+        {"dyne", dyne},
         {"lb", pound_force},
         {"lbf", pound_force},
         {"pound", pound_force},
@@ -119,9 +131,9 @@ si::input_format_map const& get_default_format<Pressure>() {
 template<>
 si::input_format_map const& get_default_format<Energy>() {
     static const si::input_format_map s_known {
-        {"kW_hr", 1e3*watt*hour},
-        {"kW_hr", 1e3*watt*hour},
-        {"kW_hr", 1e3*watt*hour},
+        {"kW_hr", 1e3*watt*hour},        
+        {"kW_h", 1e3*watt*hour},
+        {"kWh", 1e3*watt*hour},
         {"erg", erg},
         {"foot_pound", foot * pound_force},
         {"ft_lb", foot * pound_force},
@@ -143,6 +155,7 @@ template<>
 si::input_format_map const& get_default_format<Area>() {
     static const si::input_format_map s_known {
         {"acre", acre},
+        {"ac", acre},
         {"sq_mi", mile * mile},
         {"mi^2", mile * mile},
         {"mile2", mile * mile},
@@ -150,7 +163,9 @@ si::input_format_map const& get_default_format<Area>() {
         {"ft^2", foot * foot},
         {"foot2", foot * foot},
         {"a", 1e2*meter2},
-        {"ha", 1e4*meter2}
+        {"are", 1e2*meter2},
+        {"ha", 1e4*meter2},
+        {"hectare", 1e4*meter2}
     };
     return s_known;
 }
@@ -159,6 +174,9 @@ template<>
 si::input_format_map const& get_default_format<Volume>() {
     static const si::input_format_map s_known {
         {"cc", 1e-6 * meter3},
+        {"liter", liter},
+        {"litre", liter},
+        {"L", liter},
         {"gal", gallon},
         {"gallon", gallon},
         {"acre_ft", acre * foot},
@@ -183,6 +201,7 @@ si::input_format_map const& get_default_format<FlowRate>() {
         {"gal/min", gallon / minute},
         {"meter3/second", meter3 / second},
         {"liter/second", liter / second},
+        {"L/s", liter / second},
         {"gallon/second", gallon / second},
         {"gallon/minute", gallon / minute},
     };
@@ -215,6 +234,7 @@ template<>
 si::input_format_map const& get_default_format<AngularRate>() {
     static const si::input_format_map s_known {
         {"deg/s", degree / second},
+        {"°/s", degree / second},
         {"degrees_per_second", degree / second},
         {"radians_per_second", radian / second}
     };
@@ -224,6 +244,7 @@ template<>
 si::input_format_map const& get_default_format<AngularAcceleration>() {
     static const si::input_format_map s_known {
         {"deg/s^2", degree / second / second},
+        {"°/s^2", degree / second / second},
         {"degrees_per_second2", degree / second / second},
         {"radians_per_second2", radian / second / second}
     };
@@ -231,12 +252,10 @@ si::input_format_map const& get_default_format<AngularAcceleration>() {
 }
 template<>
 si::input_format_map const& get_default_format<Torque>() {
-    static const si::input_format_map s_known {
-        {"ft*lbf", foot* pound_force/radian},
-        {"ft_lbf", foot* pound_force/radian},
-        {"ft*lb", foot* pound_force/radian},
-        {"ft_lb", foot* pound_force/radian},
-        {"foot_pound", foot* pound_force/radian}
+    static const si::input_format_map s_known {        
+        {"ft_lbf", foot * pound_force/radian},        
+        {"ft_lb", foot * pound_force/radian},
+        {"foot_pound", foot * pound_force/radian}
     };
     return s_known;
 }

@@ -16,13 +16,13 @@ namespace si {
 
 std::locale::id facet::id;
 
-void install_facet(si::facet* fac)
+void install_facet(si::facet* quantity_facet)
 {
     std::locale base_locale;  // Initialized to current global    
-    if (!fac) {
-        fac = make_default_facet();
+    if (!quantity_facet) {
+        quantity_facet = make_default_facet();
     }
-    std::locale enhanced_locale(base_locale, fac);
+    std::locale enhanced_locale(base_locale, quantity_facet);
     std::locale::global(enhanced_locale);
     // Install the locale in the default streams
     std::cout.imbue(enhanced_locale);

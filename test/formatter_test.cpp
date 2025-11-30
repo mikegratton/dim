@@ -1,4 +1,6 @@
+#include "dim/incommensurable_exception.hpp"
 #include "dim/io_detail.hpp"
+#include "dim/si/definition.hpp"
 #include "dim/si/si_facet.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
@@ -32,7 +34,18 @@ TEST_CASE("formatter")
 
     si::Length q = f.input<si::Length>(5.0);
     CHECK(dimensionless_cast(q) == doctest::Approx(5.0 * si::inch/si::meter));
+
+    si ::formatted_quantity fq;
+    si::Temperature temp = si::fahrenheit(2.0);
+    format_quantity(fq, temp);
+    CHECK(fq.value() == temp/si::kelvin);
     
+#ifdef DIM_EXCEPTIONS
+    CHECK_THROWS_AS(f.input<si::Time>(1.0), dim::incommensurable_exception);
+    CHECK_THROWS_AS(f.output(si::second), dim::incommensurable_exception);
+    CHECK_THROWS_AS(f.output(si::dynamic_quantity(si::second)), dim::incommensurable_exception);
+    CHECK_THROWS_AS(si::formatter("blah", si::yard, si::second), dim::incommensurable_exception);
+#else
     si::Time t = f.input<si::Time>(1.0);
     CHECK(t.is_bad());
 
@@ -43,6 +56,7 @@ TEST_CASE("formatter")
     f = si::formatter("blah", si::yard, si::second);
     CHECK(std::string(f.symbol()) == "INCONSISTENT");
     CHECK(std::isnan(f.non_dim(si::meter)));
+#endif
 }
 
 TEST_CASE("formatted_quantity")

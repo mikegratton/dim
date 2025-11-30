@@ -1,0 +1,13 @@
+#pragma once
+
+#ifndef DIM_EXCEPTIONS
+    #cmakedefine DIM_EXCEPTIONS
+#endif
+
+#ifndef DIM_STRING
+    #cmakedefine DIM_STRING
+#endif
+
+#ifndef DIM_STREAM
+    #cmakedefine DIM_STREAM
+#endif

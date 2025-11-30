@@ -9,7 +9,8 @@ namespace dim
 
 /// An iostream facet for formatting quantities. This is typically used by operator<< and operator>>,
 /// but can be adjusted to change how quantities are formated in a program
-template <class Scalar, class System> class quantity_facet : public std::locale::facet
+template <class Scalar, class System>
+class quantity_facet : public std::locale::facet
 {
 
   public:
@@ -34,7 +35,8 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
     /**
      * @brief Format a quantity for output (convert to correct scalar value, assign symbol)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> formatted format(Q const& q) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    formatted format(Q const& q) const
     {
         formatted result;
         format_quantity(result, q, &output_symbol);
@@ -54,29 +56,41 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
     /**
      * @brief Format a scalar + symbol into a quantity. If the conversion is illegal, the value
      * will be NaN (check with is_bad() method on quantity)
+     *
+     * @note This form is not preferred as it can suffer from buffer overruns if symbol is not null terminated
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q format(typename Q::scalar const& s, char const* symbol) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q format(typename Q::scalar const& s, char const* symbol) const
     {
-        // FIXME length of symbol?
         Q result = input_symbol.template to_quantity<Q>(s, symbol);
         if (!result.is_bad()) {
             return result;
         }
-        auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(symbol, symbol + kMaxSymbol);
-        return (s * dynamic_q).template as<Q>();        
+        auto dynamic_q =
+            detail::parse_standard_rep<typename Q::scalar, typename Q::system>(symbol, symbol + kMaxSymbol);
+        return (s * dynamic_q).template as<Q>();
     }
 
     /**
      * @brief Format a scalar + symbol into a quantity. If the conversion is illegal, the value
      * will be NaN (check with is_bad() method on quantity)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q format(formatted const& f) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q format(formatted const& f) const
     {
-        return format<Q>(f.value(), f.symbol());
+        Q q;
+        input_format_map<Scalar, System> const* input_format = input_symbol.get(index(q));
+        if (input_format) {
+            parse_quantity(q, f, *input_format);
+        } else {
+            parse_quantity(q, f);
+        }
+        return q;
     }
 
     /**
      * @brief Format a scalar and a symbol to a dynamic_quantity
+     * @note This form is not preferred as it can suffer from buffer overruns if symbol is not null terminated
      */
     dynamic_type format(Scalar const& s, char const* symbol) const
     {
@@ -84,7 +98,7 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
         if (!map_result.is_bad()) {
             return map_result;
         }
-        return detail::parse_standard_rep<Scalar, System>(symbol, symbol + kMaxSymbol) * dynamic_type(s);        
+        return detail::parse_standard_rep<Scalar, System>(symbol, symbol + kMaxSymbol) * dynamic_type(s);
     }
 
     /**
@@ -92,7 +106,9 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      */
     dynamic_type format(formatted const& f) const
     {
-        return format(f.value(), f.symbol());        
+        dynamic_type q;
+        parse_quantity(q, f, input_symbol);
+        return q;
     }
 
     /**
@@ -109,7 +125,8 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
      * @param scale  One unit of symbol is this much of Q
      * @param add    (For affine maps, defaults to zero)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> void output_formatter(char const* symbol, Q scale, Q add = Q(0.0))
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    void output_formatter(char const* symbol, Q scale, Q add = Q(0.0))
     {
         output_symbol.insert(symbol, scale, add);
     }
@@ -128,12 +145,20 @@ template <class Scalar, class System> class quantity_facet : public std::locale:
     /**
      * @brief Drop input formatters for Q (reverting to default format)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> void clear_input_formatter() { input_symbol.erase(Q::index()); }
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    void clear_input_formatter()
+    {
+        input_symbol.erase(Q::index());
+    }
 
     /**
      * @brief Drop all output formatters for Q (reverting to default format)
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> void clear_output_formatter() { output_symbol.erase(Q::index()); }
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    void clear_output_formatter()
+    {
+        output_symbol.erase(Q::index());
+    }
 
     /**
      * @brief Drop ALL input formatters

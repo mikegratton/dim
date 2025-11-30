@@ -1,5 +1,6 @@
 #pragma once
 #include "dim/io_detail.hpp"
+#include "dim/tag.hpp"
 #include "dynamic_quantity.hpp"
 #include "io.hpp"
 #include <algorithm>
@@ -42,7 +43,8 @@ typename Container::iterator find(Container& container, Key const& key, Compare 
 ///
 /// Each of these is for a given quantity (denoted by its index aka dynamic_unit).
 /// If a quantity doesn't match this index, this returns a bad quantity.
-template <class Scalar, class System> class input_format_map
+template <class Scalar, class System>
+class input_format_map
 {
   public:
     using system = System;
@@ -100,7 +102,8 @@ template <class Scalar, class System> class input_format_map
      * Add a formatter to the map. Q::unit must match the type of the map.
      * @return True if insertion occurred. False if the item has the wrong index
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* s, Q const& scale, Q const& add = Q(0))
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    bool insert(char const* s, Q const& scale, Q const& add = Q(0))
     {
         return insert(formatter_type(s, scale, add));
     }
@@ -127,8 +130,11 @@ template <class Scalar, class System> class input_format_map
     /**
      * Transform the scalar/symbol pair into a quantity. If Q::unit is the wrong type, or symbol is not in the map,
      * return a bad_quantity().
+     *
+     * @note This form is not preferred. It can suffer buffer overruns.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(typename Q::scalar const& s, char const* symbol) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q to_quantity(typename Q::scalar const& s, char const* symbol) const
     {
         if (::dim::index<Q>() != index()) {
             return Q::bad_quantity();
@@ -141,7 +147,8 @@ template <class Scalar, class System> class input_format_map
      * Transform the scalar/symbol pair into a quantity. If Q::unit is the wrong type, or symbol is not in the map,
      * return a bad_quantity().
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(formatted_quantity<scalar> const& input) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q to_quantity(formatted_quantity<scalar> const& input) const
     {
         return to_quantity<Q>(input.value(), input.symbol());
     }
@@ -149,6 +156,8 @@ template <class Scalar, class System> class input_format_map
     /**
      * Transform the scalar/symbol pair into a dynamic_quantity. If the symbol is
      * not in the map, return a bad_quantity().
+     *
+     * @note This form is not preferred. It can suffer buffer overruns.
      */
     quantity_type to_quantity(Scalar const& s, char const* symbol) const
     {
@@ -255,7 +264,8 @@ template <class Scalar, class System> class input_format_map
 ///
 /// For each index, there's an input_format_map of formatters representing
 /// different symbols for that quantity.
-template <class Scalar, class System> class input_format_map_group
+template <class Scalar, class System>
+class input_format_map_group
 {
   public:
     using map_type = input_format_map<Scalar, System>;
@@ -274,7 +284,8 @@ template <class Scalar, class System> class input_format_map_group
      * If a map for index<Q>() exists, this formatter is added to that group.
      * Otherwise a new map is created and the formatter is added to the new map.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* symbol, Q const& scale, Q const& add = Q(0))
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    bool insert(char const* symbol, Q const& scale, Q const& add = Q(0))
     {
         return insert(formatter_type(symbol, scale, add));
     }
@@ -347,8 +358,11 @@ template <class Scalar, class System> class input_format_map_group
      * Format a scalar/symbol pair into a quantity of type Q. If no map for
      * index<Q>() exists, or there is no matching symbol in the map, this returns
      * a bad_quantity.
+     *
+     * @note This form is not preferred. It can suffer buffer overruns.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(typename Q::scalar const& s, char const* symbol) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q to_quantity(typename Q::scalar const& s, char const* symbol) const
     {
         auto it = find(::dim::index<Q>());
         return (it != sorted_data.end() ? it->template to_quantity<Q>(s, symbol) : Q::bad_quantity());
@@ -359,9 +373,10 @@ template <class Scalar, class System> class input_format_map_group
      * index<Q>() exists, or there is no matching symbol in the map, this returns
      * a bad_quantity.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> Q to_quantity(formatted const& data) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q to_quantity(formatted const& data) const
     {
-        return to_quantity<Q>(data.value(), data.symbol());        
+        return to_quantity<Q>(data.value(), data.symbol());
     }
 
     /**
@@ -369,6 +384,8 @@ template <class Scalar, class System> class input_format_map_group
      * version, this version searchs *all* maps for the symbol, using the first
      * formatter found. If the symbol is not in any maps, this returns a
      * bad_quantity.
+     *
+     * @note This form is not preferred. It can suffer buffer overruns.
      */
     quantity_type to_quantity(Scalar const& s, char const* symbol) const
     {
@@ -387,10 +404,7 @@ template <class Scalar, class System> class input_format_map_group
      * formatter found. If the symbol is not in any maps, this returns a
      * bad_quantity.
      */
-    quantity_type to_quantity(formatted const& data) const
-    {
-        return to_quantity(data.value(), data.symbol());        
-    }
+    quantity_type to_quantity(formatted const& data) const { return to_quantity(data.value(), data.symbol()); }
 
     /**
      * Inspect the map for a given index. Do not delete this pointer.
@@ -448,7 +462,8 @@ template <class Scalar, class System> class input_format_map_group
 ///
 /// Formatters are organized by a quantity's index. Each dynamic_unit
 /// may have one formatter.
-template <class Scalar, class System> class output_format_map
+template <class Scalar, class System>
+class output_format_map
 {
   public:
     using system = System;
@@ -467,7 +482,8 @@ template <class Scalar, class System> class output_format_map
      * Format a quantity using the formatter for the unit type. If no formatter is available, return
      * a bad_format.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> formatted format(Q const& q) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    formatted format(Q const& q) const
     {
         auto it = find(::dim::index<Q>());
         return (it != sorted_data.end() ? it->template output<Q>(q) : formatted_quantity<scalar>::bad_format());
@@ -486,7 +502,8 @@ template <class Scalar, class System> class output_format_map
     /**
      * Add or replace a formatter in the map for Q::unit.
      */
-    template <class Q, DIM_IS_QUANTITY(Q)> bool insert(char const* s, Q const& scale, Q const& add = Q(0))
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    bool insert(char const* s, Q const& scale, Q const& add = Q(0))
     {
         return insert(formatter_type(s, scale, add));
     }
@@ -576,13 +593,15 @@ template <class Scalar, class System> class output_format_map
     std::vector<formatter_type> sorted_data;
 };
 
-template <class Q> using static_input_format_map = input_format_map<typename Q::scalar, typename Q::unit::system>;
+template <class Q>
+using static_input_format_map = input_format_map<typename Q::scalar, typename Q::unit::system>;
 
 /**
  * @brief Create template specializations of this function for your system to control the
  * default formats available for input
  */
-template <class Q> input_format_map<typename Q::scalar, typename Q::system> const& get_default_format()
+template <class Q>
+input_format_map<typename Q::scalar, typename Q::system> const& get_default_format()
 {
     input_format_map<typename Q::scalar, typename Q::system> static const EMPTY(::dim::index<Q>());
     return EMPTY;
@@ -603,7 +622,8 @@ bool parse_quantity(Q& o_q, formatted_quantity<typename Q::scalar> const& format
     if (!o_q.is_bad()) {
         return true;
     }
-    auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(formatted.symbol(), formatted.symbol() + kMaxSymbol);
+    auto dynamic_q = detail::parse_standard_rep<typename Q::scalar, typename Q::system>(
+        formatted.symbol(), formatted.symbol() + kMaxSymbol);
     o_q = (formatted.value() * dynamic_q).template as<Q>();
     return !(o_q.is_bad());
 }
@@ -617,15 +637,16 @@ bool parse_quantity(Q& o_q, formatted_quantity<typename Q::scalar> const& format
  *
  * @note This version searches all maps in a map group to match a symbol.
  */
-template <class Scalar, class System>
-bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, formatted_quantity<Scalar> const& formatted,
-                    input_format_map_group<Scalar, System> const& unit_map)
+template<class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+bool parse_quantity(DQ& o_q, formatted_quantity<typename DQ::scalar> const& formatted,
+                    input_format_map_group<typename DQ::scalar, typename DQ::system> const& unit_map)
 {
     o_q = unit_map.to_quantity(formatted.value(), formatted.symbol());
     if (!o_q.is_bad()) {
         return true;
     }
-    o_q = formatted.value() * detail::parse_standard_rep<Scalar, System>(formatted.symbol(), formatted.symbol() + kMaxSymbol);
+    o_q = formatted.value() *
+          detail::parse_standard_rep<typename DQ::scalar, typename DQ::system>(formatted.symbol(), formatted.symbol() + kMaxSymbol);
     return !o_q.is_bad();
 }
 
@@ -638,15 +659,16 @@ bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, formatted_quantity<Sc
  *
  * @note This version searches only one map.
  */
-template <class Scalar, class System>
-bool parse_quantity(dynamic_quantity<Scalar, System>& o_q, formatted_quantity<Scalar> const& formatted,
-                    input_format_map<Scalar, System> const& unit_map)
+template<class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+bool parse_quantity(DQ& o_q, formatted_quantity<typename DQ::scalar> const& formatted,
+                    input_format_map<typename DQ::scalar, typename DQ::system> const& unit_map)
 {
     o_q = unit_map.to_quantity(formatted.value(), formatted.symbol());
     if (!o_q.is_bad()) {
         return true;
     }
-    o_q = formatted.value() * detail::parse_standard_rep<Scalar, System>(formatted.symbol(), formatted.symbol() + kMaxSymbol);
+    o_q = formatted.value() *
+          detail::parse_standard_rep<typename DQ::scalar, typename DQ::system>(formatted.symbol(), formatted.symbol() + kMaxSymbol);
     return !o_q.is_bad();
 }
 
@@ -675,17 +697,18 @@ bool format_quantity(formatted_quantity<typename Q::scalar>& o_formatted, Q cons
  * this map is first used. If it is null or doesn't contain a matching
  * formatter, we fall back to using print_unit().
  */
-template <class Scalar, class System>
-bool format_quantity(formatted_quantity<Scalar>& o_formatted, dynamic_quantity<Scalar, System> const& i_q,
-                     output_format_map<Scalar, System> const* out_map = nullptr)
+template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+bool format_quantity(formatted_quantity<typename DQ::scalar>& o_formatted, DQ const& i_q,
+                     output_format_map<typename DQ::scalar, typename DQ::system> const* out_map = nullptr)
 {
+    using scalar = typename DQ::scalar;
     if (out_map) {
         o_formatted = out_map->format(i_q);
         if (!o_formatted.is_bad()) {
             return true;
         }
     }
-    o_formatted = formatted_quantity<Scalar>(dimensionless_cast(i_q));
+    o_formatted = formatted_quantity<scalar>(dimensionless_cast(i_q));
     print_unit(o_formatted.symbol(), o_formatted.symbol() + kMaxSymbol, i_q);
     return true;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "config.hpp"
 #include <type_traits>
 
 #if __cplusplus < 201103L
@@ -41,6 +42,9 @@ struct dynamic_unit_tag {};
 
 /// Use as a template parameter to check if Q is a quantity
 #define DIM_IS_QUANTITY(Q) DIM_IS_TAGGED_FOR(::dim::quantity_tag, Q)
+
+/// Use as a template parameter to check if Q is a quantity
+#define DIM_IS_DYNAMIC_QUANTITY(Q) DIM_IS_TAGGED_FOR(::dim::dynamic_quantity_tag, Q)
 
 /// Use as a template parameter to check if T is a system
 #define DIM_IS_SYSTEM(T) DIM_IS_TAGGED_FOR(::dim::system_tag, T)

@@ -1,4 +1,5 @@
 #pragma once
+#include "dim/incommensurable_exception.hpp"
 #include "dynamic_quantity.hpp"
 #include "io_detail.hpp"
 #include <cstring>
@@ -14,10 +15,11 @@ namespace dim
 /**
  * @brief A quantity represented as a scalar number and a symbol (char* string).
  */
-template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
+template <class Scalar, DIM_IS_SCALAR(Scalar)>
+class formatted_quantity
 {
   public:
-    formatted_quantity(scalar value_ = std::numeric_limits<scalar>::quiet_NaN(), char const* symbol_ = "")
+    formatted_quantity(Scalar value_ = std::numeric_limits<Scalar>::quiet_NaN(), char const* symbol_ = "")
         : m_value(value_),
           m_symbol{'\0'}
     {
@@ -33,23 +35,23 @@ template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
 
     static formatted_quantity bad_format()
     {
-        return formatted_quantity(std::numeric_limits<scalar>::quiet_NaN(), nullptr);
+        return formatted_quantity(std::numeric_limits<Scalar>::quiet_NaN(), nullptr);
     }
 
     bool is_bad() const { return isbad__(m_value); }
 
-    scalar const& value() const { return m_value; } 
+    Scalar const& value() const { return m_value; }
 
-    scalar& value() { return m_value; } 
+    Scalar& value() { return m_value; }
 
-    void value(scalar const& s) { m_value = s; }
+    void value(Scalar const& s) { m_value = s; }
 
     char const* symbol() const { return m_symbol; }
 
     char* symbol() { return m_symbol; }
 
   private:
-    scalar m_value;
+    Scalar m_value;
     char m_symbol[kMaxSymbol];
 };
 
@@ -68,11 +70,12 @@ template <class scalar, DIM_IS_SCALAR(scalar)> class formatted_quantity
  * Formatters have the quantity type erased, tracking it at runtime via a unit_code.
  *
  */
-template <class S, class System> class formatter
+template <class Scalar, class System>
+class formatter
 {
   public:
-    using scalar = S;
-    using dynamic_type = dynamic_quantity<S, System>;
+    using scalar = Scalar;
+    using dynamic_type = dynamic_quantity<Scalar, System>;
     using formatted = formatted_quantity<scalar>;
 
     formatter(char const* symbol_, dynamic_type const& scale_, dynamic_type const& add_ = dynamic_type::bad_quantity())
@@ -84,9 +87,14 @@ template <class S, class System> class formatter
             add = dynamic_type(0, scale.unit());
         }
         if (add.unit() != scale.unit()) {
+#ifdef DIM_EXCEPTIONS
+            throw incommensurable_exception(scale.unit(), add.unit(),
+                                            "Units of affine transformation in formatter are incompatible");
+#else
             add = dynamic_type::bad_quantity();
             scale = dynamic_type::bad_quantity();
             strncpy(m_symbol, "INCONSISTENT", kMaxSymbol - 1);
+#endif
         }
     }
 
@@ -96,22 +104,39 @@ template <class S, class System> class formatter
     {
     }
 
-    template <class Q, DIM_IS_QUANTITY(Q)> scalar non_dim(Q const& q) const { return non_dim(dynamic_type(q)); }
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    scalar non_dim(Q const& q) const
+    {
+        return non_dim(dynamic_type(q));
+    }
 
     scalar non_dim(dynamic_type const& q) const
     {
         dynamic_type result = (q + add) / scale;
+#ifdef DIM_EXCEPTIONS
+        if (result.dimensionless()) {
+            return dimensionless_cast(result);
+        }
+        throw incommensurable_exception(::dim::index(q), scale.unit(),
+                                        "Could not nondimensionalize quantity. Dimensions are incompatible");
+#else
         return (result.dimensionless() ? dimensionless_cast(result) : std::numeric_limits<scalar>::quiet_NaN());
+#endif
     }
 
     formatted output(dynamic_type const& q) const { return formatted(non_dim(q), symbol()); }
 
-    template <class Q, DIM_IS_QUANTITY(Q)> formatted output(Q const& q) const
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    formatted output(Q const& q) const
     {
         return formatted(non_dim(q), symbol());
     }
 
-    template <class Q, DIM_IS_QUANTITY(Q)> Q input(scalar const& s) const { return (s * scale + add).template as<Q>(); }
+    template <class Q, DIM_IS_QUANTITY(Q)>
+    Q input(scalar const& s) const
+    {
+        return (s * scale + add).template as<Q>();
+    }
 
     dynamic_type input(scalar const& s) const { return scale * dynamic_type(s) + add; }
 
@@ -124,59 +149,6 @@ template <class S, class System> class formatter
     dynamic_type scale;
     dynamic_type add;
 };
-
-/**
- * Print a unit string like "m/s^2" using the system
- * @return pointer past the last character written
- *
- * @param out_symbol Buffer to hold exponentiated symbol
- * @param end Pointer past the end of out_symbol
- * @param U The unit to print
- */
-template <class U, DIM_IS_UNIT(U)> char* print_unit(char* out_symbol, char* end, U const&)
-{
-    using System = typename U::system;
-    return detail::print_unit(out_symbol, end, System::template specialized_symbol<U>(), dim::index<U>());
-}
-
-/**
- * Print a unit string like "m/s^2" using the system
- * @return pointer past the last character written
- *
- * @param out_symbol Buffer to hold exponentiated symbol
- * @param end Pointer past the end of out_symbol
- * @param unit The unit to print
- */
-template <class System, DIM_IS_SYSTEM(System)>
-char* print_unit(char* out_symbol, char* end, dynamic_unit<System> const& unit)
-{
-    return detail::print_unit(out_symbol, end, System::specialized_symbol(unit), unit);    
-}
-
-/**
- * @brief Basic formatting of a quantity's unit according to the system
- * @param o_unit_str Buffer to write to
- * @param end Pointer past the end of o_unit_str
- * @param q Quantity to use for template argument deduction
- * @return Pointer past the last character written
- */
-template <class Q, DIM_IS_QUANTITY(Q)> char* print_unit(char* o_unit_str, char* end, Q const&)
-{
-    return print_unit(o_unit_str, end, dim::index<Q>());
-}
-
-/**
- * @brief Basic formatting of a dynamic_unit according to the system
- * @param buf Buffer to write to
- * @param end Pointer past the end of buf
- * @param q Quantity whose unit to print
- * @return Pointer past the last character written
- */
-template <class Scalar, class System, DIM_IS_SYSTEM(System)>
-char* print_unit(char* buf, char* end, dynamic_quantity<Scalar, System> const& q)
-{
-    return print_unit(buf, end, q.unit());
-}
 
 /**
  * @brief Transform a region of characters into a formatted_quantity.
@@ -205,7 +177,9 @@ std::from_chars_result from_chars(char const* start, char const* end, formatted_
         return result;
     }
     formatted.value(s);
-    if (detail::isseparator(*result.ptr)) { ++result.ptr; }    
+    if (detail::isseparator(*result.ptr)) {
+        ++result.ptr;
+    }
     char* cursor = formatted.symbol();
     char* symbolEnd = formatted.symbol() + kMaxSymbol;
     detail::unit_string_scanner scanner;
@@ -215,15 +189,70 @@ std::from_chars_result from_chars(char const* start, char const* end, formatted_
     // Ensure the string is nul terminated
     if (cursor == symbolEnd) {
         result.ec = std::errc::no_buffer_space;
-        formatted.symbol()[kMaxSymbol - 1] = '\0';        
+        formatted.symbol()[kMaxSymbol - 1] = '\0';
     } else {
         *cursor = '\0';
     }
     // Pack in scanner errors
-    if (scanner.state() == detail::kError) {        
+    if (scanner.state() == detail::kError) {
         result.ec = std::errc::invalid_argument;
     }
     return result;
+}
+
+/**
+ * Write a string representation "m/s^2" using the system type's facilities.
+ * @return pointer past the last character written
+ *
+ * @param out_symbol Buffer to hold exponentiated symbol
+ * @param end Pointer past the end of out_symbol
+ * @param U The unit to print
+ */
+template <class U, DIM_IS_UNIT(U)>
+char* print_unit(char* out_symbol, char* end, U const&)
+{
+    using System = typename U::system;
+    return detail::print_unit(out_symbol, end, System::template specialized_symbol<U>(), dim::index<U>());
+}
+
+/**
+ * Write a string representation like "m/s^2" using the system type's facilities.
+ * @return pointer past the last character written
+ *
+ * @param out_symbol Buffer to hold exponentiated symbol
+ * @param end Pointer past the end of out_symbol
+ * @param unit The unit to print
+ */
+template <class System, DIM_IS_SYSTEM(System)>
+char* print_unit(char* out_symbol, char* end, dynamic_unit<System> const& unit)
+{
+    return detail::print_unit(out_symbol, end, System::specialized_symbol(unit), unit);
+}
+
+/**
+ * @brief Write a string representation of a quantity's unit. This version uses the system type.
+ * @param o_unit_str Buffer to write to
+ * @param end Pointer past the end of o_unit_str
+ * @param q Quantity to use for template argument deduction
+ * @return Pointer past the last character written
+ */
+template <class Q, DIM_IS_QUANTITY(Q)>
+char* print_unit(char* o_unit_str, char* end, Q const&)
+{
+    return print_unit(o_unit_str, end, dim::index<Q>());
+}
+
+/**
+ * @brief Write a string representation of a quantity's unit. This version uses the system type.
+ * @param buf Buffer to write to
+ * @param end Pointer past the end of buf
+ * @param q Quantity whose unit to print
+ * @return Pointer past the last character written
+ */
+template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+char* print_unit(char* buf, char* end, DQ const& q)
+{
+    return print_unit(buf, end, q.unit());
 }
 
 } // end of namespace dim

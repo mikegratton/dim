@@ -42,7 +42,7 @@
 
 output :
    %empty
-   | unit_group             { driver.result = $1; return 0; }  
+   | unit_group           { driver.result = $1; return 0; }  
    | MULTIPLY unit_group  { driver.result = $2; return 0; }    
    | error                { driver.result = ::dim::si::dynamic_quantity::bad_quantity(); return 1; }
    ;
@@ -189,5 +189,5 @@ int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_pa
 
 void siquant::parser::error(std::string const&) 
 {
-    throw std::runtime_error("bad quantity");
+    this->driver.result = ::dim::si::dynamic_quantity::bad_quantity();    
 }

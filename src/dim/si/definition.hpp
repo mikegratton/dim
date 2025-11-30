@@ -55,38 +55,38 @@ struct system : system_tag {
 
 // clang-format off
 // Fundamental dimensions and their associated unit types, quantity types, and symbols
-DEFINE_QUANTITY_S(Length,      meter,     system, double, 1, 0, 0, 0, 0, 0, 0, 0, "m")
-DEFINE_QUANTITY_S(Time,        second,    system, double, 0, 1, 0, 0, 0, 0, 0, 0, "s")
-DEFINE_QUANTITY_S(Mass,        kilogram,  system, double, 0, 0, 1, 0, 0, 0, 0, 0, "kg")
-DEFINE_QUANTITY_S(Angle,       radian,    system, double, 0, 0, 0, 1, 0, 0, 0, 0, "rad")
-DEFINE_QUANTITY_S(Temperature, kelvin,    system, double, 0, 0, 0, 0, 1, 0, 0, 0, "K")
-DEFINE_QUANTITY_S(Amount,      mole,      system, double, 0, 0, 0, 0, 0, 1, 0, 0, "mol")
-DEFINE_QUANTITY_S(Current,     ampere,    system, double, 0, 0, 0, 0, 0, 0, 1, 0, "A")
-DEFINE_QUANTITY_S(Luminosity,  candela,   system, double, 0, 0, 0, 0, 0, 0, 0, 1, "cd")
+DIM_DEFINE_QUANTITY_S(Length,      meter,     system, double, 1, 0, 0, 0, 0, 0, 0, 0, "m")
+DIM_DEFINE_QUANTITY_S(Time,        second,    system, double, 0, 1, 0, 0, 0, 0, 0, 0, "s")
+DIM_DEFINE_QUANTITY_S(Mass,        kilogram,  system, double, 0, 0, 1, 0, 0, 0, 0, 0, "kg")
+DIM_DEFINE_QUANTITY_S(Angle,       radian,    system, double, 0, 0, 0, 1, 0, 0, 0, 0, "rad")
+DIM_DEFINE_QUANTITY_S(Temperature, kelvin,    system, double, 0, 0, 0, 0, 1, 0, 0, 0, "K")
+DIM_DEFINE_QUANTITY_S(Amount,      mole,      system, double, 0, 0, 0, 0, 0, 1, 0, 0, "mol")
+DIM_DEFINE_QUANTITY_S(Current,     ampere,    system, double, 0, 0, 0, 0, 0, 0, 1, 0, "A")
+DIM_DEFINE_QUANTITY_S(Luminosity,  candela,   system, double, 0, 0, 0, 0, 0, 0, 0, 1, "cd")
 
 // Derived units and their associated quantity types, and symbols
-DEFINE_QUANTITY_S(Frequency,           hertz,      system, double,  0, -1,  0,  0,  0,  0,  0,  0, "Hz")
-DEFINE_QUANTITY_S(SolidAngle,          steradian,  system, double,  0,  0,  0,  2,  0,  0,  0,  0, "sr")
-DEFINE_QUANTITY_S(Force,               newton,     system, double,  1, -2,  1,  0,  0,  0,  0,  0, "N")
-DEFINE_QUANTITY_S(Pressure,            pascal,     system, double, -1, -2,  1,  0,  0,  0,  0,  0, "Pa")
-DEFINE_QUANTITY_S(Energy,              joule,      system, double,  2, -2,  1,  0,  0,  0,  0,  0, "J")
-DEFINE_QUANTITY_S(Power,               watt,       system, double,  2, -3,  1,  0,  0,  0,  0,  0, "W")
-DEFINE_QUANTITY_S(Charge,              coulomb,    system, double,  0,  1,  0,  0,  0,  0,  1,  0, "C")
-DEFINE_QUANTITY_S(Voltage,             volt,       system, double,  2, -3,  1,  0,  0,  0, -1,  0, "V")
-DEFINE_QUANTITY_S(Capacitance,         farad,      system, double, -2,  4, -1,  0,  0,  0,  1,  0, "F")
-DEFINE_QUANTITY_S(Resistance,          ohm,        system, double,  2, -3,  1,  0,  0,  0, -2,  0, "R")
-DEFINE_QUANTITY_S(Conductance,         siemens,    system, double, -2,  3, -1,  0,  0,  0,  2,  0, "S")
-DEFINE_QUANTITY_S(MagneticFlux,        weber,      system, double,  2, -2,  1,  0,  0,  0, -1,  0, "Wb")
-DEFINE_QUANTITY_S(MagneticFluxDensity, tesla,      system, double,  0, -2,  1,  0,  0,  0, -1,  0, "T")
-DEFINE_QUANTITY_S(Inductance,          henry,      system, double,  2, -2,  1,  0,  0,  0, -2,  0, "H")
-DEFINE_QUANTITY_S(LuminousFlux,        lumen,      system, double,  0,  0,  0,  2,  0,  0,  0,  1, "Im")
-DEFINE_QUANTITY_S(Luminance,           lux,        system, double, -2,  0,  0,  2,  0,  0,  0,  1, "Ix")
-DEFINE_QUANTITY_S(CatalyticActivity,   katal,      system, double,  0, -1,  0,  0,  0,  1,  0,  0, "kat")
-DEFINE_QUANTITY_S(Viscosity,           poiseuille, system, double, -1, -1,  1,  0,  0,  0,  0,  0, "Pl")
+DIM_DEFINE_QUANTITY_S(Frequency,           hertz,      system, double,  0, -1,  0,  0,  0,  0,  0,  0, "Hz")
+DIM_DEFINE_QUANTITY_S(SolidAngle,          steradian,  system, double,  0,  0,  0,  2,  0,  0,  0,  0, "sr")
+DIM_DEFINE_QUANTITY_S(Force,               newton,     system, double,  1, -2,  1,  0,  0,  0,  0,  0, "N")
+DIM_DEFINE_QUANTITY_S(Pressure,            pascal,     system, double, -1, -2,  1,  0,  0,  0,  0,  0, "Pa")
+DIM_DEFINE_QUANTITY_S(Energy,              joule,      system, double,  2, -2,  1,  0,  0,  0,  0,  0, "J")
+DIM_DEFINE_QUANTITY_S(Power,               watt,       system, double,  2, -3,  1,  0,  0,  0,  0,  0, "W")
+DIM_DEFINE_QUANTITY_S(Charge,              coulomb,    system, double,  0,  1,  0,  0,  0,  0,  1,  0, "C")
+DIM_DEFINE_QUANTITY_S(Voltage,             volt,       system, double,  2, -3,  1,  0,  0,  0, -1,  0, "V")
+DIM_DEFINE_QUANTITY_S(Capacitance,         farad,      system, double, -2,  4, -1,  0,  0,  0,  1,  0, "F")
+DIM_DEFINE_QUANTITY_S(Resistance,          ohm,        system, double,  2, -3,  1,  0,  0,  0, -2,  0, "R")
+DIM_DEFINE_QUANTITY_S(Conductance,         siemens,    system, double, -2,  3, -1,  0,  0,  0,  2,  0, "S")
+DIM_DEFINE_QUANTITY_S(MagneticFlux,        weber,      system, double,  2, -2,  1,  0,  0,  0, -1,  0, "Wb")
+DIM_DEFINE_QUANTITY_S(MagneticFluxDensity, tesla,      system, double,  0, -2,  1,  0,  0,  0, -1,  0, "T")
+DIM_DEFINE_QUANTITY_S(Inductance,          henry,      system, double,  2, -2,  1,  0,  0,  0, -2,  0, "H")
+DIM_DEFINE_QUANTITY_S(LuminousFlux,        lumen,      system, double,  0,  0,  0,  2,  0,  0,  0,  1, "Im")
+DIM_DEFINE_QUANTITY_S(Luminance,           lux,        system, double, -2,  0,  0,  2,  0,  0,  0,  1, "Ix")
+DIM_DEFINE_QUANTITY_S(CatalyticActivity,   katal,      system, double,  0, -1,  0,  0,  0,  1,  0,  0, "kat")
+DIM_DEFINE_QUANTITY_S(Viscosity,           poiseuille, system, double, -1, -1,  1,  0,  0,  0,  0,  0, "Pl")
 
 // Compound units without specialized unit names or symbols
-DEFINE_QUANTITY(Area,                  meter2,  system, double, 2, 0, 0, 0, 0, 0, 0, 0)
-DEFINE_QUANTITY(Volume,                meter3,  system, double, 3, 0, 0, 0, 0, 0, 0, 0)
+DIM_DEFINE_QUANTITY(Area,                  meter2,  system, double, 2, 0, 0, 0, 0, 0, 0, 0)
+DIM_DEFINE_QUANTITY(Volume,                meter3,  system, double, 3, 0, 0, 0, 0, 0, 0, 0)
 constexpr unit_multiply_t<Time::unit, Time::unit> second2;
 // clang-format on
 
@@ -106,11 +106,16 @@ using KinematicViscosity  = quantity<unit_divide_t<Area::unit, Time::unit>, doub
  *****************************************************************************
  */
 
+// Alternate spelling
+constexpr Length metre = meter;
+constexpr decltype(meter_) metre_ = meter_;
+
 // Common SI-allied units
 constexpr Time minute = 60.0*second;
 constexpr Time hour = 60.0*minute;
 constexpr Area hectare = 1e4*meter2;
 constexpr Volume liter = 1e-3*meter3;
+constexpr Volume litre = liter;
 constexpr Pressure bar = 1e5*pascal;
 constexpr Pressure atmosphere = 1.01325e5*pascal;
 constexpr Energy calorie = 4.184*joule;
@@ -130,7 +135,7 @@ constexpr Length yard = 3.0*foot;
 constexpr Length mile = 5280.0*foot;
 constexpr Mass pound_mass = 0.453592*kilogram;
 constexpr Force poundal = 0.138255*newton;
-constexpr Area acre = 4046.86*meter2;
+constexpr Area acre = 43560.0 * foot * foot;
 constexpr Volume gallon = 3.78541*liter;
 
 // Nautical
@@ -155,7 +160,7 @@ constexpr Luminance phot = 1e5*lux;
 // Affine temperature conversions (Celsius/Fahrenheit)
 constexpr inline Temperature celsius(double temp_c) { return (temp_c + 273.15)*kelvin; }
 constexpr inline double toCelsiusValue(Temperature arg_t) { return (arg_t/kelvin - 273.15); }
-constexpr inline Temperature fahrenheit(double temp_f) { return (temp_f + 459.67)*rankine; }
+constexpr inline Temperature fahrenheit(double temp_f) { return (5./9.*temp_f + (273.15 - 5./9.*32.))*kelvin; }
 constexpr inline double toFahrenheitValue(Temperature arg_t) { return (arg_t/rankine - 459.67); }
 
 } // end of namespace si

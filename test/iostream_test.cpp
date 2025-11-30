@@ -1,3 +1,4 @@
+#include "dim/si/definition.hpp"
 #include "doctest.h"
 #include "dim/si.hpp"
 #include <sstream>
@@ -9,7 +10,7 @@ TEST_CASE("io_stream")
     si::system::install_facet();
 
     std::stringstream ss;
-    std::locale loc = std::locale(std::locale::classic(), si::make_default_facet());
+    std::locale loc = std::locale{};
     ss.imbue(loc);
     
     ss << 5.0_m;

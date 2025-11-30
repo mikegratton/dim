@@ -427,78 +427,14 @@ Dim provides `si::to_string()` and `si::from_string()` to use the facet without 
 
 ### Fallback Parser
 
-When a symbol isn't recognized, Dim falls back to a Bison-built parser for SI types.  This
-parser understands (almost all of) the SI prefixes and symbols defined in NIST SP 811. The parser recognizes 
-`_`, `*` and space as multiplication, `/` as division, and `^` as exponentiation, as well as
-parentheses. 
-
-The symbol tables differ very slightly from the standard, avoiding non-ASCII characters.
-
-| Prefix | Magnitude |
-|--------|-----------|
-| y | 1e-24 |
-| z | 1e-21 |
-| a | 1e-18 |
-| f | 1e-15 |
-| p | 1e-12 |
-| n | 1e-9 |
-| u*| 1e-6 |
-| m | 1e-3 |
-| c | 1e-2 |
-| d | 1e-1 |
-| Y | 1e24 |
-| Z | 1e21 |
-| E | 1e18 |
-| P | 1e15 |
-| T | 1e12 |
-| G | 1e9 |
-| M | 1e6 |
-| k | 1e3 |
-| h | 1e2 |
-    
-*mu (&#956;) has been replaced by "u". 
-
-|Symbol|Name|
-|------|----|
-| m    | meter|
-| s    | second|
-| rad  | radian|
-| g    | gram|
-| K    | kelvin|
-| mol  | mole|
-| A    | ampere|
-| cd   | candela|
-| Hz   | hertz|
-| sr   | steradian|
-| N    | newton|
-| Pa   | pascal|
-| J    | joule|
-| W    | watt|
-| C    | coulomb|
-| V    | volt|
-| F    | farad|
-| R*   | ohm|
-| S    | siemens|
-| Wb   | weber|
-| T    | tesla|
-| H    | henry|
-| Im   | lumen|
-| Ix   | lux  |
-| Bq   | becquerel   |
-| Sv   | sievert    |
-| kat  | katal|
-| L    | liter|
-| eV   | electron volt|
-| bar  | bar |
-| -- | are**|
-
-*Omega (&#937;) has been replaced by "R". 
-
-**The are (symbol "a") has been excluded as it makes parsing the units string ambiguous (is "Pa" a pascal or is it a petaare?).  
-
-The Bison-generated C++ code is part of the Dim project so that you don't need Bison installed to build or use Dim. If you wish to
-modify the grammar, the provided Makefile will regenerate the code. The parser has been designed to avoid memory allocation or string 
-copies. 
+When a symbol isn't recognized, Dim falls back to a Bison-built parser for SI
+types.  This parser understands (almost all of) the SI prefixes and symbols
+defined in NIST SP 811. The parser recognizes `_`, `*` and space as
+multiplication, `/` as division, and `^` as exponentiation, as well as
+parentheses. The Bison-generated C++ code is part of the Dim project so that you
+don't need Bison installed to build or use Dim. If you wish to modify the
+grammar, the provided Makefile will regenerate the code. The parser has been
+designed to avoid memory allocation or string copies. 
 
 ## Simple and Complete Parsing
 
@@ -507,14 +443,16 @@ required. You call it like so:
 ```cpp
 double scale = ...; // Taken from your data source
 char const* unit_string = ... ; // Taken from your data source
+si::formatted_quantity raw(scale, unit_string);
 si::Force f;
-if (parse_quantity(f, scale, unit_string)) {
+if (parse_quantity(f, raw)) {
     // Use f
 }
 ```
-This avoids the use of `std::string` or `iostream` while still having access to both layers of the input code. 
-The default symbol map is consulted first, followed by the fallback parser if that map doesn't contain the symbol.
-
+This avoids the use of `std::string`, `iostream`, and `locale` while still
+having access to both layers of the input code. The default symbol map is
+consulted first, followed by the fallback parser if that map doesn't contain the
+symbol.
 
 # Advanced Topics
 
@@ -535,7 +473,7 @@ char* print_quantity(char* o_quant_str, Q const& q)
 }
 ```
 The print_quantity function template is thus only defined for quantity types, where we know `q` 
-will have a member `value`. A C++17 `if constexpr` functionality may be added at a later date.
+will have a member `value`.
 
 
 ## Micro-Optimization for Nondimensionalization
@@ -549,13 +487,13 @@ double v1 = dimensionless_cast(L); // 1
 double v1 = L / meter; // 2
 double v2 = L / meter_; // 3
 ```
-(1) just uses our knowledge that lengths are stored in meters.  It doesn't document this fact very well, 
-however  (2)
-does just what it says, provide the length of L in meters. However, since `meter` is itself a Length 
-quantity, this actually performs a floating point division (2.0/1.0).  (3) uses the specially defined
-*unit* types (these are the same as the quantities but have a trailing underscore).  The `operator/`
-action here understands that a unit has, well, *unit* value, so avoids the division.  In fact,
-at runtime, (1) and (3) produce the same assembly code.
+(1) is an unchecked access and can be unsafe. (2) does just what it says,
+provide the length of L in meters. However, since `meter` is itself a Length
+quantity, this actually performs a floating point division (2.0/1.0).  (3) uses
+the specially defined *unit* types (these are the same as the quantities but
+have a trailing underscore).  The `operator/` action here understands that a
+unit has, well, *unit* value, so avoids the division.  In fact, at runtime, (1)
+and (3) produce the same machine instructions.
 
 ## Fractional Dimensions
 
@@ -622,6 +560,7 @@ Note that standard SI notation doesn't appear below as the parser handles it jus
 ## Angle
 * "radian" : Radian
 * "deg" : Degree
+* "°" : Degree
 * "mil" : Mil
 * "mrad" : Milliradian
 * "milliradian" : Milliradian

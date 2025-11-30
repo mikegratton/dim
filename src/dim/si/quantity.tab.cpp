@@ -703,7 +703,7 @@ namespace siquant {
             {
   case 3: // output: unit_group
 #line 45 "quantity.y"
-                            { driver.result = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); return 0; }
+                          { driver.result = yystack_[0].value.as < ::dim::si::dynamic_quantity > (); return 0; }
 #line 708 "../quantity.tab.cpp"
     break;
 
@@ -1570,5 +1570,5 @@ int yylex(siquant::parser::value_type* o_typePtr, ::dim::si::detail::quantity_pa
 
 void siquant::parser::error(std::string const&) 
 {
-    throw std::runtime_error("bad quantity");
+    this->driver.result = ::dim::si::dynamic_quantity::bad_quantity();    
 }

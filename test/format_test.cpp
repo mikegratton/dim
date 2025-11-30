@@ -45,11 +45,16 @@ TEST_CASE("to_string")
 #if __cplusplus >= 202002L
 TEST_CASE("std_format")
 {
+    // Static quantity, float formats
     auto message = std::format("{:.3f}", M_SQRT2 * si::meter);
     CHECK(message == "1.414_m");
+
+    // dynamic_quantity
     message = std::format("{}", si::dynamic_quantity(2.0 * si::weber));
     CHECK(message == "2_Wb");
-    message = std::format("Lots of {} go in {} for {}", "sheep", 1.0, si::second);
-    CHECK(message == "Lots of sheep go in 1 for 1_s");
+
+    // Check we're not crowding out other types
+    message = std::format("Lots of {} go in {} pen for {}", "sheep", 1.0, si::second);
+    CHECK(message == "Lots of sheep go in 1 pen for 1_s");
 }
 #endif

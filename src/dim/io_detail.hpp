@@ -121,7 +121,6 @@ enum unit_parse_state {
     kEnd = -1,
 };
 
-
 /**
  * @brief Stateful unit string scanner.
  *
@@ -189,8 +188,29 @@ inline bool isseparator(char c)
 }
 
 } // end of namespace detail
+} // namespace dim
 
-} // end of namespace dim
+#ifdef DIM_EXCEPTIONS
+#include "incommensurable_exception.hpp"
+
+namespace dim
+{
+template <class S1, class S2>
+std::string incommensurable_exception::print_error(dynamic_unit<S1> const& u1, dynamic_unit<S2> const& u2,
+                                                   char const* message)
+{
+    std::string output(message);
+    output += ": ";
+    char buffer[256];
+    print_unit(buffer, buffer + sizeof(buffer), u1);
+    output += buffer;
+    output += " != ";
+    print_unit(buffer, buffer + sizeof(buffer), u2);
+    output += buffer;
+    return output;
+}
+} // namespace dim
+#endif
 
 // For compatibility, replicate from_chars_result for
 // C++ < 17

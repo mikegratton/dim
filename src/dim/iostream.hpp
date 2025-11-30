@@ -1,93 +1,103 @@
 #pragma once
-#include <iostream>
+#include "dim/io.hpp"
 #include "dim/io_detail.hpp"
 #include "dynamic_quantity.hpp"
-#include "format_map.hpp"
-#include "dim/io.hpp"
 #include "facet.hpp"
+#include "format_map.hpp"
+#include <iostream>
 
 namespace dim
 {
 
-namespace detail {
+namespace detail
+{
 
-template<class Scalar>
+template <class Scalar>
 bool extract_formatted_quantity(formatted_quantity<Scalar>& formatted, std::istream& is)
 {
     std::size_t i = 0;
     char* cursor = formatted.symbol();
-    is >> formatted.value();    
-    while (is && detail::isseparator(is.peek())) { is.ignore(); }
+    is >> formatted.value();
+    while (is && detail::isseparator(is.peek())) {
+        is.ignore();
+    }
     detail::unit_parse_state state = detail::kStart;
     char* end = formatted.symbol() + kMaxSymbol;
     detail::unit_string_scanner scanner;
-    while (is && scanner.accept(is.peek()) && cursor < end) { is.get(*cursor++); }
-    if (cursor < end) { 
+    while (is && scanner.accept(is.peek()) && cursor < end) {
+        is.get(*cursor++);
+    }
+    if (cursor < end) {
         *cursor = '\0';
     } else {
-        *(end-1) = '\0';
+        *(end - 1) = '\0';
     }
     return !(formatted.is_bad() || scanner.state() == kError || formatted.symbol() == cursor);
 }
-}  // namespace detail
+} // namespace detail
 
 /// Write a formatted quantity to a stream.
-template <class Scalar, DIM_IS_SCALAR(Scalar)> inline std::ostream& operator<<(std::ostream& os, formatted_quantity<Scalar> const& fq)
+template <class Scalar, DIM_IS_SCALAR(Scalar)>
+inline std::ostream& operator<<(std::ostream& os, formatted_quantity<Scalar> const& fq)
 {
     return os << fq.value() << "_" << fq.symbol();
 }
 
 /// Write a quantity Q to a stream using the facet.
-template <class Q, DIM_IS_QUANTITY(Q)> std::ostream& operator<<(std::ostream& os, Q const& q)
+template <class Q, DIM_IS_QUANTITY(Q)>
+std::ostream& operator<<(std::ostream& os, Q const& q)
 {
     using facet = typename Q::system::facet;
     formatted_quantity<typename Q::scalar> f;
     if (std::has_facet<facet>(os.getloc())) {
         f = std::use_facet<facet>(os.getloc()).template format<Q>(q);
-    } else {        
-        format_quantity(f, q);        
+    } else {
+        format_quantity(f, q);
     }
     return os << f;
 }
 
 /// Write a dynamic_quantity to a stream using the facet.
-template <class Scalar, class System, DIM_IS_SCALAR(Scalar), DIM_IS_SYSTEM(System)>
-std::ostream& operator<<(std::ostream& os, dynamic_quantity<Scalar, System> const& dq)
+template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+std::ostream& operator<<(std::ostream& os, DQ const& dq)
 {
-    using facet = typename System::facet;
-    formatted_quantity<Scalar> f;
+    using facet = typename DQ::system::facet;
+    formatted_quantity<typename DQ::scalar> f;
     if (std::has_facet<facet>(os.getloc())) {
         f = std::use_facet<facet>(os.getloc()).format(dq);
-    } else {        
-        format_quantity(f, dq);        
+    } else {
+        format_quantity(f, dq);
     }
     return os << f;
 }
 
 /// Write the unit U to a stream using the default output symbol
-template <class U, DIM_IS_UNIT(U)> std::ostream& operator<<(std::ostream& os, U const& u)
+template <class U, DIM_IS_UNIT(U)>
+std::ostream& operator<<(std::ostream& os, U const& u)
 {
     char buf[128];
     return os << print_unit(buf, buf + sizeof(buf), u);
 }
 
 /// Write the dynamic_unit to a stream using the default output symbol
-template <class System, DIM_IS_SYSTEM(System)> std::ostream& operator<<(std::ostream& os, dynamic_unit<System> const& u)
+template <class System, DIM_IS_SYSTEM(System)>
+std::ostream& operator<<(std::ostream& os, dynamic_unit<System> const& u)
 {
     char buf[128];
-    return os << print_unit(buf, buf + sizeof(buf), u);    
+    return os << print_unit(buf, buf + sizeof(buf), u);
 }
 
 /**
  * @breif Calls parse_quantity, using the quantity_facet to extract a custom unit map if available.
  */
-template <class Q, DIM_IS_QUANTITY(Q)> std::istream& operator>>(std::istream& is, Q& out_q)
+template <class Q, DIM_IS_QUANTITY(Q)>
+std::istream& operator>>(std::istream& is, Q& out_q)
 {
     using Scalar = typename Q::scalar;
     using facet = typename Q::system::facet;
-    formatted_quantity<Scalar> formatted;        
-    if (detail::extract_formatted_quantity(formatted, is)) {        
-        if (std::has_facet<facet>(is.getloc())) {            
+    formatted_quantity<Scalar> formatted;
+    if (detail::extract_formatted_quantity(formatted, is)) {
+        if (std::has_facet<facet>(is.getloc())) {
             out_q = std::use_facet<facet>(is.getloc()).template format<Q>(formatted);
             if (out_q.is_bad()) {
                 is.setstate(std::ios_base::failbit);
@@ -102,13 +112,15 @@ template <class Q, DIM_IS_QUANTITY(Q)> std::istream& operator>>(std::istream& is
 }
 
 /// Use the facet to do formatted input for a dynamic quantity
-template <class Scalar, class System> std::istream& operator>>(std::istream& is, dynamic_quantity<Scalar, system_tag>& o_q)
+template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
+std::istream& operator>>(std::istream& is, DQ& o_q)
 {
-    using facet = typename System::facet;
-    Scalar value;
-    formatted_quantity<Scalar> formatted;        
-    if (detail::extract_formatted_quantity(formatted, is)) {        
-        if (std::has_facet<facet>(is.getloc())) {            
+    using facet = typename DQ::system::facet;
+    using scalar = typename DQ::scalar;
+    scalar value;
+    formatted_quantity<scalar> formatted;
+    if (detail::extract_formatted_quantity(formatted, is)) {
+        if (std::has_facet<facet>(is.getloc())) {
             o_q = std::use_facet<facet>(is.getloc()).format(formatted);
             if (o_q.is_bad()) {
                 is.setstate(std::ios_base::failbit);
@@ -121,6 +133,5 @@ template <class Scalar, class System> std::istream& operator>>(std::istream& is,
     }
     return is;
 }
-
 
 } // end of namespace dim

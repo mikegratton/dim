@@ -8,3 +8,5 @@ PointerAlignment: Left
 PackConstructorInitializers: Never
 QualifierAlignment: Right
 BreakBeforeBraces : Linux
+BreakBeforeConceptDeclarations : true
+AlwaysBreakTemplateDeclarations : true
