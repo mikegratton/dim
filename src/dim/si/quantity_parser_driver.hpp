@@ -12,21 +12,24 @@ namespace detail
 {
 
 /**
- * Communication between bison parser and output
+ * Communication between bison parser and output. Use parse_standard_rep() to
+ * access this functionality.
+ *
+ * @note The public members are referenced by name in the bison-generated code.  
  */
 class quantity_parser_driver
 {
   public:
-    // Result of the parse
+    /// Result of the parse
     ::dim::si::dynamic_quantity result;
 
-    // Text being parsed
+    /// Text being parsed
     char const* corpus;
 
-    // Current location in the text
+    /// Current location in the text
     char const* cursor;
 
-    // Size of text (or -1 for null terminated text)
+    /// Pointer past the end of the text
     char const* corpus_end;
 
     /**
@@ -49,6 +52,9 @@ class quantity_parser_driver
         }
     }
 
+    /**
+     * Construct a parser_driver in a non-functional state
+     */ 
     quantity_parser_driver()
         : result(::dim::si::dynamic_quantity::bad_quantity()),
           corpus(nullptr),

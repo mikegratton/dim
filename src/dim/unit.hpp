@@ -3,10 +3,10 @@
 #include <algorithm>
 #include <cstdint>
 
-/// The dim namespace encloses all dim symbols
 namespace dim
 {
 
+// Forward declare the dynamic_unit/index type
 template <class System> class dynamic_unit;
 
 
@@ -26,16 +26,19 @@ template <DIM_ARRAY, class System> struct unit : public unit_tag {
     static constexpr int8_t luminosity() { return Luminosity; }
 };
 
-
-/// dynamic_units are a compact representation of the dimension string plus the system tag.
-///
-/// These are comparable types and can be used as keys in maps.
+/**
+* @brief dynamic_units are a compact representation of the dimension string plus the system tag.
+*
+* These are comparable types and can be used as keys in maps.
+*/
 template <class System> class dynamic_unit : public dynamic_unit_tag
 {
   private:
     enum dimension_order { DIM_D_ARRAY };
 
-    /// Get byte v as a byte of an 8-byte int, respecting its sign.
+    /**
+     * Get byte v as a byte of an 8-byte int, respecting its sign.
+     */ 
     static constexpr uint64_t scast(int8_t v) 
     {
         // We must cast to an unsigned byte before bit manipulation, otherwise negative
@@ -43,7 +46,9 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
         return static_cast<uint64_t>(static_cast<uint8_t>(v));
     }
 
-    /// Put byte v at the i'th byte of the 8 byte int
+    /**
+     * Put byte v at the i'th byte of the 8 byte int.
+     */
     static constexpr uint64_t scast(int8_t v, uint8_t i) 
     {
         return scast(v) << (i*8);
@@ -58,25 +63,35 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
     }
 
     // clang-format off
-    constexpr dynamic_unit(int8_t length_, int8_t time_, int8_t mass_, int8_t angle_, int8_t temperature_,
-                           int8_t amount_, int8_t current_, int8_t luminosity_)
-        : m_code(scast(length_, Length)           | scast(time_, Time)     | scast(mass_, Mass)       | scast(angle_, Angle) 
-               | scast(temperature_, Temperature) | scast(amount_, Amount) | scast(current_, Current) | scast(luminosity_, Luminosity))
+    constexpr dynamic_unit(int8_t i_length, int8_t i_time, int8_t i_mass, int8_t i_angle, int8_t i_temperature,
+                           int8_t i_amount, int8_t i_current, int8_t i_luminosity)
+        : m_code(scast(i_length, Length)           | scast(i_time, Time)     | scast(i_mass, Mass)       | scast(i_angle, Angle) 
+               | scast(i_temperature, Temperature) | scast(i_amount, Amount) | scast(i_current, Current) | scast(i_luminosity, Luminosity))
     {
     }
     // clang-format on
 
+    /**
+     * @brief Transform a static unit to a dynamic_unit
+     */
     template <class U, DIM_IS_UNIT(U)>
     explicit constexpr dynamic_unit(U const&) : dynamic_unit(from<U>()) { }
 
+    /**
+     * @brief Transform a static unit to a dynamic_unit
+     */
     template <class U, DIM_IS_UNIT(U)> static constexpr dynamic_unit from()
     {
         return dynamic_unit(U::length(), U::time(), U::mass(), U::angle(), U::temperature(), U::amount(), U::current(),
                             U::luminosity());
     }
 
+    /**
+     * @brief Get the underlying uint64_t data for serialization.
+     */
     constexpr uint64_t raw() const { return m_code; }
 
+    // Access each dimension
     constexpr int8_t length() const { return get_byte(Length); }
     constexpr int8_t time() const { return get_byte(Time); }
     constexpr int8_t mass() const { return get_byte(Mass); }
@@ -86,6 +101,7 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
     constexpr int8_t current() const { return get_byte(Current); }
     constexpr int8_t luminosity() const { return get_byte(Luminosity); }
 
+    // Set each dimension
     void length(int8_t b) { return set_byte(Length, b); }
     void time(int8_t b) { return set_byte(Time, b); }
     void mass(int8_t b) { return set_byte(Mass, b); }
@@ -95,6 +111,7 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
     void current(int8_t b) { return set_byte(Current, b); }
     void luminosity(int8_t b) { return set_byte(Luminosity, b); }
 
+    // Comparison operators
     constexpr bool operator==(dynamic_unit rhs) const { return raw() == rhs.raw(); }
 
     constexpr bool operator<(dynamic_unit rhs) const { return raw() < rhs.raw(); }
@@ -113,31 +130,43 @@ template <class System> class dynamic_unit : public dynamic_unit_tag
 
     constexpr bool is_bad() const { return *this == bad_unit(); }
 
+    /**
+     * @brief Compute the product of two units.
+     */
     // clang-format off
-    constexpr dynamic_unit multiply(dynamic_unit const& other) const
+    constexpr dynamic_unit multiply(dynamic_unit const& i_other) const
     {        
         // Work byte by byte to avoid overflow into neighboring dimensions
         return dynamic_unit{
-            scast(get_byte(Length) + other.get_byte(Length), Length)
-            | scast(get_byte(Time) + other.get_byte(Time), Time)
-            | scast(get_byte(Mass) + other.get_byte(Mass), Mass)
-            | scast(get_byte(Angle) + other.get_byte(Angle), Angle)
-            | scast(get_byte(Temperature) + other.get_byte(Temperature), Temperature)
-            | scast(get_byte(Amount) + other.get_byte(Amount), Amount)
-            | scast(get_byte(Current) + other.get_byte(Current), Current)
-            | scast(get_byte(Luminosity) + other.get_byte(Luminosity), Luminosity)
+            scast(get_byte(Length) + i_other.get_byte(Length), Length)
+            | scast(get_byte(Time) + i_other.get_byte(Time), Time)
+            | scast(get_byte(Mass) + i_other.get_byte(Mass), Mass)
+            | scast(get_byte(Angle) + i_other.get_byte(Angle), Angle)
+            | scast(get_byte(Temperature) + i_other.get_byte(Temperature), Temperature)
+            | scast(get_byte(Amount) + i_other.get_byte(Amount), Amount)
+            | scast(get_byte(Current) + i_other.get_byte(Current), Current)
+            | scast(get_byte(Luminosity) + i_other.get_byte(Luminosity), Luminosity)
         };        
     }
     // clang-format on
 
+    /**
+     * @brief  Number of distinct dimensions.
+     */
     static constexpr int size() { return 8; }
 
+    /**
+     * @brief Get a dimension by index (0 <= i < 8). The order matches the enum
+     * values in base_dimension.
+     */
     constexpr int8_t get(uint8_t i) const { return get_byte(std::min<uint8_t>(7, i)); }
 
   private:
 
+    // Unchecked version of get()
     constexpr int8_t get_byte(uint8_t i) const { return static_cast<int8_t>((m_code & (0xfful << (i * 8))) >> (i * 8)); }
 
+    // Set a byte in the code. This creates a mask that zeros out byte i, then or's b into that place.
     void set_byte(uint8_t i, int8_t b)
     {
         uint64_t mask = ~(0xfful << (i*8));
@@ -299,17 +328,17 @@ template <class System> inline constexpr dynamic_unit<System> inverse(dynamic_un
     // clang-format on
 }
 
-template <class System, DIM_IS_SYSTEM(System)> constexpr dynamic_unit<System> pow(dynamic_unit<System> unit, int n)
+template <class System, DIM_IS_SYSTEM(System)> constexpr dynamic_unit<System> pow(dynamic_unit<System> i_unit, int n)
 {
     return dynamic_unit<System>{
-        static_cast<int8_t>(n * unit.length()),
-        static_cast<int8_t>(n * unit.time()),
-        static_cast<int8_t>(n * unit.mass()),
-        static_cast<int8_t>(n * unit.angle()),
-        static_cast<int8_t>(n * unit.temperature()),
-        static_cast<int8_t>(n * unit.amount()),
-        static_cast<int8_t>(n * unit.current()),
-        static_cast<int8_t>(n * unit.luminosity())
+        static_cast<int8_t>(n * i_unit.length()),
+        static_cast<int8_t>(n * i_unit.time()),
+        static_cast<int8_t>(n * i_unit.mass()),
+        static_cast<int8_t>(n * i_unit.angle()),
+        static_cast<int8_t>(n * i_unit.temperature()),
+        static_cast<int8_t>(n * i_unit.amount()),
+        static_cast<int8_t>(n * i_unit.current()),
+        static_cast<int8_t>(n * i_unit.luminosity())
     };
 }
 

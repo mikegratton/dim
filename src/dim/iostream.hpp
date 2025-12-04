@@ -1,10 +1,6 @@
 #pragma once
-#include "dim/io.hpp"
-#include "dim/io_detail.hpp"
-#include "dynamic_quantity.hpp"
-#include "facet.hpp"
-#include "format_map.hpp"
 #include <iostream>
+#include "facet.hpp"
 
 namespace dim
 {
@@ -12,17 +8,26 @@ namespace dim
 namespace detail
 {
 
+/**
+ * @brief Extract a formatter_quantity from an istream.
+ *
+ * This uses operator>> to extract the scalar part, followed by the
+ * `unit_string_scanner` to take characters from the stream until it determines
+ * the unit symbol string is finished.
+ *
+ * @return False if: (a) the scalar is bad, (b) the scanner ends in an error
+ * state, or (c) the stream reports failure.
+ */
 template <class Scalar>
-bool extract_formatted_quantity(formatted_quantity<Scalar>& formatted, std::istream& is)
+bool extract_formatted_quantity(formatted_quantity<Scalar>& o_formatted, std::istream& is)
 {
     std::size_t i = 0;
-    char* cursor = formatted.symbol();
-    is >> formatted.value();
+    char* cursor = o_formatted.symbol();
+    is >> o_formatted.value();
     while (is && detail::isseparator(is.peek())) {
         is.ignore();
-    }
-    detail::unit_parse_state state = detail::kStart;
-    char* end = formatted.symbol() + kMaxSymbol;
+    }    
+    char* end = o_formatted.symbol() + kMaxSymbol;
     detail::unit_string_scanner scanner;
     while (is && scanner.accept(is.peek()) && cursor < end) {
         is.get(*cursor++);
@@ -32,15 +37,15 @@ bool extract_formatted_quantity(formatted_quantity<Scalar>& formatted, std::istr
     } else {
         *(end - 1) = '\0';
     }
-    return !(formatted.is_bad() || scanner.state() == kError || formatted.symbol() == cursor);
+    return !(o_formatted.is_bad() || scanner.state() == detail::unit_parse_state::kError || is.fail());
 }
 } // namespace detail
 
 /// Write a formatted quantity to a stream.
 template <class Scalar, DIM_IS_SCALAR(Scalar)>
-inline std::ostream& operator<<(std::ostream& os, formatted_quantity<Scalar> const& fq)
+inline std::ostream& operator<<(std::ostream& os, formatted_quantity<Scalar> const& i_formatted)
 {
-    return os << fq.value() << "_" << fq.symbol();
+    return os << i_formatted.value() << "_" << i_formatted.symbol();
 }
 
 /// Write a quantity Q to a stream using the facet.
@@ -88,21 +93,23 @@ std::ostream& operator<<(std::ostream& os, dynamic_unit<System> const& u)
 }
 
 /**
- * @breif Calls parse_quantity, using the quantity_facet to extract a custom unit map if available.
+ * @brief Extract a quantity from the stream using the facet if available.
+ * @throws (If DIM_EXCEPTIONS is defined) if the extracted quantity has
+ * different dimensions than Q.
  */
 template <class Q, DIM_IS_QUANTITY(Q)>
-std::istream& operator>>(std::istream& is, Q& out_q)
+std::istream& operator>>(std::istream& is, Q& o_quantity)
 {
     using Scalar = typename Q::scalar;
     using facet = typename Q::system::facet;
     formatted_quantity<Scalar> formatted;
     if (detail::extract_formatted_quantity(formatted, is)) {
         if (std::has_facet<facet>(is.getloc())) {
-            out_q = std::use_facet<facet>(is.getloc()).template format<Q>(formatted);
-            if (out_q.is_bad()) {
+            o_quantity = std::use_facet<facet>(is.getloc()).template format<Q>(formatted);
+            if (o_quantity.is_bad()) {
                 is.setstate(std::ios_base::failbit);
             }
-        } else if (!parse_quantity<Q>(out_q, formatted)) {
+        } else if (!parse_quantity<Q>(o_quantity, formatted)) {
             is.setstate(std::ios_base::failbit);
         }
     } else {
@@ -111,9 +118,11 @@ std::istream& operator>>(std::istream& is, Q& out_q)
     return is;
 }
 
-/// Use the facet to do formatted input for a dynamic quantity
+/**
+ * @brief Extract a dynamic_quantity from the stream using the facet if available.
+ */
 template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
-std::istream& operator>>(std::istream& is, DQ& o_q)
+std::istream& operator>>(std::istream& is, DQ& o_quantity)
 {
     using facet = typename DQ::system::facet;
     using scalar = typename DQ::scalar;
@@ -121,11 +130,11 @@ std::istream& operator>>(std::istream& is, DQ& o_q)
     formatted_quantity<scalar> formatted;
     if (detail::extract_formatted_quantity(formatted, is)) {
         if (std::has_facet<facet>(is.getloc())) {
-            o_q = std::use_facet<facet>(is.getloc()).format(formatted);
-            if (o_q.is_bad()) {
+            o_quantity = std::use_facet<facet>(is.getloc()).format(formatted);
+            if (o_quantity.is_bad()) {
                 is.setstate(std::ios_base::failbit);
             }
-        } else if (!parse_quantity(o_q, formatted)) {
+        } else if (!parse_quantity(o_quantity, formatted)) {
             is.setstate(std::ios_base::failbit);
         }
     } else {

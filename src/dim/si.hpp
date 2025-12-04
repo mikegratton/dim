@@ -1,6 +1,8 @@
 #pragma once
 #include "config.hpp"
-#include "si_no_stream.hpp"
+#include "si/definition.hpp"
+#include "si/literal.hpp"
+#include "si/si_io.hpp"
 #include "ioformat.hpp"
 #ifdef DIM_STREAM
 #include "iostream.hpp"

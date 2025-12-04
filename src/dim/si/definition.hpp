@@ -3,11 +3,20 @@
 #include "dim/system_creation_helper.hpp"
 #include "si_facet.hpp"
 
+/*
+ * This file defines the types making up the SI system. This includes
+ * - The si::system type itself
+ * - Types for each dimension (unit, quantity, and symbol)
+ * - All of the derived units (unit, quantity, and symbol)
+ * - typedefs for compound quantities such as si::Speed
+ * - "Conversion" types giving the si measure of types from other system (such as si::foot)
+ * - Trig functions for si::Angle types
+ */
 
 namespace dim
 {
 
-/// Namespace forthe International System (SI) of units
+/// Namespace for the International System (SI) of units
 namespace si
 {
 
@@ -17,31 +26,41 @@ namespace symbol
 {
 /// If there's no specialized symbol for U, just return a null char
 template<class U>
-constexpr const char* specialized_symbol() { return "\0"; }
+constexpr const char* specialized_symbol() { return ""; }
 }
 
 /// The si::system contains symbols for the dimensions, access to specialized
 /// symbols for units, and information about the si locale facet.
 struct system : system_tag {
+    /// Unique id of this system
     static const long id;
+
+    /// The symbols for each dimension
     static const char* kSymbol[];
     
-    constexpr static const char* symbol_for(int dimension)
+    /// Obtain the symbol for a given dimension. The order matches the base_dimension enum.
+    constexpr static const char* symbol_for(int i_dimension)
     {
-        return kSymbol[dimension];
+        return kSymbol[i_dimension];
     }
 
+    /// Obtain the specialized symbol for a given unit. 
+    /// If no such symbol exists for U, this will return an empty string
     template<class U>
     static constexpr const char* specialized_symbol()
     {
         return symbol::specialized_symbol<U>();
     }
     
-    static const char* specialized_symbol(dynamic_unit const& u);
-    static void set_specialized_symbol(dynamic_unit const& u, char const* symbol);
+    /// Obtain the specialized symbol for a given dynamic_unit.
+    /// If no such symbol exists for U, this will return an empty string
+    static const char* specialized_symbol(dynamic_unit const& i_u);
+    static void set_specialized_symbol(dynamic_unit const& i_u, char const* i_symbol);
 
+    /// The dimensionless dynamic_unit for si
     using dimensionless_unit = unit<0, 0, 0, 0, 0, 0, 0, 0, system>;
 
+    /// The facet type for si
     using facet = ::dim::si::facet;
 
     /// Obtain a pointer to a new si::facet. To avoid a memory leak, you must
@@ -50,7 +69,7 @@ struct system : system_tag {
 
     /// Install the facet in the global locale. Imbue all standard streams with
     /// this enhanced locale.
-    static void install_facet(si::facet* fac = make_default_facet()) { ::dim::si::install_facet(fac); }
+    static void install_facet(si::facet* i_fac = make_default_facet()) { ::dim::si::install_facet(i_fac); }
 };
 
 // clang-format off

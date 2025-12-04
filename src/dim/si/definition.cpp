@@ -4,14 +4,15 @@
 namespace dim {
 namespace si {
 const char* system::kSymbol[] = {"m", "s", "kg", "rad", "K", "mol", "A", "cd"};
-const long system::id = 26980L;
+// If you cast the string "si" to a short* on a little-endian system, this is the numeric value
+const long system::id =  26995L;
 
-static si::output_format_map specialized_symbol_map;
+static si::output_format_map g_specialized_symbol_map;
 
-void system::set_specialized_symbol(dynamic_unit const& u, char const* symbol)
+void system::set_specialized_symbol(dynamic_unit const& i_u, char const* i_symbol)
 {
-    si::formatter special_format(symbol, dynamic_quantity(u));
-    specialized_symbol_map.insert(special_format);
+    si::formatter special_format(i_symbol, dynamic_quantity(i_u));
+    g_specialized_symbol_map.insert(special_format);
 }
 
 static void initialize_specialized_symbol_map()
@@ -45,14 +46,14 @@ static void initialize_specialized_symbol_map()
     system::set_specialized_symbol(::dim::index<Viscosity>(), "Pl");
 }
 
-const char* system::specialized_symbol(dynamic_unit const& u)
+const char* system::specialized_symbol(dynamic_unit const& i_u)
 {
     static bool s_init_map = true;
     if (s_init_map) {
         initialize_specialized_symbol_map();
     }
-    auto const* special = specialized_symbol_map.get(u);
-    return (special? special->symbol() : nullptr);    
+    auto const* special = g_specialized_symbol_map.get(i_u);
+    return (special? special->symbol() : "");    
 }
 
 }  // namespace si

@@ -3,6 +3,10 @@
 #include <limits>
 #include "unit.hpp"
 
+/**
+ * The static quantity template type.
+ */
+
 /* clang-format off */
 namespace dim {
 
@@ -41,7 +45,7 @@ template<class Unit, class Scalar>
 class quantity : public quantity_tag {
 
 protected: 
-    Scalar value;
+    Scalar m_value;
 
 public:
     using scalar = Scalar;    
@@ -51,18 +55,18 @@ public:
     using dimensionless = typename unit::system::dimensionless_unit;
 
     constexpr quantity() noexcept { }
-    constexpr explicit quantity(Scalar s) noexcept : value(s) { }
-    constexpr quantity(unit const&) noexcept : value(static_cast<scalar>(1.0)) { }
+    constexpr explicit quantity(Scalar s) noexcept : m_value(s) { }
+    constexpr quantity(unit const&) noexcept : m_value(static_cast<scalar>(1.0)) { }
     
     template<class Q2, DIM_IS_QUANTITY(Q2)>
-    constexpr quantity(Q2 const& q) noexcept : value(dimensionless_cast(q))
+    constexpr quantity(Q2 const& q) noexcept : m_value(dimensionless_cast(q))
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
     }
     
     template<class U2, DIM_IS_UNIT(U2)>
-    constexpr quantity(U2 const&) noexcept : value(static_cast<scalar>(1.0)) 
+    constexpr quantity(U2 const&) noexcept : m_value(static_cast<scalar>(1.0)) 
     { 
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
@@ -72,14 +76,14 @@ public:
     static constexpr type bad_quantity() noexcept { return type(bad_double__()); }
 
     /// Detect if this is a bad quantity
-    constexpr bool is_bad() const { return isbad__(value); }
+    constexpr bool is_bad() const { return isbad__(m_value); }
     
     template<class U2, DIM_IS_UNIT(U2)>
     type& operator=(U2 const&) noexcept 
     { 
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
-        value = static_cast<scalar>(1); return *this;         
+        m_value = static_cast<scalar>(1); return *this;         
     }
     
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -87,16 +91,16 @@ public:
     { 
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        value = dimensionless_cast(rhs);
+        m_value = dimensionless_cast(rhs);
         return *this;         
     }
     
-    constexpr type operator-() const noexcept { return type(-value); }
+    constexpr type operator-() const noexcept { return type(-m_value); }
 
     constexpr operator Scalar() const
     {
         DIM_CHECK_DIMENSIONS(unit, dimensionless)       
-        return value;
+        return m_value;
     }
 
     // = operators
@@ -105,7 +109,7 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        lhs.value += rhs.value;
+        lhs.m_value += rhs.value;
         return lhs;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -113,7 +117,7 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        lhs.value -= rhs.value;
+        lhs.m_value -= rhs.value;
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
@@ -121,7 +125,7 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, U)
         DIM_CHECK_SYSTEMS(unit, U)
-        lhs.value += static_cast<Scalar>(1.0);
+        lhs.m_value += static_cast<Scalar>(1.0);
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
@@ -129,19 +133,19 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, U)
         DIM_CHECK_SYSTEMS(unit, U)
-        lhs.value -= static_cast<Scalar>(1.0);
+        lhs.m_value -= static_cast<Scalar>(1.0);
         return lhs;
     }
     template<class Scalar2, DIM_IS_SCALAR(Scalar2)>
     friend type& operator*= (type& lhs, Scalar2 const& rhs)
     {
-        lhs.value *= rhs;
+        lhs.m_value *= rhs;
         return lhs;
     }
     template<class Scalar2, DIM_IS_SCALAR(Scalar2)>
     friend type& operator/= (type& lhs, Scalar2 const& rhs)
     {
-        lhs.value /= rhs;
+        lhs.m_value /= rhs;
         return lhs;
     }
 
@@ -151,14 +155,14 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)      
-        return lhs.value == rhs.value;
+        return lhs.m_value == rhs.m_value;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr bool operator< (type const& lhs, Q2 const& rhs)
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        return lhs.value < rhs.value;
+        return lhs.m_value < rhs.m_value;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr bool operator!= (type const& lhs, Q2 const& rhs)
@@ -181,13 +185,13 @@ public:
         return !(lhs < rhs);
     }
 
-    Scalar v() const { return value; }
+    Scalar v() const { return m_value; }
 
     /// Cast away the units to access the raw scalar
-    friend constexpr Scalar dimensionless_cast(type const& r) { return r.value; }
+    friend constexpr Scalar dimensionless_cast(type const& r) { return r.m_value; }
 
     /// Cast away the units to access the raw scalar
-    friend constexpr Scalar& dimensionless_cast(type& r) { return r.value; }
+    friend constexpr Scalar& dimensionless_cast(type& r) { return r.m_value; }
     
     // Quantity-on-quantity operators
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -204,7 +208,7 @@ public:
     {
         DIM_CHECK_SYSTEMS(unit, Q2::unit);       
         return quantity<unit_divide_t<unit, typename Q2::unit>, scalar>
-               (q1.value / dimensionless_cast(q2));
+               (q1.m_value / dimensionless_cast(q2));
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     friend constexpr type operator+ (type const& q1, Q2 const& q2)
@@ -237,22 +241,22 @@ public:
     friend constexpr type
     operator* (type const& q, scalar const& s)
     {
-        return type(q.value * s);
+        return type(q.m_value * s);
     }
     friend constexpr type
     operator* (scalar const& s, type const& q)
     {
-        return type(q.value * s);
+        return type(q.m_value * s);
     }
     friend constexpr type
     operator/ (type const& q, scalar const& s)
     {
-        return type(q.value / s);
+        return type(q.m_value / s);
     }
     friend constexpr quantity<typename unit::inverse, scalar>
     operator/ (scalar const& s, type const& q)
     {
-        return quantity<typename unit::inverse, scalar>(s / q.value);
+        return quantity<typename unit::inverse, scalar>(s / q.m_value);
     }
 
     // Quantity/unit ops
@@ -261,7 +265,7 @@ public:
     operator* (type const& q, U const&)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
-        return quantity<unit_multiply_t<unit, U>, scalar>(q.value);
+        return quantity<unit_multiply_t<unit, U>, scalar>(q.m_value);
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_multiply_t<unit, U>, scalar>
@@ -274,28 +278,45 @@ public:
     operator/ (type const& q, U const&)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
-        return quantity<unit_divide_t<unit, U>, scalar> (q.value);
+        return quantity<unit_divide_t<unit, U>, scalar> (q.m_value);
     }
     template<class U, DIM_IS_UNIT(U)>
     friend constexpr quantity<unit_divide_t<U, unit>, scalar>
     operator/ (U const&, type const& q)
     {
         DIM_CHECK_SYSTEMS(unit, U) 
-        return quantity<unit_divide_t<U, unit>, scalar> (q.value);
+        return quantity<unit_divide_t<U, unit>, scalar> (q.m_value);
     }
 
     // Quantity-unit ops leading to a scalar result
     friend constexpr scalar operator/ (type const& q, unit const&)
     {
-        return q.value;
+        return q.m_value;
     }
     friend constexpr scalar
     operator* (type const& q, typename unit::inverse const&)
     {
-        return q.value;
+        return q.m_value;
     }
 };
 
+/**
+ * Transform Q into a comparable type
+ */
+template <class Q, DIM_IS_QUANTITY(Q)>
+constexpr dynamic_unit<typename Q::system> index(Q const&)
+{
+    return index<typename Q::unit>();
+}
+
+/**
+ * Transform Q into a comparable type
+ */
+template <class Q, DIM_IS_QUANTITY(Q)>
+constexpr dynamic_unit<typename Q::system> index()
+{
+    return index<typename Q::unit>();
+}
 
 /*
  * Scalar on unit -> quantity

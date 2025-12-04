@@ -1,6 +1,11 @@
 #pragma once
 #include "definition.hpp"
 
+/**
+ * Literal formatters for SI types. To use these, you must do `using namespace dim::si::literal;`. 
+ * Then these can be used like `si::Length myLength = 2.0_m;`
+ */ 
+
 namespace dim {
 namespace si {
 namespace literal {

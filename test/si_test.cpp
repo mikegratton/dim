@@ -1,3 +1,4 @@
+#include "dim/si/definition.hpp"
 #undef DIM_NO_MATH
 
 #include "doctest.h"
@@ -13,6 +14,14 @@ template<class Q, class Qp> void doCheck(Qp u, std::string symbol) {
     CHECK(U2::system::id == dim::si::system::id);
     CHECK(symbol == system::specialized_symbol<U2>());
 }
+}
+
+TEST_CASE("SiId")
+{
+    char const* id_string = "si";
+    long value = (long) *reinterpret_cast<short const*>(id_string);
+    CHECK(value == si::system::id);
+
 }
 
 TEST_CASE("SiFundamental") {

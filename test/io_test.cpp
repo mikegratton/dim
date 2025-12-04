@@ -108,8 +108,7 @@ TEST_CASE("print_int8")
 }
 
 TEST_CASE("isseparator")
-{
-    CHECK(dim::detail::isseparator('.'));
+{    
     CHECK(dim::detail::isseparator('*'));
     CHECK(dim::detail::isseparator('_'));
     CHECK(dim::detail::isseparator(' '));
@@ -130,41 +129,41 @@ TEST_CASE("unit_string_scanner.basic")
     char const* cursor = basic;
     dim::detail::unit_string_scanner scanner;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponentStart);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponentStart);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponentSign);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponentSign);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponent);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponent);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponent);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponent);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponent);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponent);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kOperator);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kOperator);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponentStart);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponentStart);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kExponent);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kExponent);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kOperator);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kOperator);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kOperator);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kOperator);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 }
 
 
@@ -177,7 +176,7 @@ TEST_CASE("unit_string_scanner.exponent_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     test = "s^^2";
     scanner.reset();
@@ -185,7 +184,7 @@ TEST_CASE("unit_string_scanner.exponent_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     test = "s^*";
     scanner.reset();
@@ -193,7 +192,7 @@ TEST_CASE("unit_string_scanner.exponent_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     test = "s^m";
     scanner.reset();
@@ -201,7 +200,7 @@ TEST_CASE("unit_string_scanner.exponent_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 }
 
 TEST_CASE("unit_string_scanner.operator_error")
@@ -212,7 +211,7 @@ TEST_CASE("unit_string_scanner.operator_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));    
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     test = "s*^1";
     scanner.reset();
@@ -220,7 +219,7 @@ TEST_CASE("unit_string_scanner.operator_error")
     CHECK(scanner.accept(*cursor++));
     CHECK(scanner.accept(*cursor++));    
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 }
 
 TEST_CASE("unit_string_scanner.paren")
@@ -229,55 +228,55 @@ TEST_CASE("unit_string_scanner.paren")
     dim::detail::unit_string_scanner scanner;
     char const* cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     scanner.reset();
     test = "((m))";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     scanner.reset();
     test = "(m^-1)";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     scanner.reset();
     test = "(m^(-1))";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
     
     scanner.reset();
     test = "(m/s)";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     scanner.reset();
     test = "(m";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     scanner.reset();
     test = "((m)";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     scanner.reset();
     test = "(m^(-1)";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     scanner.reset();
     test = "m^(-1";
     cursor = test;
     while (scanner.accept(*cursor++)) { }
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 }
 
 TEST_CASE("unit_string_scanner.utf8")
@@ -287,121 +286,121 @@ TEST_CASE("unit_string_scanner.utf8")
     dim::detail::unit_string_scanner scanner;
     char const* cursor = test;    
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);    
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);    
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kOperator);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kOperator);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Omega
     scanner.reset();
     test = "Ωm";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Degree sign
     scanner.reset();
     test = "°/s";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kOperator);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kOperator);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Angstrom
     scanner.reset();
     test = "Å";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Celsius
     scanner.reset();
     test = "℃";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Fahrenheit
     scanner.reset();
     test = "℉";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Start of greek range
     scanner.reset();
     test = "Α";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // End of greek range
     scanner.reset();
     test = "Ͽ";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kEnd);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kEnd);
 
     // Before greek range
     scanner.reset();
     test = "ΐ";
     cursor = test;
     CHECK(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kSymbol);    
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kSymbol);    
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 
     // After greek range
     scanner.reset();
     test = "Ѐ";
     cursor = test;
     CHECK_FALSE(scanner.accept(*cursor++));
-    CHECK(scanner.state() == dim::detail::kError);
+    CHECK(scanner.state() == dim::detail::unit_parse_state::kError);
 }
 

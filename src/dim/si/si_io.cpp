@@ -1,5 +1,9 @@
 #include "si_io.hpp"
 
+/**
+ * Definitions of the SI formatters for each quantity
+ */ 
+
 namespace dim {
 
 using namespace si;
@@ -269,10 +273,10 @@ namespace dim {
 namespace detail {
 
 template <>
-::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(const char* unit_str, char const* end)
+::dim::si::dynamic_quantity parse_standard_rep<double, si::system>(const char* i_unit_str, char const* i_end)
 {
     dim::si::detail::quantity_parser_driver driver;
-    driver.parse(unit_str, end);
+    driver.parse(i_unit_str, i_end);
     return driver.result;
 }
 }  // namespace detail

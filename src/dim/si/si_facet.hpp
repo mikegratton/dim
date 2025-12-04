@@ -1,6 +1,10 @@
 #pragma once
 #include "dim/facet.hpp"
 
+/**
+ * The facet contains the formatters for SI.
+ */
+
 namespace dim
 {
 
@@ -9,6 +13,7 @@ namespace si
 
 struct system;
 
+// Typedefs for the key SI types
 using dynamic_quantity = ::dim::dynamic_quantity<double, si::system>;
 using formatter = dim::formatter<typename dynamic_quantity::scalar, typename dynamic_quantity::system>;
 using formatted_quantity = dim::formatted_quantity<typename dynamic_quantity::scalar>;
@@ -16,6 +21,10 @@ using input_format_map = ::dim::input_format_map<typename dynamic_quantity::scal
 using input_format_map_group = ::dim::input_format_map_group<typename dynamic_quantity::scalar, typename dynamic_quantity::system>;
 using output_format_map = ::dim::output_format_map<typename dynamic_quantity::scalar, typename dynamic_quantity::system>;
 
+/**
+ * The facet for formatting SI types. This is a simple extension of the base quantity_facet that specifies
+ * the template parameters and adds the mandatory id static member.
+ */
 class facet : public quantity_facet<typename dynamic_quantity::scalar, typename dynamic_quantity::system>
 {
   public:
@@ -35,6 +44,7 @@ facet* make_default_facet();
 void install_facet(facet* fac = make_default_facet());
 } // namespace si
 
+// Force the instantiation of key class templates
 extern template class dynamic_quantity<typename si::dynamic_quantity::scalar, typename si::dynamic_quantity::system>;
 extern template class formatter<typename si::dynamic_quantity::scalar, typename si::dynamic_quantity::system>;
 extern template class input_format_map<typename si::dynamic_quantity::scalar, typename si::dynamic_quantity::system>;

@@ -14,7 +14,16 @@
 namespace dim
 {
 
-/// Make a string representation of Q using the facet
+/**
+ * 1. Functions for serializing/deserializing quantities to/from strings.
+ * 2. Functions for working with std::format
+ */
+
+/**
+ * Make a string representation of Q using the facet.
+ * @param i_quantity Quantity to serialize
+ * @return Serialized quantity
+ */
 template <class Q, DIM_IS_QUANTITY(Q)>
 std::string to_string(Q const& i_quantity)
 {
@@ -29,7 +38,11 @@ std::string to_string(Q const& i_quantity)
     return std::to_string(formatted.value()) + '_' + formatted.symbol();
 }
 
-/// Make a string representation of Q using the facet
+/**
+ * Make a string representation of a dynamic_quantity using the facet.
+ * @param i_quantity Quantity to serialize
+ * @return Serialized quantity
+ */
 template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
 std::string to_string(DQ const& i_quantity)
 {
@@ -44,8 +57,16 @@ std::string to_string(DQ const& i_quantity)
     return std::to_string(formatted.value()) + '_' + formatted.symbol();
 }
 
-/// Parse a string representation to Q using the facet. If the string
-/// does not represent a quantity of type Q, return false
+/**
+ * Parse a string representation using the facet. If the string does not
+ * represent a quantity of type Q, set o_quantity to a bad_quantity() and return
+ * false.
+ *
+ * @param[out] o_quantity On exit, the deserialized quantity
+ * @param[in] i_string String containing the serialized scalar and unit symbol
+ * string.
+ * @return True if parsing was successful.
+ */
 template <class Q, DIM_IS_QUANTITY(Q)>
 bool from_string(Q& o_quantity, std::string const& i_string)
 {
@@ -78,8 +99,16 @@ bool from_string(Q& o_quantity, std::string const& i_string)
 #endif
 }
 
-/// Parse a string representation to Q using the facet. If the string
-/// does not represent a quantity of type Q, return false
+/**
+ * Parse a string representation using the facet. If the string does not
+ * represent a dynamic_quantity of any known type, set o_quantity to a
+ * bad_quantity() and return false.
+ *
+ * @param[out] o_quantity On exit, the deserialized dynamic_quantity
+ * @param[in] i_string String containing the serialized scalar and unit symbol
+ * string.
+ * @return True if parsing was successful.
+ */
 template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
 bool from_string(DQ& o_quantity, std::string const& i_string)
 {
@@ -117,6 +146,26 @@ bool from_string(DQ& o_quantity, std::string const& i_string)
 
 #if __cplusplus >= 202002L
 #include <format>
+/**
+ * Provide a std::formattter for formatted_quantity
+ *
+ * This works like `std::format("{:6.3}", my_formatted)`, allowing the usual
+ * format codes for the scalar type.  
+ */
+template <class Scalar>
+    requires std::floating_point<Scalar>
+struct std::formatter<dim::formatted_quantity<Scalar>> : std::formatter<Scalar> {
+    using scalar = Scalar;    
+
+    constexpr auto parse(std::format_parse_context& io_ctx) { return std::formatter<scalar>::parse(io_ctx); }
+
+    auto format(dim::formatted_quantity<scalar> const& i_formatted, std::format_context& io_ctx) const
+    {
+        auto it = std::formatter<scalar>::format(i_formatted.value(), io_ctx);
+        *it++ = '_';
+        return std::formatter<char const*>{}.format(i_formatted.symbol(), io_ctx);
+    }
+};
 
 /**
  * Provide a std::formattter for quantities.
@@ -127,11 +176,11 @@ bool from_string(DQ& o_quantity, std::string const& i_string)
  */
 template <class Q>
     requires std::derived_from<Q, dim::quantity_tag>
-struct std::formatter<Q> : std::formatter<typename Q::scalar> {
+struct std::formatter<Q> : std::formatter<dim::formatted_quantity<typename Q::scalar>> {
     using scalar = typename Q::scalar;
     using facet = typename Q::system::facet;
 
-    constexpr auto parse(std::format_parse_context& ctx) { return std::formatter<scalar>::parse(ctx); }
+    constexpr auto parse(std::format_parse_context& io_ctx) { return std::formatter<dim::formatted_quantity<scalar>>::parse(io_ctx); }
 
     auto format(Q const& i_quantity, std::format_context& io_ctx) const
     {
@@ -141,9 +190,7 @@ struct std::formatter<Q> : std::formatter<typename Q::scalar> {
         } else {
             format_quantity(formatted, i_quantity);
         }
-        auto it = std::formatter<scalar>::format(formatted.value(), io_ctx);
-        *it++ = '_';
-        return std::formatter<char*>{}.format(formatted.symbol(), io_ctx);
+        return std::formatter<dim::formatted_quantity<scalar>>::format(formatted, io_ctx);        
     }
 };
 
@@ -156,11 +203,11 @@ struct std::formatter<Q> : std::formatter<typename Q::scalar> {
  */
 template <class DQ>
     requires std::derived_from<DQ, dim::dynamic_quantity_tag>
-struct std::formatter<DQ> : std::formatter<typename DQ::scalar> {
+struct std::formatter<DQ> :  std::formatter<dim::formatted_quantity<typename DQ::scalar>> {
     using scalar = typename DQ::scalar;
     using facet = typename DQ::system::facet;
 
-    constexpr auto parse(std::format_parse_context& ctx) { return std::formatter<typename DQ::scalar>::parse(ctx); }
+    constexpr auto parse(std::format_parse_context& io_ctx) { return std::formatter<dim::formatted_quantity<scalar>>::parse(io_ctx); }
 
     auto format(DQ const& i_quantity, std::format_context& io_ctx) const
     {
@@ -170,9 +217,10 @@ struct std::formatter<DQ> : std::formatter<typename DQ::scalar> {
         } else {
             format_quantity(formatted, i_quantity);
         }
-        auto it = std::formatter<typename DQ::scalar>::format(formatted.value(), io_ctx);
-        *it++ = '_';
-        return std::formatter<char*>{}.format(formatted.symbol(), io_ctx);
+        return std::formatter<dim::formatted_quantity<scalar>>::format(formatted, io_ctx);
     }
 };
+
+
+
 #endif

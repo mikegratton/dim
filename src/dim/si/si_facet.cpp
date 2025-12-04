@@ -2,6 +2,9 @@
 #include "definition.hpp"
 #include <iostream>
 
+/**
+ * The facet contains the formatters for SI.
+ */
 
 namespace dim {
 
@@ -14,15 +17,17 @@ template class quantity_facet<typename si::dynamic_quantity::scalar, typename si
 
 namespace si {
 
+/// The mandatory public static id member of the facet.
 std::locale::id facet::id;
 
-void install_facet(si::facet* quantity_facet)
+
+void install_facet(si::facet* i_quantity_facet)
 {
     std::locale base_locale;  // Initialized to current global    
-    if (!quantity_facet) {
-        quantity_facet = make_default_facet();
+    if (!i_quantity_facet) {
+        i_quantity_facet = make_default_facet();
     }
-    std::locale enhanced_locale(base_locale, quantity_facet);
+    std::locale enhanced_locale(base_locale, i_quantity_facet);
     std::locale::global(enhanced_locale);
     // Install the locale in the default streams
     std::cout.imbue(enhanced_locale);
@@ -30,6 +35,7 @@ void install_facet(si::facet* quantity_facet)
     std::clog.imbue(enhanced_locale);
     std::cin.imbue(enhanced_locale);
 }
+
 
 facet* make_default_facet()
 {

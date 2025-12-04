@@ -16,20 +16,22 @@ using enable_if_t = typename ::std::enable_if<B,T>::type;
 
 namespace dim
 {
+
 /// Tag type for units
 struct unit_tag {};
 
 /// Tag type for quantities
 struct quantity_tag {};
 
-/// Tag type for systems
-struct system_tag {};
+/// Tag type for dynamic_unit
+struct dynamic_unit_tag {};
 
 /// Tag type for dynamic_quantity
 struct dynamic_quantity_tag {};
 
-/// Tag type for dynamic_unit
-struct dynamic_unit_tag {};
+/// Tag type for systems
+struct system_tag {};
+
 
 
 // SFINAE macros that can be used as template parameters
