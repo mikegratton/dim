@@ -1,5 +1,6 @@
 #include "si_facet.hpp"
 #include "definition.hpp"
+#include "si_io.hpp"
 #include <iostream>
 
 /**
@@ -40,44 +41,43 @@ void install_facet(si::facet* i_quantity_facet)
 facet* make_default_facet()
 {
     facet* instance = new facet();
-    instance->input_formatter(get_default_format<Temperature>());
-    instance->input_formatter(get_default_format<Length>());
-    instance->input_formatter(get_default_format<Time>());
-    instance->input_formatter(get_default_format<Mass>());
-    instance->input_formatter(get_default_format<Angle>());
-    instance->input_formatter(get_default_format<SolidAngle>());
-    instance->input_formatter(get_default_format<Temperature>());
+    instance->input_formatter(get_default_format<Acceleration>());
     instance->input_formatter(get_default_format<Amount>());
-    instance->input_formatter(get_default_format<Current>());
-    instance->input_formatter(get_default_format<Luminosity>());
-    instance->input_formatter(get_default_format<Frequency>());
-    instance->input_formatter(get_default_format<Force>());
-    instance->input_formatter(get_default_format<Pressure>());
-    instance->input_formatter(get_default_format<Energy>());
-    instance->input_formatter(get_default_format<Power>());
-    instance->input_formatter(get_default_format<Charge>());
-    instance->input_formatter(get_default_format<Voltage>());
+    instance->input_formatter(get_default_format<Angle>());
+    instance->input_formatter(get_default_format<AngularAcceleration>());
+    instance->input_formatter(get_default_format<AngularRate>());
+    instance->input_formatter(get_default_format<Area>());
     instance->input_formatter(get_default_format<Capacitance>());
-    instance->input_formatter(get_default_format<Resistance>());
+    instance->input_formatter(get_default_format<CatalyticActivity>());
+    instance->input_formatter(get_default_format<Charge>());
     instance->input_formatter(get_default_format<Conductance>());
+    instance->input_formatter(get_default_format<Current>());
+    instance->input_formatter(get_default_format<Density>());
+    instance->input_formatter(get_default_format<Energy>());
+    instance->input_formatter(get_default_format<FlowRate>());   
+    instance->input_formatter(get_default_format<Force>());
+    instance->input_formatter(get_default_format<Frequency>());
+    instance->input_formatter(get_default_format<Inductance>());
+    instance->input_formatter(get_default_format<KinematicViscosity>());
+    instance->input_formatter(get_default_format<Length>());
+    instance->input_formatter(get_default_format<Luminance>());
+    instance->input_formatter(get_default_format<Luminosity>());
+    instance->input_formatter(get_default_format<LuminousFlux>());
     instance->input_formatter(get_default_format<MagneticFlux>());
     instance->input_formatter(get_default_format<MagneticFluxDensity>());
-    instance->input_formatter(get_default_format<Inductance>());
-    instance->input_formatter(get_default_format<LuminousFlux>());
-    instance->input_formatter(get_default_format<Luminance>());
-    instance->input_formatter(get_default_format<CatalyticActivity>());
-    instance->input_formatter(get_default_format<Area>());
-    instance->input_formatter(get_default_format<Volume>());
-    instance->input_formatter(get_default_format<FlowRate>());
+    instance->input_formatter(get_default_format<Mass>());
+    instance->input_formatter(get_default_format<Power>());
+    instance->input_formatter(get_default_format<Pressure>());
+    instance->input_formatter(get_default_format<Resistance>());
+    instance->input_formatter(get_default_format<SolidAngle>());
     instance->input_formatter(get_default_format<Speed>());
-    instance->input_formatter(get_default_format<Acceleration>());
-    instance->input_formatter(get_default_format<AngularRate>());
-    instance->input_formatter(get_default_format<AngularAcceleration>());
+    instance->input_formatter(get_default_format<Temperature>());
+    instance->input_formatter(get_default_format<Time>());
     instance->input_formatter(get_default_format<Torque>());
-    instance->input_formatter(get_default_format<Density>());
-    instance->input_formatter(get_default_format<Viscosity>());
-    instance->input_formatter(get_default_format<KinematicViscosity>());
-
+    instance->input_formatter(get_default_format<Viscosity>());      
+    instance->input_formatter(get_default_format<Voltage>());
+    instance->input_formatter(get_default_format<Volume>());
+      
     instance->output_formatter("m", meter);
     instance->output_formatter("s", second);
     instance->output_formatter("kg", kilogram);
