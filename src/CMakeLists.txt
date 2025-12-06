@@ -91,6 +91,7 @@ configure_package_config_file(
     PATH_VARS 
         DIM_INCLUDE_INSTALL_DIR
         DIM_LIB_INSTALL_DIR
+        DIM_CONFIG_INSTALL_DIR
 )
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/DimConfigVersion.cmake
@@ -108,7 +109,7 @@ install(
 )
 install(
     EXPORT
-        DimTargets
+        DimTargets    
     NAMESPACE
         dim::
     DESTINATION

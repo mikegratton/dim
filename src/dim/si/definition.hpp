@@ -184,9 +184,6 @@ constexpr inline double toFahrenheitValue(Temperature arg_t) { return (arg_t/ran
 
 } // end of namespace si
 
-// Some explicit template instantiations
-extern template class dynamic_unit<si::system>;
-
 } // end of namespace dim
 
 #ifndef DIMENSION_NO_MATH
