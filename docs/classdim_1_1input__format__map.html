@@ -95,13 +95,12 @@ $(document).ready(function(){initNavTree('classdim_1_1input__format__map.html','
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classdim_1_1input__format__map-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">dim::input_format_map&lt; Scalar, System &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Format a scalar plus string to quantity or <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities. These are inefficient compared to quantity&lt;&gt;, but are convenient for...">dynamic_quantity</a>.  
+<p>Format a scalar plus string to quantity or <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities.">dynamic_quantity</a>.  
  <a href="classdim_1_1input__format__map.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="format__map_8hpp_source.html">format_map.hpp</a>&gt;</code></p>
@@ -109,75 +108,543 @@ $(document).ready(function(){initNavTree('classdim_1_1input__format__map.html','
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a6f17a7eb8ff416fb412e072413fdc111" id="r_a6f17a7eb8ff416fb412e072413fdc111"><td class="memItemLeft" align="right" valign="top"><a id="a6f17a7eb8ff416fb412e072413fdc111" name="a6f17a7eb8ff416fb412e072413fdc111"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>system</b> = System</td></tr>
+<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>system</b> = <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a></td></tr>
 <tr class="separator:a6f17a7eb8ff416fb412e072413fdc111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a072b80b6226adcbce93a46406fd7a013" id="r_a072b80b6226adcbce93a46406fd7a013"><td class="memItemLeft" align="right" valign="top"><a id="a072b80b6226adcbce93a46406fd7a013" name="a072b80b6226adcbce93a46406fd7a013"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>scalar</b> = Scalar</td></tr>
+<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>scalar</b> = <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a></td></tr>
 <tr class="separator:a072b80b6226adcbce93a46406fd7a013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ae209bfecc4777336925811aebcb6ad" id="r_a2ae209bfecc4777336925811aebcb6ad"><td class="memItemLeft" align="right" valign="top"><a id="a2ae209bfecc4777336925811aebcb6ad" name="a2ae209bfecc4777336925811aebcb6ad"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>formatter_type</b> = <a class="el" href="classdim_1_1formatter.html">formatter</a>&lt; Scalar, System &gt;</td></tr>
+<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>formatter_type</b> = <a class="el" href="classdim_1_1formatter.html">formatter</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;</td></tr>
 <tr class="separator:a2ae209bfecc4777336925811aebcb6ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67af314abc59e9294f71d334256d5daa" id="r_a67af314abc59e9294f71d334256d5daa"><td class="memItemLeft" align="right" valign="top"><a id="a67af314abc59e9294f71d334256d5daa" name="a67af314abc59e9294f71d334256d5daa"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>quantity_type</b> = <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, System &gt;</td></tr>
+<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>quantity_type</b> = <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;</td></tr>
 <tr class="separator:a67af314abc59e9294f71d334256d5daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a161fa4c16dfae6d99469b09883e5a" id="r_ae6a161fa4c16dfae6d99469b09883e5a"><td class="memItemLeft" align="right" valign="top"><a id="ae6a161fa4c16dfae6d99469b09883e5a" name="ae6a161fa4c16dfae6d99469b09883e5a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>unit_type</b> = typename <a class="el" href="classdim_1_1dynamic__unit.html">quantity_type::unit_type</a></td></tr>
+<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unit_type</b> = <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">typename</a> <a class="el" href="classdim_1_1dynamic__unit.html">quantity_type::unit_type</a></td></tr>
 <tr class="separator:ae6a161fa4c16dfae6d99469b09883e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a187ad467fa289b2ed5062791c7edb2da" id="r_a187ad467fa289b2ed5062791c7edb2da"><td class="memItemLeft" align="right" valign="top"><a id="a187ad467fa289b2ed5062791c7edb2da" name="a187ad467fa289b2ed5062791c7edb2da"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>input_format_map</b> (unit_type unit_code_)</td></tr>
-<tr class="separator:a187ad467fa289b2ed5062791c7edb2da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fd87027b334340ef5c39ed04fd14203" id="r_a1fd87027b334340ef5c39ed04fd14203"><td class="memTemplParams" colspan="2"><a id="a1fd87027b334340ef5c39ed04fd14203" name="a1fd87027b334340ef5c39ed04fd14203"></a>
-template&lt;class U , DIM_IS_UNIT(U) &gt; </td></tr>
-<tr class="memitem:a1fd87027b334340ef5c39ed04fd14203"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>input_format_map</b> (U const &amp;unit_code_)</td></tr>
-<tr class="separator:a1fd87027b334340ef5c39ed04fd14203"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60f5da149ea7c5799201480125c95713" id="r_a60f5da149ea7c5799201480125c95713"><td class="memItemLeft" align="right" valign="top"><a id="a60f5da149ea7c5799201480125c95713" name="a60f5da149ea7c5799201480125c95713"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>input_format_map</b> (<a class="el" href="classdim_1_1formatter.html">formatter_type</a> first_formater)</td></tr>
-<tr class="separator:a60f5da149ea7c5799201480125c95713"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5418c8e3720954af099c8164f2d646eb" id="r_a5418c8e3720954af099c8164f2d646eb"><td class="memItemLeft" align="right" valign="top"><a id="a5418c8e3720954af099c8164f2d646eb" name="a5418c8e3720954af099c8164f2d646eb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>input_format_map</b> (std::initializer_list&lt; <a class="el" href="classdim_1_1formatter.html">formatter_type</a> &gt; const &amp;list)</td></tr>
-<tr class="separator:a5418c8e3720954af099c8164f2d646eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31551ff5e2e936ee909f54dece45e225" id="r_a31551ff5e2e936ee909f54dece45e225"><td class="memTemplParams" colspan="2"><a id="a31551ff5e2e936ee909f54dece45e225" name="a31551ff5e2e936ee909f54dece45e225"></a>
-template&lt;class Q , DIM_IS_QUANTITY(Q) &gt; </td></tr>
-<tr class="memitem:a31551ff5e2e936ee909f54dece45e225"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert</b> (char const *s, Q const &amp;scale, Q const &amp;add=Q(0))</td></tr>
-<tr class="separator:a31551ff5e2e936ee909f54dece45e225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb713be0443888cac64c8223f799aa64" id="r_abb713be0443888cac64c8223f799aa64"><td class="memItemLeft" align="right" valign="top"><a id="abb713be0443888cac64c8223f799aa64" name="abb713be0443888cac64c8223f799aa64"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classdim_1_1formatter.html">formatter_type</a> const &amp;item)</td></tr>
-<tr class="separator:abb713be0443888cac64c8223f799aa64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50aa094ae3270b0476f5d19dd80b2e4f" id="r_a50aa094ae3270b0476f5d19dd80b2e4f"><td class="memTemplParams" colspan="2"><a id="a50aa094ae3270b0476f5d19dd80b2e4f" name="a50aa094ae3270b0476f5d19dd80b2e4f"></a>
-template&lt;class Q , DIM_IS_QUANTITY(Q) &gt; </td></tr>
-<tr class="memitem:a50aa094ae3270b0476f5d19dd80b2e4f"><td class="memTemplItemLeft" align="right" valign="top">Q&#160;</td><td class="memTemplItemRight" valign="bottom"><b>to_quantity</b> (typename Q::scalar const &amp;s, char const *symbol) const</td></tr>
-<tr class="separator:a50aa094ae3270b0476f5d19dd80b2e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7cf4e3005a23c5351a3571020b524c5" id="r_ae7cf4e3005a23c5351a3571020b524c5"><td class="memItemLeft" align="right" valign="top"><a id="ae7cf4e3005a23c5351a3571020b524c5" name="ae7cf4e3005a23c5351a3571020b524c5"></a>
-<a class="el" href="classdim_1_1dynamic__quantity.html">quantity_type</a>&#160;</td><td class="memItemRight" valign="bottom"><b>to_quantity</b> (Scalar const &amp;s, char const *symbol) const</td></tr>
-<tr class="separator:ae7cf4e3005a23c5351a3571020b524c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85fa12891ae03671f27b3b12a08f11b8" id="r_a85fa12891ae03671f27b3b12a08f11b8"><td class="memItemLeft" align="right" valign="top"><a id="a85fa12891ae03671f27b3b12a08f11b8" name="a85fa12891ae03671f27b3b12a08f11b8"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="memitem:abc564cec4b2fdd8c01bb92d313b10fbf" id="r_abc564cec4b2fdd8c01bb92d313b10fbf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#abc564cec4b2fdd8c01bb92d313b10fbf">input_format_map</a> (unit_type <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_unit_code</a>)</td></tr>
+<tr class="separator:abc564cec4b2fdd8c01bb92d313b10fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abef44442cf4a734d990957ee40aa8230" id="r_abef44442cf4a734d990957ee40aa8230"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a> , DIM_IS_UNIT(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a>) &gt; </td></tr>
+<tr class="memitem:abef44442cf4a734d990957ee40aa8230"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#abef44442cf4a734d990957ee40aa8230">input_format_map</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_unit_code</a>)</td></tr>
+<tr class="separator:abef44442cf4a734d990957ee40aa8230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b351a34d7ce2bc5fd916779f680c5c7" id="r_a3b351a34d7ce2bc5fd916779f680c5c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a3b351a34d7ce2bc5fd916779f680c5c7">input_format_map</a> (<a class="el" href="classdim_1_1formatter.html">formatter_type</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_first_formater</a>)</td></tr>
+<tr class="separator:a3b351a34d7ce2bc5fd916779f680c5c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841a1d459e20a859bfd86409f6f684d4" id="r_a841a1d459e20a859bfd86409f6f684d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a841a1d459e20a859bfd86409f6f684d4">input_format_map</a> (std::initializer_list&lt; <a class="el" href="classdim_1_1formatter.html">formatter_type</a> &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_formatter_list</a>)</td></tr>
+<tr class="separator:a841a1d459e20a859bfd86409f6f684d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff03113efaa3960457d6b0c97c55e311" id="r_aff03113efaa3960457d6b0c97c55e311"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </td></tr>
+<tr class="memitem:aff03113efaa3960457d6b0c97c55e311"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#aff03113efaa3960457d6b0c97c55e311">insert</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_symbol</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_scale</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_add</a>=<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>(0))</td></tr>
+<tr class="separator:aff03113efaa3960457d6b0c97c55e311"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a634089f95278064b74e7c15895892148" id="r_a634089f95278064b74e7c15895892148"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a634089f95278064b74e7c15895892148">insert</a> (<a class="el" href="classdim_1_1formatter.html">formatter_type</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_item</a>)</td></tr>
+<tr class="separator:a634089f95278064b74e7c15895892148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b3aeba7818bbd0a0c04a7d564eca426" id="r_a9b3aeba7818bbd0a0c04a7d564eca426"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </td></tr>
+<tr class="memitem:a9b3aeba7818bbd0a0c04a7d564eca426"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a9b3aeba7818bbd0a0c04a7d564eca426">to_quantity</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">typename</a> Q::scalar <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_symbol</a>) <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
+<tr class="separator:a9b3aeba7818bbd0a0c04a7d564eca426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a895efd72df652c475362b3e16191666b" id="r_a895efd72df652c475362b3e16191666b"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </td></tr>
+<tr class="memitem:a895efd72df652c475362b3e16191666b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a895efd72df652c475362b3e16191666b">to_quantity</a> (<a class="el" href="classdim_1_1formatted__quantity.html">formatted_quantity</a>&lt; scalar &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_input</a>) <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
+<tr class="separator:a895efd72df652c475362b3e16191666b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc4eb073b229220cb07740864e14ccbe" id="r_adc4eb073b229220cb07740864e14ccbe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1dynamic__quantity.html">quantity_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#adc4eb073b229220cb07740864e14ccbe">to_quantity</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_symbol</a>) <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
+<tr class="separator:adc4eb073b229220cb07740864e14ccbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a3021556e63f6fc10678b360abf44ee" id="r_a9a3021556e63f6fc10678b360abf44ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1dynamic__quantity.html">quantity_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a9a3021556e63f6fc10678b360abf44ee">to_quantity</a> (<a class="el" href="classdim_1_1formatted__quantity.html">formatted_quantity</a>&lt; scalar &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_input</a>) <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
+<tr class="separator:a9a3021556e63f6fc10678b360abf44ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a871a1cf41e7e6ab67b16d39ed7c4f6b3" id="r_a871a1cf41e7e6ab67b16d39ed7c4f6b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1formatter.html">formatter_type</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a871a1cf41e7e6ab67b16d39ed7c4f6b3">get</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_symbol</a>) <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
+<tr class="separator:a871a1cf41e7e6ab67b16d39ed7c4f6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85fa12891ae03671f27b3b12a08f11b8" id="r_a85fa12891ae03671f27b3b12a08f11b8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a85fa12891ae03671f27b3b12a08f11b8">size</a> () <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a></td></tr>
 <tr class="separator:a85fa12891ae03671f27b3b12a08f11b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a486e58bc6d8b3088993f31700d81c263" id="r_a486e58bc6d8b3088993f31700d81c263"><td class="memItemLeft" align="right" valign="top"><a id="a486e58bc6d8b3088993f31700d81c263" name="a486e58bc6d8b3088993f31700d81c263"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="memitem:a486e58bc6d8b3088993f31700d81c263" id="r_a486e58bc6d8b3088993f31700d81c263"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a486e58bc6d8b3088993f31700d81c263">clear</a> ()</td></tr>
 <tr class="separator:a486e58bc6d8b3088993f31700d81c263"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d1f7cfe3d1dc6b74ecc712914d7109d" id="r_a8d1f7cfe3d1dc6b74ecc712914d7109d"><td class="memItemLeft" align="right" valign="top"><a id="a8d1f7cfe3d1dc6b74ecc712914d7109d" name="a8d1f7cfe3d1dc6b74ecc712914d7109d"></a>
-unit_type&#160;</td><td class="memItemRight" valign="bottom"><b>index</b> () const</td></tr>
+<tr class="memitem:a8d1f7cfe3d1dc6b74ecc712914d7109d" id="r_a8d1f7cfe3d1dc6b74ecc712914d7109d"><td class="memItemLeft" align="right" valign="top">unit_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">index</a> () const</td></tr>
 <tr class="separator:a8d1f7cfe3d1dc6b74ecc712914d7109d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09d15d50e59bda0cad7286f3ecf454f9" id="r_a09d15d50e59bda0cad7286f3ecf454f9"><td class="memItemLeft" align="right" valign="top"><a id="a09d15d50e59bda0cad7286f3ecf454f9" name="a09d15d50e59bda0cad7286f3ecf454f9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (char const *symbol)</td></tr>
-<tr class="separator:a09d15d50e59bda0cad7286f3ecf454f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a05a8fbc5aa769f5a54ad810bef03de03" id="r_a05a8fbc5aa769f5a54ad810bef03de03"><td class="memTemplParams" colspan="2"><a id="a05a8fbc5aa769f5a54ad810bef03de03" name="a05a8fbc5aa769f5a54ad810bef03de03"></a>
-template&lt;class Q , DIM_IS_QUANTITY(Q) &gt; </td></tr>
-<tr class="memitem:a05a8fbc5aa769f5a54ad810bef03de03"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classdim_1_1input__format__map.html">input_format_map</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_map</b> ()</td></tr>
-<tr class="separator:a05a8fbc5aa769f5a54ad810bef03de03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a531addb5866fa23428c485c33823841e" id="r_a531addb5866fa23428c485c33823841e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1input__format__map.html#a531addb5866fa23428c485c33823841e">erase</a> (<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">i_symbol</a>)</td></tr>
+<tr class="separator:a531addb5866fa23428c485c33823841e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;class Scalar, class System&gt;<br />
-class dim::input_format_map&lt; Scalar, System &gt;</div><p>Format a scalar plus string to quantity or <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities. These are inefficient compared to quantity&lt;&gt;, but are convenient for...">dynamic_quantity</a>. </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a>&gt;<br />
+class dim::input_format_map&lt; Scalar, System &gt;</div><p>Format a scalar plus string to quantity or <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities.">dynamic_quantity</a>. </p>
 <p>Each of these is for a given quantity (denoted by its index aka <a class="el" href="classdim_1_1dynamic__unit.html" title="dynamic_units are a compact representation of the dimension string plus the system tag.">dynamic_unit</a>). If a quantity doesn't match this index, this returns a bad quantity. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abc564cec4b2fdd8c01bb92d313b10fbf" name="abc564cec4b2fdd8c01bb92d313b10fbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc564cec4b2fdd8c01bb92d313b10fbf">&#9670;&#160;</a></span>input_format_map() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::input_format_map </td>
+          <td>(</td>
+          <td class="paramtype">unit_type&#160;</td>
+          <td class="paramname"><em>i_unit_code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create an empty map for a given unit_type. </p>
+
+</div>
+</div>
+<a id="abef44442cf4a734d990957ee40aa8230" name="abef44442cf4a734d990957ee40aa8230"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abef44442cf4a734d990957ee40aa8230">&#9670;&#160;</a></span>input_format_map() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a> , DIM_IS_UNIT(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a>) &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::input_format_map </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">U</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_unit_code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create an empty map for the unit type given by U. </p>
+
+</div>
+</div>
+<a id="a3b351a34d7ce2bc5fd916779f680c5c7" name="a3b351a34d7ce2bc5fd916779f680c5c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b351a34d7ce2bc5fd916779f680c5c7">&#9670;&#160;</a></span>input_format_map() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::input_format_map </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1formatter.html">formatter_type</a>&#160;</td>
+          <td class="paramname"><em>i_first_formater</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create a map with the unit type given by first_formatter.index(). Insert this formatter into the map. </p>
+
+</div>
+</div>
+<a id="a841a1d459e20a859bfd86409f6f684d4" name="a841a1d459e20a859bfd86409f6f684d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a841a1d459e20a859bfd86409f6f684d4">&#9670;&#160;</a></span>input_format_map() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::input_format_map </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="classdim_1_1formatter.html">formatter_type</a> &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_formatter_list</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Create a map with the given contents. The type will be set to that of the first item. If there are no items, the type will be an invalid type. Items with types not matching the first item will be rejected. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a486e58bc6d8b3088993f31700d81c263" name="a486e58bc6d8b3088993f31700d81c263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a486e58bc6d8b3088993f31700d81c263">&#9670;&#160;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">void</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Clear all items from the map. </p>
+
+</div>
+</div>
+<a id="a531addb5866fa23428c485c33823841e" name="a531addb5866fa23428c485c33823841e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a531addb5866fa23428c485c33823841e">&#9670;&#160;</a></span>erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::erase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td>
+          <td class="paramname"><em>i_symbol</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Remove a symbol from the map. Returns true if removal occured. </p>
+
+</div>
+</div>
+<a id="a871a1cf41e7e6ab67b16d39ed7c4f6b3" name="a871a1cf41e7e6ab67b16d39ed7c4f6b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871a1cf41e7e6ab67b16d39ed7c4f6b3">&#9670;&#160;</a></span>get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1formatter.html">formatter_type</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a>  * <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::get </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td>
+          <td class="paramname"><em>i_symbol</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get a pointer to a formatter by symbol type. If the symbol is unknown, this returns a nullptr. Do not delete this pointer. </p>
+
+</div>
+</div>
+<a id="a8d1f7cfe3d1dc6b74ecc712914d7109d" name="a8d1f7cfe3d1dc6b74ecc712914d7109d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1f7cfe3d1dc6b74ecc712914d7109d">&#9670;&#160;</a></span>index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Scalar , class System &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unit_type <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; Scalar, System &gt;::index </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Obtain the unit type that this formatter handles. </p>
+
+</div>
+</div>
+<a id="aff03113efaa3960457d6b0c97c55e311" name="aff03113efaa3960457d6b0c97c55e311"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff03113efaa3960457d6b0c97c55e311">&#9670;&#160;</a></span>insert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::insert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td>
+          <td class="paramname"><em>i_symbol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_add</em> = <code><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>(0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Add a formatter to the map. Q::unit must match the type of the map. </p><dl class="section return"><dt>Returns</dt><dd>True if insertion occurred. False if the item has the wrong index </dd></dl>
+
+</div>
+</div>
+<a id="a634089f95278064b74e7c15895892148" name="a634089f95278064b74e7c15895892148"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a634089f95278064b74e7c15895892148">&#9670;&#160;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">bool</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::insert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1formatter.html">formatter_type</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Add a formatter to the map. item.index() must match the type of the map. </p><dl class="section return"><dt>Returns</dt><dd>True if insertion occurred. False if the item has the wrong index </dd></dl>
+
+</div>
+</div>
+<a id="a85fa12891ae03671f27b3b12a08f11b8" name="a85fa12891ae03671f27b3b12a08f11b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85fa12891ae03671f27b3b12a08f11b8">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the number of items in the map. </p>
+
+</div>
+</div>
+<a id="a895efd72df652c475362b3e16191666b" name="a895efd72df652c475362b3e16191666b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a895efd72df652c475362b3e16191666b">&#9670;&#160;</a></span>to_quantity() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::to_quantity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1formatted__quantity.html">formatted_quantity</a>&lt; scalar &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_input</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Transform the scalar/symbol pair into a quantity. If Q::unit is the wrong type, or symbol is not in the map, return a bad_quantity(). </p>
+
+</div>
+</div>
+<a id="a9a3021556e63f6fc10678b360abf44ee" name="a9a3021556e63f6fc10678b360abf44ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a3021556e63f6fc10678b360abf44ee">&#9670;&#160;</a></span>to_quantity() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1dynamic__quantity.html">quantity_type</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::to_quantity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1formatted__quantity.html">formatted_quantity</a>&lt; scalar &gt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_input</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Transform the scalar/symbol pair into a quantity. If Q::unit is the wrong type, or symbol is not in the map, return a bad_quantity(). </p>
+
+</div>
+</div>
+<a id="adc4eb073b229220cb07740864e14ccbe" name="adc4eb073b229220cb07740864e14ccbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc4eb073b229220cb07740864e14ccbe">&#9670;&#160;</a></span>to_quantity() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1dynamic__quantity.html">quantity_type</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::to_quantity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_scalar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td>
+          <td class="paramname"><em>i_symbol</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Transform the scalar/symbol pair into a <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities.">dynamic_quantity</a>. If the symbol is not in the map, return a bad_quantity().</p>
+<dl class="section note"><dt>Note</dt><dd>This form is not preferred. It can suffer buffer overruns. </dd></dl>
+
+</div>
+</div>
+<a id="a9b3aeba7818bbd0a0c04a7d564eca426" name="a9b3aeba7818bbd0a0c04a7d564eca426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b3aeba7818bbd0a0c04a7d564eca426">&#9670;&#160;</a></span>to_quantity() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a> , <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">class</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> , DIM_IS_QUANTITY(<a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a>) &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Q</a> <a class="el" href="classdim_1_1input__format__map.html">dim::input_format_map</a>&lt; <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">Scalar</a>, <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">System</a> &gt;::to_quantity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">typename</a> Q::scalar <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>i_scalar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">char</a> <a class="el" href="classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d">const</a> *&#160;</td>
+          <td class="paramname"><em>i_symbol</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Transform the scalar/symbol pair into a quantity. If Q::unit is the wrong type, or symbol is not in the map, return a bad_quantity().</p>
+<dl class="section note"><dt>Note</dt><dd>This form is not preferred. It can suffer buffer overruns. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/mike/git/dim/src/dim/<a class="el" href="format__map_8hpp_source.html">format_map.hpp</a></li>
 </ul>
 </div><!-- contents -->

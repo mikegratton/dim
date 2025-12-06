@@ -45,7 +45,7 @@ TEST_CASE("SiDerived") {
     doCheck<Charge>(coulomb, "C");
     doCheck<Voltage>(volt, "V");
     doCheck<Capacitance>(farad, "F");
-    doCheck<Resistance>(ohm, "R");
+    doCheck<Resistance>(ohm, "Ω");
     doCheck<Conductance>(siemens, "S");
     doCheck<MagneticFlux>(weber, "Wb");
     doCheck<MagneticFluxDensity>(tesla, "T");

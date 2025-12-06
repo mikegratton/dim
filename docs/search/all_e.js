@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['make_5fdefault_5ffacet_0',['make_default_facet',['../namespacedim_1_1si.html#ae52eeeca6076ffd217997a0b275f1a95',1,'dim::si']]],
-  ['mass_1',['Mass',['../index.html#autotoc_md36',1,'']]],
-  ['math_20with_20quantities_2',['Math with Quantities',['../index.html#autotoc_md17',1,'']]],
-  ['metaprogramming_20with_20quantities_3',['Metaprogramming with Quantities',['../index.html#autotoc_md28',1,'']]],
-  ['micro_20optimization_20for_20nondimensionalization_4',['Micro-Optimization for Nondimensionalization',['../index.html#autotoc_md29',1,'']]]
+  ['length_0',['Length',['../md_KnownSymbols.html#autotoc_md34',1,'']]],
+  ['level_20i_20o_1',['level i o',['../md_Serialization.html#autotoc_md22',1,'High-level I/O'],['../md_Serialization.html#autotoc_md25',1,'Low Level I/O']]],
+  ['library_20for_20compile_20time_20dimensional_20analysis_2',['Dim: A Library for Compile-time Dimensional Analysis',['../index.html',1,'']]],
+  ['literal_20formatters_3',['Defining Custom Literal Formatters',['../md_Basics.html#autotoc_md14',1,'']]],
+  ['low_20level_20i_20o_4',['Low Level I/O',['../md_Serialization.html#autotoc_md25',1,'']]]
 ];

@@ -116,30 +116,65 @@ Collaboration diagram for dim::si::detail::quantity_parser_driver:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a917f8cfaf04c0a0c438e5ac3c58c3bb3" id="r_a917f8cfaf04c0a0c438e5ac3c58c3bb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1si_1_1detail_1_1quantity__parser__driver.html#a917f8cfaf04c0a0c438e5ac3c58c3bb3">parse</a> (char const *text, int text_size)</td></tr>
-<tr class="memdesc:a917f8cfaf04c0a0c438e5ac3c58c3bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the text into a <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities. These are inefficient compared to quantity&lt;&gt;, but are convenient for...">dynamic_quantity</a>, setting result by side-effect.  <br /></td></tr>
-<tr class="separator:a917f8cfaf04c0a0c438e5ac3c58c3bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3579d361f1939ab2c97745b63ab1db8b" id="r_a3579d361f1939ab2c97745b63ab1db8b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1si_1_1detail_1_1quantity__parser__driver.html#a3579d361f1939ab2c97745b63ab1db8b">parse</a> (char const *text, char const *text_end)</td></tr>
+<tr class="memdesc:a3579d361f1939ab2c97745b63ab1db8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the text into a <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities.">dynamic_quantity</a>, setting result by side-effect.  <br /></td></tr>
+<tr class="separator:a3579d361f1939ab2c97745b63ab1db8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7adbdac2f2b12ccc74609a1ecd33feed" id="r_a7adbdac2f2b12ccc74609a1ecd33feed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1si_1_1detail_1_1quantity__parser__driver.html#a7adbdac2f2b12ccc74609a1ecd33feed">quantity_parser_driver</a> ()</td></tr>
+<tr class="separator:a7adbdac2f2b12ccc74609a1ecd33feed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aeb468d2bf63cd8d9352bb2f515eca4a6" id="r_aeb468d2bf63cd8d9352bb2f515eca4a6"><td class="memItemLeft" align="right" valign="top"><a id="aeb468d2bf63cd8d9352bb2f515eca4a6" name="aeb468d2bf63cd8d9352bb2f515eca4a6"></a>
 <a class="el" href="classdim_1_1dynamic__quantity.html">::dim::si::dynamic_quantity</a>&#160;</td><td class="memItemRight" valign="bottom"><b>result</b></td></tr>
+<tr class="memdesc:aeb468d2bf63cd8d9352bb2f515eca4a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of the parse. <br /></td></tr>
 <tr class="separator:aeb468d2bf63cd8d9352bb2f515eca4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ee6caefa77efcd7e1905e91129067e8" id="r_a2ee6caefa77efcd7e1905e91129067e8"><td class="memItemLeft" align="right" valign="top"><a id="a2ee6caefa77efcd7e1905e91129067e8" name="a2ee6caefa77efcd7e1905e91129067e8"></a>
 char const  *&#160;</td><td class="memItemRight" valign="bottom"><b>corpus</b></td></tr>
+<tr class="memdesc:a2ee6caefa77efcd7e1905e91129067e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Text being parsed. <br /></td></tr>
 <tr class="separator:a2ee6caefa77efcd7e1905e91129067e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e41085d19d42fed98f6697bd9c95d0e" id="r_a8e41085d19d42fed98f6697bd9c95d0e"><td class="memItemLeft" align="right" valign="top"><a id="a8e41085d19d42fed98f6697bd9c95d0e" name="a8e41085d19d42fed98f6697bd9c95d0e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>corpus_size</b></td></tr>
-<tr class="separator:a8e41085d19d42fed98f6697bd9c95d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada029b53c342d71787e10b49d4c5a336" id="r_ada029b53c342d71787e10b49d4c5a336"><td class="memItemLeft" align="right" valign="top"><a id="ada029b53c342d71787e10b49d4c5a336" name="ada029b53c342d71787e10b49d4c5a336"></a>
 char const  *&#160;</td><td class="memItemRight" valign="bottom"><b>cursor</b></td></tr>
+<tr class="memdesc:ada029b53c342d71787e10b49d4c5a336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current location in the text. <br /></td></tr>
 <tr class="separator:ada029b53c342d71787e10b49d4c5a336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e0db28be7f1b52578e8c2a0d8bd7497" id="r_a0e0db28be7f1b52578e8c2a0d8bd7497"><td class="memItemLeft" align="right" valign="top"><a id="a0e0db28be7f1b52578e8c2a0d8bd7497" name="a0e0db28be7f1b52578e8c2a0d8bd7497"></a>
+char const  *&#160;</td><td class="memItemRight" valign="bottom"><b>corpus_end</b></td></tr>
+<tr class="memdesc:a0e0db28be7f1b52578e8c2a0d8bd7497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer past the end of the text. <br /></td></tr>
+<tr class="separator:a0e0db28be7f1b52578e8c2a0d8bd7497"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Communication between bison parser and output </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a917f8cfaf04c0a0c438e5ac3c58c3bb3" name="a917f8cfaf04c0a0c438e5ac3c58c3bb3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a917f8cfaf04c0a0c438e5ac3c58c3bb3">&#9670;&#160;</a></span>parse()</h2>
+<div class="textblock"><p>Communication between bison parser and output. Use parse_standard_rep() to access this functionality.</p>
+<dl class="section note"><dt>Note</dt><dd>The public members are referenced by name in the bison-generated code. <br  />
+ </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7adbdac2f2b12ccc74609a1ecd33feed" name="a7adbdac2f2b12ccc74609a1ecd33feed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7adbdac2f2b12ccc74609a1ecd33feed">&#9670;&#160;</a></span>quantity_parser_driver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">dim::si::detail::quantity_parser_driver::quantity_parser_driver </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Construct a parser_driver in a non-functional state </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3579d361f1939ab2c97745b63ab1db8b" name="a3579d361f1939ab2c97745b63ab1db8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3579d361f1939ab2c97745b63ab1db8b">&#9670;&#160;</a></span>parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,8 +191,8 @@ char const  *&#160;</td><td class="memItemRight" valign="bottom"><b>cursor</b></
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>text_size</em>&#160;</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>text_end</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -172,7 +207,7 @@ char const  *&#160;</td><td class="memItemRight" valign="bottom"><b>cursor</b></
 </table>
 </div><div class="memdoc">
 
-<p>Parse the text into a <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities. These are inefficient compared to quantity&lt;&gt;, but are convenient for...">dynamic_quantity</a>, setting result by side-effect. </p>
+<p>Parse the text into a <a class="el" href="classdim_1_1dynamic__quantity.html" title="Run-time dimensioned quantities.">dynamic_quantity</a>, setting result by side-effect. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">text</td><td>Text to parse </td></tr>

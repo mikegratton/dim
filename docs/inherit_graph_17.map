@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000000" title=" " alt="" coords="5,67,136,93"/>
 <area shape="rect" id="Node000001" href="$classdim_1_1quantity__facet.html" title=" " alt="" coords="184,5,371,75"/>
 <area shape="poly" id="edge9_Node000000_Node000001" title=" " alt="" coords="149,62,183,55,184,61,150,67"/>
-<area shape="rect" id="Node000003" href="$classdim_1_1quantity__facet.html" title="An iostream facet for formatting quantities. This is typically used by operator&lt;&lt; and operator&gt;&gt;,..." alt="" coords="203,99,352,139"/>
+<area shape="rect" id="Node000003" href="$classdim_1_1quantity__facet.html" title=" " alt="" coords="203,99,352,139"/>
 <area shape="poly" id="edge11_Node000000_Node000003" title=" " alt="" coords="151,92,203,102,202,107,150,97"/>
 <area shape="rect" id="Node000002" href="$classdim_1_1si_1_1facet.html" title=" " alt="" coords="419,27,525,53"/>
 <area shape="poly" id="edge10_Node000001_Node000002" title=" " alt="" coords="384,37,418,37,418,43,384,43"/>

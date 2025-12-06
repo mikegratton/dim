@@ -103,51 +103,43 @@ $(document).ready(function(){initNavTree('literal_8hpp_source.html',''); initRes
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;definition.hpp&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim.html">dim</a> {</div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> {</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span>literal {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define DIM_MAKE_LITERAL(symbol, unit)                                                                     \</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">    inline constexpr ::dim::quantity&lt;decltype(unit)::type, double&gt; operator&quot;&quot; symbol(long double x)        \</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">    {                                                                                                      \</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">        return static_cast&lt;double&gt;(x) * unit;                                                              \</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">    }                                                                                                      \</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">    inline constexpr ::dim::quantity&lt;decltype(unit)::type, double&gt; operator&quot;&quot; symbol(unsigned long long x) \</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">    {                                                                                                      \</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">        return static_cast&lt;double&gt;(x) * unit;                                                              \</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">    }</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>DIM_MAKE_LITERAL(_m, dim::si::meter_)</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>DIM_MAKE_LITERAL(_s, dim::si::second_)</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>DIM_MAKE_LITERAL(_kg, dim::si::kilogram_)</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>DIM_MAKE_LITERAL(_rad, dim::si::radian_)</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>DIM_MAKE_LITERAL(_K, dim::si::kelvin_)</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>DIM_MAKE_LITERAL(_mol, dim::si::mole_)</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>DIM_MAKE_LITERAL(_A, dim::si::ampere_)</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>DIM_MAKE_LITERAL(_cd, dim::si::candela_)</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>DIM_MAKE_LITERAL(_sr, dim::si::steradian_)</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>DIM_MAKE_LITERAL(_Hz, dim::si::hertz_)</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>DIM_MAKE_LITERAL(_N, dim::si::newton_)</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>DIM_MAKE_LITERAL(_Pa, dim::si::pascal_)</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>DIM_MAKE_LITERAL(_J, dim::si::joule_)</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>DIM_MAKE_LITERAL(_W, dim::si::watt_)</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>DIM_MAKE_LITERAL(_C, dim::si::coulomb_)</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>DIM_MAKE_LITERAL(_V, dim::si::volt_)</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>DIM_MAKE_LITERAL(_F, dim::si::farad_)</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>DIM_MAKE_LITERAL(_R, dim::si::ohm_)</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>DIM_MAKE_LITERAL(_S, dim::si::siemens_)</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>DIM_MAKE_LITERAL(_Wb, dim::si::weber_)</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>DIM_MAKE_LITERAL(_T, dim::si::tesla_)</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>DIM_MAKE_LITERAL(_H, dim::si::henry_)</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>DIM_MAKE_LITERAL(_Im, dim::si::lumen_)</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>DIM_MAKE_LITERAL(_Ix, dim::si::lux_)</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>DIM_MAKE_LITERAL(_kat, dim::si::katal_)</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>}  <span class="comment">// namespace literal</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>}  <span class="comment">// namespace si</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>}  <span class="comment">// namespace dim</span></div>
-<div class="ttc" id="anamespacedim_1_1si_html"><div class="ttname"><a href="namespacedim_1_1si.html">dim::si</a></div><div class="ttdoc">Namespace forthe International System (SI) of units.</div><div class="ttdef"><b>Definition</b> si.hpp:17</div></div>
-<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:8</div></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim.html">dim</a> {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>literal {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">m</a>, dim::si::meter_)</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">s</a>, dim::si::second_)</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">kg</a>, dim::si::kilogram_)</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">rad</a>, dim::si::radian_)</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">K</a>, dim::si::kelvin_)</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">mol</a>, dim::si::mole_)</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">A</a>, dim::si::ampere_)</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">cd</a>, dim::si::candela_)</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">sr</a>, dim::si::steradian_)</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">Hz</a>, dim::si::hertz_)</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">N</a>, dim::si::newton_)</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">Pa</a>, dim::si::pascal_)</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">J</a>, dim::si::joule_)</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">W</a>, dim::si::watt_)</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">C</a>, dim::si::coulomb_)</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">V</a>, dim::si::volt_)</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">F</a>, dim::si::farad_)</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">R</a>, dim::si::ohm_)</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">S</a>, dim::si::siemens_)</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">Wb</a>, dim::si::weber_)</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">T</a>, dim::si::tesla_)</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">H</a>, dim::si::henry_)</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">Im</a>, dim::si::lumen_)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">Ix</a>, dim::si::lux_)</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>DIM_MAKE_LITERAL(<a class="code hl_function" href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">kat</a>, dim::si::katal_)</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>}  <span class="comment">// namespace literal</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}  <span class="comment">// namespace si</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}  <span class="comment">// namespace dim</span></div>
+<div class="ttc" id="anamespacedim_1_1si_html"><div class="ttname"><a href="namespacedim_1_1si.html">dim::si</a></div><div class="ttdoc">Namespace for the International System (SI) of units.</div><div class="ttdef"><b>Definition</b> si.hpp:18</div></div>
+<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:10</div></div>
+<div class="ttc" id="anamespacedim_html_ad0c07902f50f59dafd92c0a28b7400ff"><div class="ttname"><a href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">dim::index</a></div><div class="ttdeci">constexpr dynamic_unit&lt; typename Q::system &gt; index()</div><div class="ttdef"><b>Definition</b> quantity.hpp:316</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

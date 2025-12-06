@@ -93,7 +93,7 @@ DIM_DEFINE_QUANTITY_S(Power,               watt,       system, double,  2, -3,  
 DIM_DEFINE_QUANTITY_S(Charge,              coulomb,    system, double,  0,  1,  0,  0,  0,  0,  1,  0, "C")
 DIM_DEFINE_QUANTITY_S(Voltage,             volt,       system, double,  2, -3,  1,  0,  0,  0, -1,  0, "V")
 DIM_DEFINE_QUANTITY_S(Capacitance,         farad,      system, double, -2,  4, -1,  0,  0,  0,  1,  0, "F")
-DIM_DEFINE_QUANTITY_S(Resistance,          ohm,        system, double,  2, -3,  1,  0,  0,  0, -2,  0, "R")
+DIM_DEFINE_QUANTITY_S(Resistance,          ohm,        system, double,  2, -3,  1,  0,  0,  0, -2,  0, "Ω")
 DIM_DEFINE_QUANTITY_S(Conductance,         siemens,    system, double, -2,  3, -1,  0,  0,  0,  2,  0, "S")
 DIM_DEFINE_QUANTITY_S(MagneticFlux,        weber,      system, double,  2, -2,  1,  0,  0,  0, -1,  0, "Wb")
 DIM_DEFINE_QUANTITY_S(MagneticFluxDensity, tesla,      system, double,  0, -2,  1,  0,  0,  0, -1,  0, "T")

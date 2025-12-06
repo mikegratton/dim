@@ -18,7 +18,8 @@ PROJECT_BRIEF          = "Compile time dimensional analysis"
 PROJECT_LOGO           =
 
 OUTPUT_DIRECTORY       = 
-INPUT                  = ../README.md ../src
+INPUT                  = ../README.md ../src Basics.md Serialization.md KnownSymbols.md Advanced.md MigrationV1to2.md 
+IMAGE_PATH             = symbol_scanner.svg
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_PATTERNS       = *.tab.* *.lex.*

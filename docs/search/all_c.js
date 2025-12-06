@@ -1,14 +1,20 @@
 var searchData=
 [
-  ['index_0',['index',['../namespacedim.html#a862042e195f66d3e42526368b88b3ee1',1,'dim']]],
-  ['input_20and_20output_1',['Input and Output',['../index.html#autotoc_md19',1,'']]],
-  ['input_20symbols_2',['Appendix A: Default Quantity Input Symbols',['../index.html#autotoc_md32',1,'']]],
-  ['input_5fformat_5fmap_3',['input_format_map',['../classdim_1_1input__format__map.html',1,'dim']]],
-  ['input_5fformat_5fmap_5fgroup_4',['input_format_map_group',['../classdim_1_1input__format__map__group.html',1,'dim']]],
-  ['input_5fformat_5fmap_5fgroup_3c_20scalar_2c_20system_20_3e_5',['input_format_map_group&lt; scalar, system &gt;',['../classdim_1_1input__format__map__group.html',1,'dim']]],
-  ['input_5fformatter_6',['input_formatter',['../classdim_1_1quantity__facet.html#a7c9163de685918fbb2c14a1744b54bcf',1,'dim::quantity_facet::input_formatter(formatter_type const &amp;f)'],['../classdim_1_1quantity__facet.html#a3d28a19f8beba93eda6c441976442ec0',1,'dim::quantity_facet::input_formatter(input_format_map&lt; Scalar, System &gt; const &amp;map)']]],
-  ['install_5ffacet_7',['install_facet',['../namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a',1,'dim::si']]],
-  ['inverse_8',['inverse',['../namespacedim.html#a6c2341758ba42285cb3c388a3b53c121',1,'dim']]],
-  ['is_5fbad_9',['is_bad',['../classdim_1_1quantity.html#a46841186fb12313d8d15f794d67fba82',1,'dim::quantity']]],
-  ['isbad_5f_5f_10',['isbad__',['../namespacedim.html#a3c7b17ba20be91b82f5fc40a7974a515',1,'dim']]]
+  ['i_20o_0',['i o',['../md_Serialization.html#autotoc_md22',1,'High-level I/O'],['../md_Serialization.html#autotoc_md25',1,'Low Level I/O']]],
+  ['id_1',['id',['../structdim_1_1si_1_1system.html#a0f5f74de05a7135c44fe2c7963947163',1,'dim::si::system::id'],['../classdim_1_1si_1_1facet.html#a9332adf59007021adcc5037608a4b28b',1,'dim::si::facet::id']]],
+  ['incommensurable_5fexception_2',['incommensurable_exception',['../classdim_1_1incommensurable__exception.html',1,'dim']]],
+  ['index_3',['index',['../namespacedim.html#a8f46d372a7382878d0193c13f4c5a738',1,'dim::index(Q const &amp;)'],['../namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff',1,'dim::index()'],['../namespacedim.html#a862042e195f66d3e42526368b88b3ee1',1,'dim::index()'],['../classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d',1,'dim::input_format_map::index()'],['../classdim_1_1formatter.html#a7dba4335d25fdd68c394d59c2b8a9de5',1,'dim::formatter::index() const']]],
+  ['input_4',['input',['../classdim_1_1formatter.html#a3cdde6472ee44a3af49eb05cdf0cf895',1,'dim::formatter::input(scalar const &amp;s) const'],['../classdim_1_1formatter.html#ad499bc168b33c29781b9d8ab2d3283aa',1,'dim::formatter::input(scalar const &amp;s) const']]],
+  ['input_20and_20output_5',['Input and Output',['../md_Serialization.html',1,'']]],
+  ['input_20symbols_6',['Know Quantity Input Symbols',['../md_KnownSymbols.html',1,'']]],
+  ['input_5fformat_5fmap_7',['input_format_map',['../classdim_1_1input__format__map.html#a3b351a34d7ce2bc5fd916779f680c5c7',1,'dim::input_format_map::input_format_map(formatter_type i_first_formater)'],['../classdim_1_1input__format__map.html#a841a1d459e20a859bfd86409f6f684d4',1,'dim::input_format_map::input_format_map(std::initializer_list&lt; formatter_type &gt; const &amp;i_formatter_list)'],['../classdim_1_1input__format__map.html#abef44442cf4a734d990957ee40aa8230',1,'dim::input_format_map::input_format_map(U const &amp;i_unit_code)'],['../classdim_1_1input__format__map.html#abc564cec4b2fdd8c01bb92d313b10fbf',1,'dim::input_format_map::input_format_map(unit_type i_unit_code)'],['../classdim_1_1input__format__map.html',1,'dim::input_format_map&lt; Scalar, System &gt;']]],
+  ['input_5fformat_5fmap_5fgroup_8',['input_format_map_group',['../classdim_1_1input__format__map__group.html',1,'dim']]],
+  ['input_5fformat_5fmap_5fgroup_3c_20scalar_2c_20system_20_3e_9',['input_format_map_group&lt; scalar, system &gt;',['../classdim_1_1input__format__map__group.html',1,'dim']]],
+  ['input_5fformatter_10',['input_formatter',['../classdim_1_1quantity__facet.html#a9fff71d889412e75bccd71164f99a5d5',1,'dim::quantity_facet::input_formatter(input_format_map&lt; Scalar, System &gt; const &amp;i_map)'],['../classdim_1_1quantity__facet.html#a3756f31fd7ba2bfbe0d69039142b864c',1,'dim::quantity_facet::input_formatter(formatter_type const &amp;i_format)']]],
+  ['insert_11',['insert',['../classdim_1_1input__format__map__group.html#a75d35eee214a3bd8a6386abdd24a5d7e',1,'dim::input_format_map_group::insert()'],['../classdim_1_1output__format__map.html#a44e8f9a0f8b0d42957d10ff8b4eb21fe',1,'dim::output_format_map::insert(formatter_type const &amp;i_item)'],['../classdim_1_1output__format__map.html#a27b548ef182dc671a8db2deecf52b761',1,'dim::output_format_map::insert(char const *i_symbol, Q const &amp;i_scale, Q const &amp;i_add=Q(0))'],['../classdim_1_1input__format__map__group.html#a9cdff2719508cbe818cd9840007169f2',1,'dim::input_format_map_group::insert(map_type const &amp;i_whole_map)'],['../classdim_1_1input__format__map__group.html#a07130a5286693304897f0bc58f577308',1,'dim::input_format_map_group::insert(formatter_type const &amp;i_item)'],['../classdim_1_1input__format__map.html#a634089f95278064b74e7c15895892148',1,'dim::input_format_map::insert(formatter_type const &amp;i_item)'],['../classdim_1_1input__format__map.html#aff03113efaa3960457d6b0c97c55e311',1,'dim::input_format_map::insert(char const *i_symbol, Q const &amp;i_scale, Q const &amp;i_add=Q(0))']]],
+  ['install_5ffacet_12',['install_facet',['../structdim_1_1si_1_1system.html#a1119c09b65f97c143169be11bffad18b',1,'dim::si::system::install_facet()'],['../namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a',1,'dim::si::install_facet()']]],
+  ['inverse_13',['inverse',['../namespacedim.html#a6c2341758ba42285cb3c388a3b53c121',1,'dim']]],
+  ['io_14',['Fallback IO',['../md_Serialization.html#autotoc_md26',1,'']]],
+  ['is_5fbad_15',['is_bad',['../classdim_1_1formatted__quantity.html#ae1c827e579a2d875d99b52f68578cef8',1,'dim::formatted_quantity::is_bad()'],['../classdim_1_1quantity.html#a46841186fb12313d8d15f794d67fba82',1,'dim::quantity::is_bad()']]],
+  ['isbad_5f_5f_16',['isbad__',['../namespacedim.html#a3c7b17ba20be91b82f5fc40a7974a515',1,'dim']]]
 ];

@@ -95,7 +95,7 @@ facet* make_default_facet()
     instance->output_formatter("C", coulomb);
     instance->output_formatter("V", volt);
     instance->output_formatter("F", farad);
-    instance->output_formatter("R", ohm);
+    instance->output_formatter("Ω", ohm);
     instance->output_formatter("S", siemens);
     instance->output_formatter("Wb", weber);
     instance->output_formatter("T", tesla);

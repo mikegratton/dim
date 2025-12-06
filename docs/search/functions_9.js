@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['ratpow_0',['ratpow',['../namespacedim.html#a6ea436cc5f79ea8f90bedfa259555389',1,'dim']]],
-  ['root_1',['root',['../namespacedim.html#a6fd8c6583e5125bb288eb6feb7c6150d',1,'dim']]]
+  ['non_5fdim_0',['non_dim',['../classdim_1_1formatter.html#acf69acc1d3a7bc9d1bdd3c58d903e558',1,'dim::formatter::non_dim(Q const &amp;q) const'],['../classdim_1_1formatter.html#a20241709aec2e3932f04235360fbb8ae',1,'dim::formatter::non_dim(dynamic_type const &amp;q) const']]]
 ];

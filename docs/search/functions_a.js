@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['sqrt_0',['sqrt',['../namespacedim.html#a5f3aa396bf7637bd8c00861c13ad95b2',1,'dim']]]
+  ['operator_2a_0',['operator*',['../namespacedim.html#a9b8dc884196cb1f675a3ce090243dd6f',1,'dim']]],
+  ['operator_2f_1',['operator/',['../namespacedim.html#a2f4de7fdd579a7c43c45bb7d6d9511b1',1,'dim']]],
+  ['operator_3c_3c_2',['operator&lt;&lt;',['../namespacedim.html#a0e160dfbc833eade3a1c9f556de1642d',1,'dim::operator&lt;&lt;(std::ostream &amp;os, formatted_quantity&lt; Scalar &gt; const &amp;i_formatted)'],['../namespacedim.html#a7872afd3010124440e409f949e9de05b',1,'dim::operator&lt;&lt;(std::ostream &amp;os, Q const &amp;q)'],['../namespacedim.html#a77de8703fc1c715cbc1880aff9ccc7c2',1,'dim::operator&lt;&lt;(std::ostream &amp;os, DQ const &amp;dq)'],['../namespacedim.html#aaa95f49656bd31ae50964b3ad39fded8',1,'dim::operator&lt;&lt;(std::ostream &amp;os, U const &amp;u)'],['../namespacedim.html#ab1be92e88e70bac2fe6b0def4ee8fb80',1,'dim::operator&lt;&lt;(std::ostream &amp;os, dynamic_unit&lt; System &gt; const &amp;u)']]],
+  ['operator_3e_3e_3',['operator&gt;&gt;',['../namespacedim.html#af07f8970cbaa3128feba8ac94b9f3353',1,'dim::operator&gt;&gt;(std::istream &amp;is, Q &amp;o_quantity)'],['../namespacedim.html#a4f6e520a79b54c4a78887ffe9e3296d8',1,'dim::operator&gt;&gt;(std::istream &amp;is, DQ &amp;o_quantity)']]],
+  ['output_4',['output',['../classdim_1_1formatter.html#a6a35a107cfd43be9e2e6240a9b2c991e',1,'dim::formatter::output(dynamic_type const &amp;q) const'],['../classdim_1_1formatter.html#a77ca107867c445f4ffa6dc00be5b2dff',1,'dim::formatter::output(Q const &amp;q) const']]],
+  ['output_5fformatter_5',['output_formatter',['../classdim_1_1quantity__facet.html#a91a879d1164902e674b97c167d2f5783',1,'dim::quantity_facet::output_formatter(formatter_type const &amp;i_format)'],['../classdim_1_1quantity__facet.html#a95d2a131d4b37c661d368529b01a6430',1,'dim::quantity_facet::output_formatter(char const *i_symbol, Q i_scale, Q i_add=Q(0.0))']]]
 ];

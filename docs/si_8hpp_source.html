@@ -101,26 +101,27 @@ $(document).ready(function(){initNavTree('si_8hpp_source.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifdef DIM_NO_STREAM</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;si_no_stream.hpp&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;io_stream.hpp&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;dim/si/definition.hpp&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;dim/si/literal.hpp&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;dim/si/si_io.hpp&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;config.hpp&quot;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;si/definition.hpp&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;si/literal.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;si/si_io.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;ioformat.hpp&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifdef DIM_STREAM</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;iostream.hpp&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> = <a class="code hl_namespace" href="namespacedim_1_1si.html">dim::si</a>;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim.html">dim</a> {</div>
-<div class="foldopen" id="foldopen00017" data-start="{" data-end="}">
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="namespacedim_1_1si.html">   17</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">using namespace </span>::<a class="code hl_namespace" href="namespacedim.html">dim</a>;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> = <a class="code hl_namespace" href="namespacedim_1_1si.html">dim::si</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim.html">dim</a> {</div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="namespacedim_1_1si.html">   18</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacedim_1_1si.html">si</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">using namespace </span>::<a class="code hl_namespace" href="namespacedim.html">dim</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>}</div>
 </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>}  <span class="comment">// namespace dim</span></div>
-<div class="ttc" id="anamespacedim_1_1si_html"><div class="ttname"><a href="namespacedim_1_1si.html">dim::si</a></div><div class="ttdoc">Namespace forthe International System (SI) of units.</div><div class="ttdef"><b>Definition</b> si.hpp:17</div></div>
-<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:8</div></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}  <span class="comment">// namespace dim</span></div>
+<div class="ttc" id="anamespacedim_1_1si_html"><div class="ttname"><a href="namespacedim_1_1si.html">dim::si</a></div><div class="ttdoc">Namespace for the International System (SI) of units.</div><div class="ttdef"><b>Definition</b> si.hpp:18</div></div>
+<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

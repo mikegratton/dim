@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['v1_200_0',['v1.0',['../index.html#autotoc_md5',1,'']]],
-  ['v1_201_1',['v1.1',['../index.html#autotoc_md4',1,'']]],
-  ['v1_202_2',['v1.2',['../index.html#autotoc_md3',1,'']]],
-  ['values_20nan_20and_20tt_20bad_5fquantity_20tt_3',['Guard Values, NaN, and &lt;tt&gt;bad_quantity&lt;/tt&gt;',['../index.html#autotoc_md16',1,'']]],
-  ['volume_4',['Volume',['../index.html#autotoc_md44',1,'']]]
+  ['understanding_20errors_0',['Understanding Errors',['../md_Basics.html#autotoc_md19',1,'']]],
+  ['unit_1',['unit',['../md_Basics.html#autotoc_md11',1,'NIST SP 811 Standard and the Angle Unit'],['../structdim_1_1unit.html',1,'dim::unit&lt; DIM_ARRAY, System &gt;']]],
+  ['unit_5fdivide_2',['unit_divide',['../structdim_1_1unit__divide.html',1,'dim']]],
+  ['unit_5fdivide_5ft_3',['unit_divide_t',['../namespacedim.html#a63e39f71c29ccb34e1bebce5e3497842',1,'dim']]],
+  ['unit_5fmultiply_4',['unit_multiply',['../structdim_1_1unit__multiply.html',1,'dim']]],
+  ['unit_5fmultiply_5ft_5',['unit_multiply_t',['../namespacedim.html#abdb68cce52f68812d9901ef325b70d9e',1,'dim']]],
+  ['unit_5fpow_6',['unit_pow',['../structdim_1_1unit__pow.html',1,'dim']]],
+  ['unit_5fpow_5ft_7',['unit_pow_t',['../namespacedim.html#a0eb6b2da6737584231bb44a0b36b162a',1,'dim']]],
+  ['unit_5froot_8',['unit_root',['../structdim_1_1unit__root.html',1,'dim']]],
+  ['unit_5froot_5ft_9',['unit_root_t',['../namespacedim.html#abdc8395d1339e595afa7df5dd84b7a7f',1,'dim']]],
+  ['unit_5ftag_10',['unit_tag',['../structdim_1_1unit__tag.html',1,'dim']]]
 ];

@@ -82,7 +82,7 @@ TEST_CASE("io_stream")
 
     ss.str("");
     ss << 5.0 * ohm;
-    CHECK(ss.str() == "5_R");
+    CHECK(ss.str() == "5_Ω");
 
     ss.str("");
     ss << 5.0 * siemens;

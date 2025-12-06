@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('namespacedim_1_1si.html',''); initResi
 </div><!--header-->
 <div class="contents">
 
-<p>Namespace forthe International System (SI) of units.  
+<p>Namespace for the International System (SI) of units.  
 <a href="namespacedim_1_1si.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
@@ -109,10 +109,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdim_1_1si_1_1facet.html">facet</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdim_1_1si_1_1system.html">system</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="structdim_1_1si_1_1system.html" title="The si::system contains symbols for the dimensions, access to specialized symbols for units,...">si::system</a> contains symbols for the dimensions, access to specialized symbols for units, and information about the si locale facet.  <a href="structdim_1_1si_1_1system.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a5bfc83f7fb804ba3ad7adbd2f9595da3" id="r_a5bfc83f7fb804ba3ad7adbd2f9595da3"><td class="memItemLeft" align="right" valign="top"><a id="a5bfc83f7fb804ba3ad7adbd2f9595da3" name="a5bfc83f7fb804ba3ad7adbd2f9595da3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_unit</b> = <a class="el" href="classdim_1_1dynamic__unit.html">::dim::dynamic_unit</a>&lt; <a class="el" href="structdim_1_1si_1_1system.html">si::system</a> &gt;</td></tr>
+<tr class="separator:a5bfc83f7fb804ba3ad7adbd2f9595da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a933883f32afb1a13356abaf917b49887" id="r_a933883f32afb1a13356abaf917b49887"><td class="memItemLeft" align="right" valign="top"><a id="a933883f32afb1a13356abaf917b49887" name="a933883f32afb1a13356abaf917b49887"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>FlowRate</b> = <a class="el" href="classdim_1_1quantity.html">quantity</a>&lt; <a class="el" href="namespacedim.html#a63e39f71c29ccb34e1bebce5e3497842">unit_divide_t</a>&lt; Volume::unit, Time::unit &gt;, double &gt;</td></tr>
 <tr class="separator:a933883f32afb1a13356abaf917b49887"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,9 +141,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>Density</b> = <a cla
 <tr class="memitem:a05692673c91d5dc30552d0f4e8703262" id="r_a05692673c91d5dc30552d0f4e8703262"><td class="memItemLeft" align="right" valign="top"><a id="a05692673c91d5dc30552d0f4e8703262" name="a05692673c91d5dc30552d0f4e8703262"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>KinematicViscosity</b> = <a class="el" href="classdim_1_1quantity.html">quantity</a>&lt; <a class="el" href="namespacedim.html#a63e39f71c29ccb34e1bebce5e3497842">unit_divide_t</a>&lt; Area::unit, Time::unit &gt;, double &gt;</td></tr>
 <tr class="separator:a05692673c91d5dc30552d0f4e8703262"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bfc83f7fb804ba3ad7adbd2f9595da3" id="r_a5bfc83f7fb804ba3ad7adbd2f9595da3"><td class="memItemLeft" align="right" valign="top"><a id="a5bfc83f7fb804ba3ad7adbd2f9595da3" name="a5bfc83f7fb804ba3ad7adbd2f9595da3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_unit</b> = <a class="el" href="classdim_1_1dynamic__unit.html">::dim::dynamic_unit</a>&lt; <a class="el" href="structdim_1_1si_1_1system.html">si::system</a> &gt;</td></tr>
-<tr class="separator:a5bfc83f7fb804ba3ad7adbd2f9595da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a832078b59bda321fd53f9e02abe7a8e2" id="r_a832078b59bda321fd53f9e02abe7a8e2"><td class="memItemLeft" align="right" valign="top"><a id="a832078b59bda321fd53f9e02abe7a8e2" name="a832078b59bda321fd53f9e02abe7a8e2"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_quantity</b> = <a class="el" href="classdim_1_1dynamic__quantity.html">::dim::dynamic_quantity</a>&lt; double, <a class="el" href="structdim_1_1si_1_1system.html">si::system</a> &gt;</td></tr>
 <tr class="separator:a832078b59bda321fd53f9e02abe7a8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,20 +192,20 @@ Angle&#160;</td><td class="memItemRight" valign="bottom"><b>acos</b> (double con
 <tr class="memitem:a8699454dc940d81d9d5fddfa70855a88" id="r_a8699454dc940d81d9d5fddfa70855a88"><td class="memItemLeft" align="right" valign="top"><a id="a8699454dc940d81d9d5fddfa70855a88" name="a8699454dc940d81d9d5fddfa70855a88"></a>
 Angle&#160;</td><td class="memItemRight" valign="bottom"><b>atan</b> (double const &amp;x)</td></tr>
 <tr class="separator:a8699454dc940d81d9d5fddfa70855a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45cb669eb91bb071d5750b29286caaf5" id="r_a45cb669eb91bb071d5750b29286caaf5"><td class="memItemLeft" align="right" valign="top"><a id="a45cb669eb91bb071d5750b29286caaf5" name="a45cb669eb91bb071d5750b29286caaf5"></a>
+Angle&#160;</td><td class="memItemRight" valign="bottom"><b>atan2</b> (double const &amp;x, double const &amp;y)</td></tr>
+<tr class="separator:a45cb669eb91bb071d5750b29286caaf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1860289cbb22d61963e89738be8b36b9" id="r_a1860289cbb22d61963e89738be8b36b9"><td class="memTemplParams" colspan="2"><a id="a1860289cbb22d61963e89738be8b36b9" name="a1860289cbb22d61963e89738be8b36b9"></a>
 template&lt;class Q , DIM_IS_QUANTITY(Q) &gt; </td></tr>
 <tr class="memitem:a1860289cbb22d61963e89738be8b36b9"><td class="memTemplItemLeft" align="right" valign="top">Angle&#160;</td><td class="memTemplItemRight" valign="bottom"><b>atan2</b> (Q const &amp;x, Q const &amp;y)</td></tr>
 <tr class="separator:a1860289cbb22d61963e89738be8b36b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45cb669eb91bb071d5750b29286caaf5" id="r_a45cb669eb91bb071d5750b29286caaf5"><td class="memItemLeft" align="right" valign="top"><a id="a45cb669eb91bb071d5750b29286caaf5" name="a45cb669eb91bb071d5750b29286caaf5"></a>
-Angle&#160;</td><td class="memItemRight" valign="bottom"><b>atan2</b> (double const &amp;x, double const &amp;y)</td></tr>
-<tr class="separator:a45cb669eb91bb071d5750b29286caaf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21fec3766288749907f7d7a42c25682a" id="r_a21fec3766288749907f7d7a42c25682a"><td class="memItemLeft" align="right" valign="top"><a id="a21fec3766288749907f7d7a42c25682a" name="a21fec3766288749907f7d7a42c25682a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>install_facet</b> (<a class="el" href="classdim_1_1si_1_1facet.html">facet</a> *fac=<a class="el" href="namespacedim_1_1si.html#ae52eeeca6076ffd217997a0b275f1a95">make_default_facet</a>())</td></tr>
 <tr class="memdesc:a21fec3766288749907f7d7a42c25682a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Install the default quantity facet into the global locale. Imbue cout, cerr, and clog with it. <br /></td></tr>
 <tr class="separator:a21fec3766288749907f7d7a42c25682a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae52eeeca6076ffd217997a0b275f1a95" id="r_ae52eeeca6076ffd217997a0b275f1a95"><td class="memItemLeft" align="right" valign="top"><a id="ae52eeeca6076ffd217997a0b275f1a95" name="ae52eeeca6076ffd217997a0b275f1a95"></a>
 <a class="el" href="classdim_1_1si_1_1facet.html">facet</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>make_default_facet</b> ()</td></tr>
-<tr class="memdesc:ae52eeeca6076ffd217997a0b275f1a95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain the default <a class="el" href="classdim_1_1quantity__facet.html" title="An iostream facet for formatting quantities. This is typically used by operator&lt;&lt; and operator&gt;&gt;,...">quantity_facet</a> for si. <br /></td></tr>
+<tr class="memdesc:ae52eeeca6076ffd217997a0b275f1a95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain the default <a class="el" href="classdim_1_1quantity__facet.html">quantity_facet</a> for si. You must either pass this pointer to the locale or delete it to avoid a memory leak. <br /></td></tr>
 <tr class="separator:ae52eeeca6076ffd217997a0b275f1a95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -212,6 +213,12 @@ Variables</h2></td></tr>
 <tr class="memitem:ae39d91d0e2bb755742ff5086dcf5cef2" id="r_ae39d91d0e2bb755742ff5086dcf5cef2"><td class="memItemLeft" align="right" valign="top"><a id="ae39d91d0e2bb755742ff5086dcf5cef2" name="ae39d91d0e2bb755742ff5086dcf5cef2"></a>
 constexpr <a class="el" href="namespacedim.html#abdb68cce52f68812d9901ef325b70d9e">unit_multiply_t</a>&lt; Time::unit, Time::unit &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>second2</b></td></tr>
 <tr class="separator:ae39d91d0e2bb755742ff5086dcf5cef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4aba021cd7b0805321d4626e3d0552a" id="r_aa4aba021cd7b0805321d4626e3d0552a"><td class="memItemLeft" align="right" valign="top"><a id="aa4aba021cd7b0805321d4626e3d0552a" name="aa4aba021cd7b0805321d4626e3d0552a"></a>
+constexpr Length&#160;</td><td class="memItemRight" valign="bottom"><b>metre</b> = meter</td></tr>
+<tr class="separator:aa4aba021cd7b0805321d4626e3d0552a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08816f22c12e158311e6bffe26bee363" id="r_a08816f22c12e158311e6bffe26bee363"><td class="memItemLeft" align="right" valign="top"><a id="a08816f22c12e158311e6bffe26bee363" name="a08816f22c12e158311e6bffe26bee363"></a>
+constexpr decltype(meter_)&#160;</td><td class="memItemRight" valign="bottom"><b>metre_</b> = meter_</td></tr>
+<tr class="separator:a08816f22c12e158311e6bffe26bee363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea194d5d2baf306726a7a1bd94ec7ce8" id="r_aea194d5d2baf306726a7a1bd94ec7ce8"><td class="memItemLeft" align="right" valign="top"><a id="aea194d5d2baf306726a7a1bd94ec7ce8" name="aea194d5d2baf306726a7a1bd94ec7ce8"></a>
 constexpr Time&#160;</td><td class="memItemRight" valign="bottom"><b>minute</b> = 60.0*second</td></tr>
 <tr class="separator:aea194d5d2baf306726a7a1bd94ec7ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,6 +231,9 @@ constexpr Area&#160;</td><td class="memItemRight" valign="bottom"><b>hectare</b>
 <tr class="memitem:a07a43497e60d0530cf3b60b9ffbe450b" id="r_a07a43497e60d0530cf3b60b9ffbe450b"><td class="memItemLeft" align="right" valign="top"><a id="a07a43497e60d0530cf3b60b9ffbe450b" name="a07a43497e60d0530cf3b60b9ffbe450b"></a>
 constexpr Volume&#160;</td><td class="memItemRight" valign="bottom"><b>liter</b> = 1e-3*meter3</td></tr>
 <tr class="separator:a07a43497e60d0530cf3b60b9ffbe450b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abac30bea97e99ef96a5d504a295233dd" id="r_abac30bea97e99ef96a5d504a295233dd"><td class="memItemLeft" align="right" valign="top"><a id="abac30bea97e99ef96a5d504a295233dd" name="abac30bea97e99ef96a5d504a295233dd"></a>
+constexpr Volume&#160;</td><td class="memItemRight" valign="bottom"><b>litre</b> = liter</td></tr>
+<tr class="separator:abac30bea97e99ef96a5d504a295233dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e4dc49225d1b97766ba39c57fe10820" id="r_a7e4dc49225d1b97766ba39c57fe10820"><td class="memItemLeft" align="right" valign="top"><a id="a7e4dc49225d1b97766ba39c57fe10820" name="a7e4dc49225d1b97766ba39c57fe10820"></a>
 constexpr Pressure&#160;</td><td class="memItemRight" valign="bottom"><b>bar</b> = 1e5*pascal</td></tr>
 <tr class="separator:a7e4dc49225d1b97766ba39c57fe10820"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,7 +280,7 @@ constexpr Mass&#160;</td><td class="memItemRight" valign="bottom"><b>pound_mass<
 constexpr Force&#160;</td><td class="memItemRight" valign="bottom"><b>poundal</b> = 0.138255*newton</td></tr>
 <tr class="separator:aa37ea6578ae13f1aa1850b916ce0b25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58727d8faf1a46d6e0590ca516ccabad" id="r_a58727d8faf1a46d6e0590ca516ccabad"><td class="memItemLeft" align="right" valign="top"><a id="a58727d8faf1a46d6e0590ca516ccabad" name="a58727d8faf1a46d6e0590ca516ccabad"></a>
-constexpr Area&#160;</td><td class="memItemRight" valign="bottom"><b>acre</b> = 4046.86*meter2</td></tr>
+constexpr Area&#160;</td><td class="memItemRight" valign="bottom"><b>acre</b> = 43560.0 * foot * foot</td></tr>
 <tr class="separator:a58727d8faf1a46d6e0590ca516ccabad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a52ab580b28f0ac103c811a908f5b89" id="r_a8a52ab580b28f0ac103c811a908f5b89"><td class="memItemLeft" align="right" valign="top"><a id="a8a52ab580b28f0ac103c811a908f5b89" name="a8a52ab580b28f0ac103c811a908f5b89"></a>
 constexpr Volume&#160;</td><td class="memItemRight" valign="bottom"><b>gallon</b> = 3.78541*liter</td></tr>
@@ -316,7 +326,7 @@ constexpr Luminance&#160;</td><td class="memItemRight" valign="bottom"><b>phot</
 <tr class="separator:a21ed7c8b38e9920cc134d152eeaaf695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Namespace forthe International System (SI) of units. </p>
+<div class="textblock"><p>Namespace for the International System (SI) of units. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

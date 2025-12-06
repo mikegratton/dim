@@ -1,7 +1,7 @@
 var hierarchy =
 [
     [ "dim::dynamic_quantity_tag", "structdim_1_1dynamic__quantity__tag.html", [
-      [ "dim::dynamic_quantity< S, System >", "classdim_1_1dynamic__quantity.html", null ],
+      [ "dim::dynamic_quantity< Scalar, System >", "classdim_1_1dynamic__quantity.html", null ],
       [ "dim::dynamic_quantity< double, si::system >", "classdim_1_1dynamic__quantity.html", null ],
       [ "dim::dynamic_quantity< S, System, >", "classdim_1_1dynamic__quantity.html", null ]
     ] ],
@@ -15,8 +15,8 @@ var hierarchy =
       ] ],
       [ "dim::quantity_facet< Scalar, System >", "classdim_1_1quantity__facet.html", null ]
     ] ],
-    [ "dim::formatted_quantity< scalar, >", "classdim_1_1formatted__quantity.html", null ],
-    [ "dim::formatter< S, System >", "classdim_1_1formatter.html", null ],
+    [ "dim::formatted_quantity< Scalar, >", "classdim_1_1formatted__quantity.html", null ],
+    [ "dim::formatter< Scalar, System >", "classdim_1_1formatter.html", null ],
     [ "dim::input_format_map< Scalar, System >", "classdim_1_1input__format__map.html", null ],
     [ "dim::input_format_map_group< Scalar, System >", "classdim_1_1input__format__map__group.html", null ],
     [ "dim::input_format_map_group< scalar, system >", "classdim_1_1input__format__map__group.html", null ],
@@ -25,6 +25,9 @@ var hierarchy =
     [ "dim::si::detail::quantity_parser_driver", "classdim_1_1si_1_1detail_1_1quantity__parser__driver.html", null ],
     [ "dim::quantity_tag", "structdim_1_1quantity__tag.html", [
       [ "dim::quantity< Unit, Scalar >", "classdim_1_1quantity.html", null ]
+    ] ],
+    [ "std::runtime_error", null, [
+      [ "dim::incommensurable_exception", "classdim_1_1incommensurable__exception.html", null ]
     ] ],
     [ "dim::system_tag", "structdim_1_1system__tag.html", [
       [ "dim::si::system", "structdim_1_1si_1_1system.html", null ]

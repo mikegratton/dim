@@ -138,6 +138,7 @@ si::input_format_map const& get_default_format<Energy>() {
         {"kW_hr", 1e3*watt*hour},        
         {"kW_h", 1e3*watt*hour},
         {"kWh", 1e3*watt*hour},
+        {"kWhr", 1e3*watt*hour},
         {"erg", erg},
         {"foot_pound", foot * pound_force},
         {"ft_lb", foot * pound_force},
@@ -150,7 +151,8 @@ si::input_format_map const& get_default_format<Energy>() {
 template<>
 si::input_format_map const& get_default_format<Power>() {
     static const si::input_format_map s_known {
-        {"hp", 33e3 * foot* pound_force / minute}
+        {"hp", 33e3 * foot* pound_force / minute},
+        {"horsepower", 33e3 * foot* pound_force / minute}
     };
     return s_known;
 }
@@ -239,6 +241,8 @@ si::input_format_map const& get_default_format<AngularRate>() {
     static const si::input_format_map s_known {
         {"deg/s", degree / second},
         {"°/s", degree / second},
+        {"rpm", 2.0 * M_PI * radian / minute},
+        {"cps", 2.0 * M_PI * radian / second},
         {"degrees_per_second", degree / second},
         {"radians_per_second", radian / second}
     };

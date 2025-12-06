@@ -137,15 +137,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9372e9c53be2395cbf015dd945ad4cb0" id="r_a9372e9c53be2395cbf015dd945ad4cb0"><td class="memItemLeft" align="right" valign="top"><a id="a9372e9c53be2395cbf015dd945ad4cb0" name="a9372e9c53be2395cbf015dd945ad4cb0"></a>
 constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_unit</b> (uint64_t code)</td></tr>
 <tr class="separator:a9372e9c53be2395cbf015dd945ad4cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68fcf8dcb763e244a33150b8730a0217" id="r_a68fcf8dcb763e244a33150b8730a0217"><td class="memItemLeft" align="right" valign="top"><a id="a68fcf8dcb763e244a33150b8730a0217" name="a68fcf8dcb763e244a33150b8730a0217"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_unit</b> (int8_t length_, int8_t time_, int8_t mass_, int8_t angle_, int8_t temperature_, int8_t amount_, int8_t current_, int8_t luminosity_)</td></tr>
-<tr class="separator:a68fcf8dcb763e244a33150b8730a0217"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a261deeac30264201c62a4b0eb94b6611" id="r_a261deeac30264201c62a4b0eb94b6611"><td class="memTemplParams" colspan="2"><a id="a261deeac30264201c62a4b0eb94b6611" name="a261deeac30264201c62a4b0eb94b6611"></a>
+<tr class="memitem:a6736602bb4514d8ae2a948a096e0fc5e" id="r_a6736602bb4514d8ae2a948a096e0fc5e"><td class="memItemLeft" align="right" valign="top"><a id="a6736602bb4514d8ae2a948a096e0fc5e" name="a6736602bb4514d8ae2a948a096e0fc5e"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_unit</b> (int8_t i_length, int8_t i_time, int8_t i_mass, int8_t i_angle, int8_t i_temperature, int8_t i_amount, int8_t i_current, int8_t i_luminosity)</td></tr>
+<tr class="separator:a6736602bb4514d8ae2a948a096e0fc5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdae40c053e6906aad5adeb5b769ca5e" id="r_acdae40c053e6906aad5adeb5b769ca5e"><td class="memTemplParams" colspan="2"><a id="acdae40c053e6906aad5adeb5b769ca5e" name="acdae40c053e6906aad5adeb5b769ca5e"></a>
 template&lt;class U , DIM_IS_UNIT(U) &gt; </td></tr>
-<tr class="memitem:a261deeac30264201c62a4b0eb94b6611"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dynamic_unit</b> (U const &amp;u)</td></tr>
-<tr class="separator:a261deeac30264201c62a4b0eb94b6611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdae40c053e6906aad5adeb5b769ca5e"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dynamic_unit</b> (U const &amp;)</td></tr>
+<tr class="memdesc:acdae40c053e6906aad5adeb5b769ca5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform a static unit to a <a class="el" href="classdim_1_1dynamic__unit.html" title="dynamic_units are a compact representation of the dimension string plus the system tag.">dynamic_unit</a>. <br /></td></tr>
+<tr class="separator:acdae40c053e6906aad5adeb5b769ca5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af33d1a1bb80571d9ae53e62139af5b29" id="r_af33d1a1bb80571d9ae53e62139af5b29"><td class="memItemLeft" align="right" valign="top"><a id="af33d1a1bb80571d9ae53e62139af5b29" name="af33d1a1bb80571d9ae53e62139af5b29"></a>
 constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>raw</b> () const</td></tr>
+<tr class="memdesc:af33d1a1bb80571d9ae53e62139af5b29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the underlying uint64_t data for serialization. <br /></td></tr>
 <tr class="separator:af33d1a1bb80571d9ae53e62139af5b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33034f5b2f3b47acf21159e0d072528c" id="r_a33034f5b2f3b47acf21159e0d072528c"><td class="memItemLeft" align="right" valign="top"><a id="a33034f5b2f3b47acf21159e0d072528c" name="a33034f5b2f3b47acf21159e0d072528c"></a>
 constexpr int8_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
@@ -213,11 +215,16 @@ constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt
 <tr class="memitem:ae4b4cb5c327562b3bd6f32019d9fbcff" id="r_ae4b4cb5c327562b3bd6f32019d9fbcff"><td class="memItemLeft" align="right" valign="top"><a id="ae4b4cb5c327562b3bd6f32019d9fbcff" name="ae4b4cb5c327562b3bd6f32019d9fbcff"></a>
 constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (<a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a> rhs) const</td></tr>
 <tr class="separator:ae4b4cb5c327562b3bd6f32019d9fbcff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a361832985b9af13fe1aefb01e2085b" id="r_a0a361832985b9af13fe1aefb01e2085b"><td class="memItemLeft" align="right" valign="top"><a id="a0a361832985b9af13fe1aefb01e2085b" name="a0a361832985b9af13fe1aefb01e2085b"></a>
-constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiply</b> (<a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a> const &amp;other) const</td></tr>
-<tr class="separator:a0a361832985b9af13fe1aefb01e2085b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71149dae7424897c8b3300bb74c8aacd" id="r_a71149dae7424897c8b3300bb74c8aacd"><td class="memItemLeft" align="right" valign="top"><a id="a71149dae7424897c8b3300bb74c8aacd" name="a71149dae7424897c8b3300bb74c8aacd"></a>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_bad</b> () const</td></tr>
+<tr class="separator:a71149dae7424897c8b3300bb74c8aacd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a498b7ced76503dbc9797145c87f6f2a6" id="r_a498b7ced76503dbc9797145c87f6f2a6"><td class="memItemLeft" align="right" valign="top"><a id="a498b7ced76503dbc9797145c87f6f2a6" name="a498b7ced76503dbc9797145c87f6f2a6"></a>
+constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&#160;</td><td class="memItemRight" valign="bottom"><b>multiply</b> (<a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a> const &amp;i_other) const</td></tr>
+<tr class="memdesc:a498b7ced76503dbc9797145c87f6f2a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the product of two units. <br /></td></tr>
+<tr class="separator:a498b7ced76503dbc9797145c87f6f2a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d661724b1fabe970f53d4e076f4970d" id="r_a8d661724b1fabe970f53d4e076f4970d"><td class="memItemLeft" align="right" valign="top"><a id="a8d661724b1fabe970f53d4e076f4970d" name="a8d661724b1fabe970f53d4e076f4970d"></a>
 constexpr int8_t&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (uint8_t i) const</td></tr>
+<tr class="memdesc:a8d661724b1fabe970f53d4e076f4970d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a dimension by index (0 &lt;= i &lt; 8). The order matches the enum values in base_dimension. <br /></td></tr>
 <tr class="separator:a8d661724b1fabe970f53d4e076f4970d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -225,12 +232,17 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a60eb45a7200428e484f37b40f4ee596e" id="r_a60eb45a7200428e484f37b40f4ee596e"><td class="memTemplParams" colspan="2"><a id="a60eb45a7200428e484f37b40f4ee596e" name="a60eb45a7200428e484f37b40f4ee596e"></a>
 template&lt;class U , DIM_IS_UNIT(U) &gt; </td></tr>
 <tr class="memitem:a60eb45a7200428e484f37b40f4ee596e"><td class="memTemplItemLeft" align="right" valign="top">static constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>from</b> ()</td></tr>
+<tr class="memdesc:a60eb45a7200428e484f37b40f4ee596e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform a static unit to a <a class="el" href="classdim_1_1dynamic__unit.html" title="dynamic_units are a compact representation of the dimension string plus the system tag.">dynamic_unit</a>. <br /></td></tr>
 <tr class="separator:a60eb45a7200428e484f37b40f4ee596e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad976da661957512a48af4f7d79653657" id="r_ad976da661957512a48af4f7d79653657"><td class="memItemLeft" align="right" valign="top"><a id="ad976da661957512a48af4f7d79653657" name="ad976da661957512a48af4f7d79653657"></a>
 static constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dimensionless</b> ()</td></tr>
 <tr class="separator:ad976da661957512a48af4f7d79653657"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab00a8a1727575fc5fe540809d3cc831b" id="r_ab00a8a1727575fc5fe540809d3cc831b"><td class="memItemLeft" align="right" valign="top"><a id="ab00a8a1727575fc5fe540809d3cc831b" name="ab00a8a1727575fc5fe540809d3cc831b"></a>
+static constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&#160;</td><td class="memItemRight" valign="bottom"><b>bad_unit</b> ()</td></tr>
+<tr class="separator:ab00a8a1727575fc5fe540809d3cc831b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7cec9415122701ca79442db4d0f9e76" id="r_aa7cec9415122701ca79442db4d0f9e76"><td class="memItemLeft" align="right" valign="top"><a id="aa7cec9415122701ca79442db4d0f9e76" name="aa7cec9415122701ca79442db4d0f9e76"></a>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
+<tr class="memdesc:aa7cec9415122701ca79442db4d0f9e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of distinct dimensions. <br /></td></tr>
 <tr class="separator:aa7cec9415122701ca79442db4d0f9e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

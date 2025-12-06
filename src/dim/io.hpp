@@ -216,6 +216,26 @@ class formatter
     dynamic_type m_add;
 };
 
+
+/**
+* @brief Parse the string [i_begin, i_end) into a Scalar, storing the result in
+* o_result.
+*
+* This can be specialized for particular Scalar types.
+*/
+template<class Scalar>
+std::from_chars_result parse_scalar(Scalar& o_result, char const* i_begin, char const* i_end)
+{
+    std::from_chars_result result;
+    #if __cplusplus >= 201703L
+    result = std::from_chars(i_begin, i_end, o_result);
+    #else
+    o_result = static_cast<Scalar>(std::strtold(i_begin, &result.ptr));
+    #endif
+    return result;
+}
+
+
 /**
  * @brief Transform a region of characters into a formatted_quantity.
  *
@@ -244,12 +264,8 @@ std::from_chars_result from_chars(char const* i_start, char const* i_end, format
 {
     Scalar s;
     o_formatted.symbol()[0] = '\0';
-    std::from_chars_result result;
-#if __cplusplus >= 201703L
-    result = std::from_chars(i_start, i_end, s);
-#else
-    s = static_cast<Scalar>(std::strtold(start, &result.ptr));
-#endif
+    
+    std::from_chars_result result = parse_scalar(s, i_start, i_end);
     if (result.ptr == i_start) {
         if (result.ec == std::errc{}) {
             result.ec = std::errc::invalid_argument;
@@ -280,6 +296,7 @@ std::from_chars_result from_chars(char const* i_start, char const* i_end, format
     }
     return result;
 }
+
 
 /**
  * Write a string representation "m/s^2" using the system type's facilities.
