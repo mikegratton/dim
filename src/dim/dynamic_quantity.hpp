@@ -364,7 +364,7 @@ constexpr dynamic_unit<System> index(dynamic_quantity<Scalar, System> const& q)
 }
 
 template <class DQ, DIM_IS_DYNAMIC_QUANTITY(DQ)>
-DQ::scalar dimensionless_cast(DQ const& q)
+typename DQ::scalar dimensionless_cast(DQ const& q)
 {
     return q.value();
 }
