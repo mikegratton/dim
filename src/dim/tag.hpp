@@ -1,5 +1,5 @@
 #pragma once
-#include "config.hpp"
+#include "DimConfig.hpp"
 #include <type_traits>
 
 #if __cplusplus < 201103L

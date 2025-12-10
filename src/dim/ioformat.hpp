@@ -1,5 +1,5 @@
 #pragma once
-#include "config.hpp"
+#include "DimConfig.hpp"
 #include "format_map.hpp"
 #include "io.hpp"
 #include <locale>
