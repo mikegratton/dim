@@ -174,6 +174,7 @@ TEST_CASE("dynamic_quantity.bad")
 
 TEST_CASE("dynamic_quantity.operators")
 {
+    // quantity/quantity operators
     si::dynamic_quantity q(5.0, si::dynamic_unit(1L));
     si::dynamic_quantity s(2.0, dim::index<si::Time>());
     auto result = q*s;
@@ -245,6 +246,7 @@ TEST_CASE("dynamic_quantity.operators")
 
 TEST_CASE("dynamic_quanity.scalar")
 {
+    // quantity/scalar operators
     si::dynamic_quantity q(5.0, si::dynamic_unit(1L));
     
     auto result = q * 2;    
@@ -314,6 +316,7 @@ TEST_CASE("dynamic_quanity.scalar")
 
 TEST_CASE("dynamic_quanity.unit")
 {
+    // quantity/unit operators
     si::dynamic_quantity q(5.0, si::dynamic_unit(1L));
     si::dynamic_unit u1(q.unit());
     si::dynamic_unit u2(si::Speed::unit{});
@@ -378,4 +381,23 @@ TEST_CASE("dynamic_quanity.unit")
     result -= u1;
     CHECK(result.unit() == q.unit());
     CHECK(result.value() == doctest::Approx(4.0));
+}
+
+TEST_CASE("dynamic_quanity.unit_scalar")
+{    
+    si::dynamic_unit u1(si::Speed::unit{});
+
+    si::dynamic_quantity q = 2.0 * u1;    
+    CHECK(q.value() == 2.0);
+    CHECK(q.unit() == u1);
+    q = u1 * 2.0;
+    CHECK(q.value() == 2.0);
+    CHECK(q.unit() == u1);
+
+    q = 2.0 / u1;
+    CHECK(q.value() == 2.0);
+    CHECK(q.unit() == inverse(u1));
+    q = u1 / 2.0;
+    CHECK(q.value() == 0.5);
+    CHECK(q.unit() == u1);
 }

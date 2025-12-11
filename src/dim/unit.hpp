@@ -267,22 +267,22 @@ template <class Unit1, class Unit2> using unit_multiply_t = typename unit_multip
 /*
  * dimensionless unit specializations
  */
-template <class Other, class System>
+template <class Other, class System, DIM_IS_SYSTEM(System)>
 constexpr Other operator*(Other const& value, typename System::dimensionless_unit const&)
 {
     return value;
 }
-template <class Other, class System>
+template <class Other, class System, DIM_IS_SYSTEM(System)>
 constexpr Other operator*(typename System::dimensionless_unit const&, Other const& value)
 {
     return value;
 }
-template <class Other, class System>
+template <class Other, class System, DIM_IS_SYSTEM(System)>
 constexpr Other operator/(Other const& value, typename System::dimensionless_unit const&)
 {
     return value;
 }
-template <class Other, class System>
+template <class Other, class System, DIM_IS_SYSTEM(System)>
 constexpr Other operator/(typename System::dimensionless_unit const&, Other const& value)
 {
     return static_cast<Other>(1.0) / value;

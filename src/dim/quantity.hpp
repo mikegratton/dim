@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <limits>
+#include "dim/tag.hpp"
 #include "unit.hpp"
 
 /**
@@ -370,7 +371,7 @@ constexpr quantity<U, S> operator/ (U const& unit, S const& value)
     return (static_cast<S>(1.0) / value) * unit;
 }
 
-}
+} // namespace dim
 
 // Math operations
 namespace dim

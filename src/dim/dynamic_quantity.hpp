@@ -1,4 +1,5 @@
 #pragma once
+#include "dim/tag.hpp"
 #include "quantity.hpp"
 #include <limits>
 
@@ -352,10 +353,26 @@ class dynamic_quantity : public dynamic_quantity_tag
     friend type& operator+=(type& a, unit_type const& b) { return a += type(b); }
     friend type& operator-=(type& a, unit_type const& b) { return a -= type(b); }
 
+
   private:
     scalar m_value;
     unit_type m_unit;
 };
+
+
+// unit/scalar operators
+template<class Scalar, class Unit, DIM_IS_SCALAR(Scalar), DIM_IS_DYNAMIC_UNIT(Unit)>
+constexpr dynamic_quantity<Scalar, typename Unit::system> operator*(Unit const& i_unit, Scalar const& i_scalar) { return {i_scalar, i_unit}; }
+
+template<class Scalar, class Unit, DIM_IS_SCALAR(Scalar), DIM_IS_DYNAMIC_UNIT(Unit)>
+constexpr dynamic_quantity<Scalar, typename Unit::system> operator*(Scalar const& i_scalar, Unit const& i_unit) { return {i_scalar, i_unit}; }
+
+template<class Scalar, class Unit, DIM_IS_SCALAR(Scalar), DIM_IS_DYNAMIC_UNIT(Unit)>
+constexpr dynamic_quantity<Scalar, typename Unit::system>  operator/(Unit const& i_unit, Scalar const& i_scalar) { return {Scalar(1)/i_scalar, i_unit}; }
+
+template<class Scalar, class Unit, DIM_IS_SCALAR(Scalar), DIM_IS_DYNAMIC_UNIT(Unit)>
+constexpr dynamic_quantity<Scalar, typename Unit::system>  operator/(Scalar const& i_scalar, Unit const& i_unit) { return {i_scalar, inverse(i_unit)}; }
+
 
 template <class Scalar, class System>
 constexpr dynamic_unit<System> index(dynamic_quantity<Scalar, System> const& q)
