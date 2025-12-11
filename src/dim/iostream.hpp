@@ -21,7 +21,6 @@ namespace detail
 template <class Scalar>
 bool extract_formatted_quantity(formatted_quantity<Scalar>& o_formatted, std::istream& is)
 {
-    std::size_t i = 0;
     char* cursor = o_formatted.symbol();
     is >> o_formatted.value();
     while (is && detail::isseparator(is.peek())) {

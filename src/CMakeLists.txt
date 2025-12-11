@@ -1,7 +1,7 @@
 option(DIM_STREAM "Include <iostream> functionality" ON)
 option(DIM_STRING "Include <string> functionality" ON)
 option(DIM_EXCEPTIONS "[EXPERIMENTAL] Throw exceptions in dynamic_quantity and during parsing" OFF)
-configure_file(config.hpp.in config.hpp)
+configure_file(DimConfig.hpp.in DimConfig.hpp)
 
 set(source
     dim/io.cpp

@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <limits>
+#include "dim/tag.hpp"
 #include "unit.hpp"
 
 /**
@@ -56,7 +57,7 @@ public:
 
     constexpr quantity() noexcept { }
     constexpr explicit quantity(Scalar s) noexcept : m_value(s) { }
-    constexpr quantity(unit const&) noexcept : m_value(static_cast<scalar>(1.0)) { }
+    constexpr quantity(unit const&) noexcept : m_value(1) { }
     
     template<class Q2, DIM_IS_QUANTITY(Q2)>
     constexpr quantity(Q2 const& q) noexcept : m_value(dimensionless_cast(q))
@@ -66,7 +67,7 @@ public:
     }
     
     template<class U2, DIM_IS_UNIT(U2)>
-    constexpr quantity(U2 const&) noexcept : m_value(static_cast<scalar>(1.0)) 
+    constexpr quantity(U2 const&) noexcept : m_value(1) 
     { 
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
@@ -83,7 +84,7 @@ public:
     { 
         DIM_CHECK_DIMENSIONS(unit, U2)
         DIM_CHECK_SYSTEMS(unit, U2)
-        m_value = static_cast<scalar>(1); return *this;         
+        m_value = Scalar(1); return *this;         
     }
     
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -109,7 +110,7 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        lhs.m_value += rhs.value;
+        lhs.m_value += rhs.m_value;
         return lhs;
     }
     template<class Q2, DIM_IS_QUANTITY(Q2)>
@@ -117,7 +118,7 @@ public:
     {
         DIM_CHECK_DIMENSIONS(unit, Q2::unit)
         DIM_CHECK_SYSTEMS(unit, Q2::unit)
-        lhs.m_value -= rhs.value;
+        lhs.m_value -= rhs.m_value;
         return lhs;
     }
     template<class U, DIM_IS_UNIT(U)>
@@ -287,6 +288,34 @@ public:
         DIM_CHECK_SYSTEMS(unit, U) 
         return quantity<unit_divide_t<U, unit>, scalar> (q.m_value);
     }
+    template<class U, DIM_IS_UNIT(U)>
+    friend constexpr type
+    operator-(type const& q, U const&)
+    {
+        DIM_CHECK_DIMENSIONS(U, unit)
+        return type{q.m_value - Scalar(1)};
+    }
+    template<class U, DIM_IS_UNIT(U)>
+    friend constexpr type
+    operator-(U const&, type const& q)
+    {
+        DIM_CHECK_DIMENSIONS(U, unit)
+        return type{Scalar(1) - q.m_value};
+    }
+    template<class U, DIM_IS_UNIT(U)>
+    friend constexpr type
+    operator+(type const& q, U const&)
+    {
+        DIM_CHECK_DIMENSIONS(U, unit)
+        return type{q.m_value + Scalar(1)};
+    }
+    template<class U, DIM_IS_UNIT(U)>
+    friend constexpr type
+    operator+(U const&, type const& q)
+    {
+        DIM_CHECK_DIMENSIONS(U, unit)
+        return type{Scalar(1) + q.m_value};
+    }
 
     // Quantity-unit ops leading to a scalar result
     friend constexpr scalar operator/ (type const& q, unit const&)
@@ -342,7 +371,7 @@ constexpr quantity<U, S> operator/ (U const& unit, S const& value)
     return (static_cast<S>(1.0) / value) * unit;
 }
 
-}
+} // namespace dim
 
 // Math operations
 namespace dim

@@ -1,5 +1,5 @@
 #pragma once
-#include "config.hpp"
+#include "DimConfig.hpp"
 #include "si/definition.hpp"
 #include "si/literal.hpp"
 #include "si/si_io.hpp"

@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Configure CMake (C++20)
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DDIM_BUILD_TEST=ON -DDIM_CXX_VERSION=20
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DDIM_BUILD_TEST=ON -DDIM_CXX_VERSION=20 -DDIM_EXCEPTIONS=ON
 
     - name: Build (C++20)
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
