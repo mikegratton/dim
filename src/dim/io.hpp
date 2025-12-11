@@ -113,7 +113,7 @@ class formatter
         }
         if (m_add.unit() != m_scale.unit()) {
 #ifdef DIM_EXCEPTIONS
-            throw incommensurable_exception(scale.unit(), add.unit(),
+            throw incommensurable_exception(i_scale.unit(), i_add.unit(),
                                             "Units of affine transformation in formatter are incompatible");
 #else
             m_add = dynamic_type::bad_quantity();
@@ -162,7 +162,7 @@ class formatter
         if (result.dimensionless()) {
             return dimensionless_cast(result);
         }
-        throw incommensurable_exception(::dim::index(q), scale.unit(),
+        throw incommensurable_exception(::dim::index(q), m_scale.unit(),
                                         "Could not nondimensionalize quantity. Dimensions are incompatible");
 #else
         return (result.dimensionless() ? dimensionless_cast(result) : std::numeric_limits<scalar>::quiet_NaN());
