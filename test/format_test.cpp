@@ -56,5 +56,11 @@ TEST_CASE("std_format")
     // Check we're not crowding out other types
     message = std::format("Lots of {} go in {} pen for {}", "sheep", 1.0, si::second);
     CHECK(message == "Lots of sheep go in 1 pen for 1_s");
+
+    // Check formatted quantity
+    si::formatter f("in", si::inch);
+    auto fq = f.output(si::yard);
+    message = std::format("One yard is {:.0f}", fq);
+    CHECK(message == "One yard is 36_in");
 }
 #endif

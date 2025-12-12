@@ -32,7 +32,7 @@ target_compile_options(dim PRIVATE -Wall -Wextra)
 
 # Static analysis
 set(analysis_source ${source})
-list(REMOVE_ITEM analysis_source "dim/si/quantity.tab.cc")
+list(REMOVE_ITEM analysis_source "dim/si/quantity.tab.cpp")
 add_custom_target(dimAnalysis
     COMMAND 
         clang-tidy -p ${CMAKE_BINARY_DIR} ${analysis_source}
