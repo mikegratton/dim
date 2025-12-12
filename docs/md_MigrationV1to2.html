@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('md_MigrationV1to2.html',''); initResiz
   <div class="headertitle"><div class="title">Migrating from Version 1</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md56"></a></p><ul>
+<div class="textblock"><p><a class="anchor" id="autotoc_md57"></a></p><ul>
 <li>The static <code>quantity</code> class template is essentially unchanged. Quantity arithmetic works as before.</li>
 <li>The <code>quantity::index()</code> and <code>unit::index()</code> methods have been removed. Use <code>index&lt;Q&gt;().raw()</code> or <code>index&lt;U&gt;().raw()</code> instead. Consider using <code>si::dynamic_unit</code> instead of raw <code>uint64_t</code> index values.</li>
 <li>The old <code>dynamic_unit</code> typedef has been replaced with a fully-featured <code>dynamic_unit</code> class. This class acts as the old index value; it is a comparable type that is used as a key in the format maps.</li>
@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('md_MigrationV1to2.html',''); initResiz
 </ul>
 </li>
 </ul>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Constructing the New Formatter Types</h1>
 <div class="fragment"><div class="line"><a class="code hl_class" href="classdim_1_1output__format__map.html">si::output_format_map</a> myOutputMap;</div>
 <div class="line"><a class="code hl_class" href="classdim_1_1formatter.html">si::formatter</a> fancyFormat(<span class="stringliteral">&quot;°/s&quot;</span>, si::degree / si::second);</div>

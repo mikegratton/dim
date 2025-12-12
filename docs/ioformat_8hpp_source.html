@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('ioformat_8hpp_source.html',''); initRe
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;config.hpp&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;DimConfig.hpp&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;format_map.hpp&quot;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;io.hpp&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;locale&gt;</span></div>
@@ -272,10 +272,10 @@ $(document).ready(function(){initNavTree('ioformat_8hpp_source.html',''); initRe
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassdim_1_1formatted__quantity_html"><div class="ttname"><a href="classdim_1_1formatted__quantity.html">dim::formatted_quantity</a></div><div class="ttdoc">A quantity represented as a scalar number and a symbol (char* string).</div><div class="ttdef"><b>Definition</b> io.hpp:22</div></div>
-<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:10</div></div>
+<div class="ttc" id="anamespacedim_html"><div class="ttname"><a href="namespacedim.html">dim</a></div><div class="ttdoc">Simplify the namespace so that all symbols are in the namespace si.</div><div class="ttdef"><b>Definition</b> dynamic_quantity.hpp:11</div></div>
 <div class="ttc" id="anamespacedim_html_a351a7a001ea5aef5937dd12abf14aeb9"><div class="ttname"><a href="namespacedim.html#a351a7a001ea5aef5937dd12abf14aeb9">dim::format_quantity</a></div><div class="ttdeci">bool format_quantity(formatted_quantity&lt; typename Q::scalar &gt; &amp;o_formatted, Q const &amp;i_q, output_format_map&lt; typename Q::scalar, typename Q::system &gt; const *i_out_map=nullptr)</div><div class="ttdoc">Turn a quantity into a formatted_quantity.</div><div class="ttdef"><b>Definition</b> format_map.hpp:702</div></div>
 <div class="ttc" id="anamespacedim_html_a5117f1510e6499dae91f2e9246aaab4f"><div class="ttname"><a href="namespacedim.html#a5117f1510e6499dae91f2e9246aaab4f">dim::parse_quantity</a></div><div class="ttdeci">bool parse_quantity(Q &amp;o_q, formatted_quantity&lt; typename Q::scalar &gt; const &amp;i_formatted, input_format_map&lt; typename Q::scalar, typename Q::system &gt; const &amp;i_unit_map=get_default_format&lt; Q &gt;())</div><div class="ttdoc">Default input parsing for quantities. Returns false if unit_str is wrong for Q. This is the recommend...</div><div class="ttdef"><b>Definition</b> format_map.hpp:636</div></div>
-<div class="ttc" id="anamespacedim_html_ad0c07902f50f59dafd92c0a28b7400ff"><div class="ttname"><a href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">dim::index</a></div><div class="ttdeci">constexpr dynamic_unit&lt; typename Q::system &gt; index()</div><div class="ttdef"><b>Definition</b> quantity.hpp:316</div></div>
+<div class="ttc" id="anamespacedim_html_ad0c07902f50f59dafd92c0a28b7400ff"><div class="ttname"><a href="namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff">dim::index</a></div><div class="ttdeci">constexpr dynamic_unit&lt; typename Q::system &gt; index()</div><div class="ttdef"><b>Definition</b> quantity.hpp:345</div></div>
 <div class="ttc" id="anamespacedim_html_aeac98da6051a44e3e586342a02a7ded1"><div class="ttname"><a href="namespacedim.html#aeac98da6051a44e3e586342a02a7ded1">dim::from_chars</a></div><div class="ttdeci">std::from_chars_result from_chars(char const *i_start, char const *i_end, formatted_quantity&lt; Scalar &gt; &amp;o_formatted)</div><div class="ttdoc">Transform a region of characters into a formatted_quantity.</div><div class="ttdef"><b>Definition</b> io.hpp:263</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

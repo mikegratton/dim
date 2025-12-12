@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project (dimlib VERSION 2.1.0.0)
+project (dimlib VERSION 2.0.1)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

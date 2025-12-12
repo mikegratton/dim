@@ -37,6 +37,12 @@ used.
 
 ## History
 
+### v2.0.1
+
+Bug fixes:
+  * Fixed malformed quantity operators.
+  * Fixed missing dynamic_quantity operators.
+
 ### v2.0
 
 Bug fixes:

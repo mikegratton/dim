@@ -27,61 +27,61 @@ var NAVTREE =
   [ "Dim", "index.html", [
     [ "Dim: A Library for Compile-time Dimensional Analysis", "index.html", "index" ],
     [ "Basic Dimensional Analysis", "md_Basics.html", [
-      [ "NIST SP 811 Standard and the Angle Unit", "md_Basics.html#autotoc_md11", null ],
-      [ "Types and Templates", "md_Basics.html#autotoc_md12", [
-        [ "Defining Custom Quantities", "md_Basics.html#autotoc_md13", null ],
-        [ "Defining Custom Literal Formatters", "md_Basics.html#autotoc_md14", null ],
-        [ "Type Definitions Attached to Quantity", "md_Basics.html#autotoc_md15", null ],
-        [ "The <tt>dimensionless_cast</tt> Escape Hatch", "md_Basics.html#autotoc_md16", null ],
-        [ "Guard Values, NaN, and <tt>bad_quantity</tt>", "md_Basics.html#autotoc_md17", null ],
-        [ "Math with Quantities", "md_Basics.html#autotoc_md18", null ],
-        [ "Understanding Errors", "md_Basics.html#autotoc_md19", null ],
-        [ "Dynamic Quantities", "md_Basics.html#autotoc_md20", null ]
+      [ "NIST SP 811 Standard and the Angle Unit", "md_Basics.html#autotoc_md12", null ],
+      [ "Types and Templates", "md_Basics.html#autotoc_md13", [
+        [ "Defining Custom Quantities", "md_Basics.html#autotoc_md14", null ],
+        [ "Defining Custom Literal Formatters", "md_Basics.html#autotoc_md15", null ],
+        [ "Type Definitions Attached to Quantity", "md_Basics.html#autotoc_md16", null ],
+        [ "The <tt>dimensionless_cast</tt> Escape Hatch", "md_Basics.html#autotoc_md17", null ],
+        [ "Guard Values, NaN, and <tt>bad_quantity</tt>", "md_Basics.html#autotoc_md18", null ],
+        [ "Math with Quantities", "md_Basics.html#autotoc_md19", null ],
+        [ "Understanding Errors", "md_Basics.html#autotoc_md20", null ],
+        [ "Dynamic Quantities", "md_Basics.html#autotoc_md21", null ]
       ] ]
     ] ],
     [ "Input and Output", "md_Serialization.html", [
-      [ "High-level I/O", "md_Serialization.html#autotoc_md22", null ],
-      [ "Formatters", "md_Serialization.html#autotoc_md23", [
-        [ "Format Maps", "md_Serialization.html#autotoc_md24", null ]
+      [ "High-level I/O", "md_Serialization.html#autotoc_md23", null ],
+      [ "Formatters", "md_Serialization.html#autotoc_md24", [
+        [ "Format Maps", "md_Serialization.html#autotoc_md25", null ]
       ] ],
-      [ "Low Level I/O", "md_Serialization.html#autotoc_md25", null ],
-      [ "Fallback IO", "md_Serialization.html#autotoc_md26", [
-        [ "Basic Format", "md_Serialization.html#autotoc_md27", null ],
-        [ "Parsing Quantities", "md_Serialization.html#autotoc_md28", null ]
+      [ "Low Level I/O", "md_Serialization.html#autotoc_md26", null ],
+      [ "Fallback IO", "md_Serialization.html#autotoc_md27", [
+        [ "Basic Format", "md_Serialization.html#autotoc_md28", null ],
+        [ "Parsing Quantities", "md_Serialization.html#autotoc_md29", null ]
       ] ],
-      [ "Design of Serialization/Deserialization", "md_Serialization.html#autotoc_md29", [
-        [ "Serialized Quantities", "md_Serialization.html#autotoc_md30", null ],
-        [ "Fallback Parser Symbols", "md_Serialization.html#autotoc_md31", null ]
+      [ "Design of Serialization/Deserialization", "md_Serialization.html#autotoc_md30", [
+        [ "Serialized Quantities", "md_Serialization.html#autotoc_md31", null ],
+        [ "Fallback Parser Symbols", "md_Serialization.html#autotoc_md32", null ]
       ] ]
     ] ],
     [ "Know Quantity Input Symbols", "md_KnownSymbols.html", [
-      [ "Temperature", "md_KnownSymbols.html#autotoc_md33", null ],
-      [ "Length", "md_KnownSymbols.html#autotoc_md34", null ],
-      [ "Time", "md_KnownSymbols.html#autotoc_md35", null ],
-      [ "Mass", "md_KnownSymbols.html#autotoc_md36", null ],
-      [ "Angle", "md_KnownSymbols.html#autotoc_md37", null ],
-      [ "SolidAngle", "md_KnownSymbols.html#autotoc_md38", null ],
-      [ "Force", "md_KnownSymbols.html#autotoc_md39", null ],
-      [ "Pressure", "md_KnownSymbols.html#autotoc_md40", null ],
-      [ "Energy", "md_KnownSymbols.html#autotoc_md41", null ],
-      [ "Power", "md_KnownSymbols.html#autotoc_md42", null ],
-      [ "Area", "md_KnownSymbols.html#autotoc_md43", null ],
-      [ "Volume", "md_KnownSymbols.html#autotoc_md44", null ],
-      [ "FlowRate", "md_KnownSymbols.html#autotoc_md45", null ],
-      [ "Speed", "md_KnownSymbols.html#autotoc_md46", null ],
-      [ "Acceleration", "md_KnownSymbols.html#autotoc_md47", null ],
-      [ "AngularRate", "md_KnownSymbols.html#autotoc_md48", null ],
-      [ "AngularAcceleration", "md_KnownSymbols.html#autotoc_md49", null ],
-      [ "Torque", "md_KnownSymbols.html#autotoc_md50", null ]
+      [ "Temperature", "md_KnownSymbols.html#autotoc_md34", null ],
+      [ "Length", "md_KnownSymbols.html#autotoc_md35", null ],
+      [ "Time", "md_KnownSymbols.html#autotoc_md36", null ],
+      [ "Mass", "md_KnownSymbols.html#autotoc_md37", null ],
+      [ "Angle", "md_KnownSymbols.html#autotoc_md38", null ],
+      [ "SolidAngle", "md_KnownSymbols.html#autotoc_md39", null ],
+      [ "Force", "md_KnownSymbols.html#autotoc_md40", null ],
+      [ "Pressure", "md_KnownSymbols.html#autotoc_md41", null ],
+      [ "Energy", "md_KnownSymbols.html#autotoc_md42", null ],
+      [ "Power", "md_KnownSymbols.html#autotoc_md43", null ],
+      [ "Area", "md_KnownSymbols.html#autotoc_md44", null ],
+      [ "Volume", "md_KnownSymbols.html#autotoc_md45", null ],
+      [ "FlowRate", "md_KnownSymbols.html#autotoc_md46", null ],
+      [ "Speed", "md_KnownSymbols.html#autotoc_md47", null ],
+      [ "Acceleration", "md_KnownSymbols.html#autotoc_md48", null ],
+      [ "AngularRate", "md_KnownSymbols.html#autotoc_md49", null ],
+      [ "AngularAcceleration", "md_KnownSymbols.html#autotoc_md50", null ],
+      [ "Torque", "md_KnownSymbols.html#autotoc_md51", null ]
     ] ],
     [ "Advanced Topics", "md_Advanced.html", [
-      [ "Metaprogramming with Quantities", "md_Advanced.html#autotoc_md52", null ],
-      [ "Micro-Optimization for Nondimensionalization", "md_Advanced.html#autotoc_md53", null ],
-      [ "Fractional Dimensions", "md_Advanced.html#autotoc_md54", null ],
-      [ "Bad Quantities and NaN", "md_Advanced.html#autotoc_md55", null ]
+      [ "Metaprogramming with Quantities", "md_Advanced.html#autotoc_md53", null ],
+      [ "Micro-Optimization for Nondimensionalization", "md_Advanced.html#autotoc_md54", null ],
+      [ "Fractional Dimensions", "md_Advanced.html#autotoc_md55", null ],
+      [ "Bad Quantities and NaN", "md_Advanced.html#autotoc_md56", null ]
     ] ],
     [ "Migrating from Version 1", "md_MigrationV1to2.html", [
-      [ "Constructing the New Formatter Types", "md_MigrationV1to2.html#autotoc_md57", null ]
+      [ "Constructing the New Formatter Types", "md_MigrationV1to2.html#autotoc_md58", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],

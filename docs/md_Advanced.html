@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -95,8 +95,8 @@ $(document).ready(function(){initNavTree('md_Advanced.html',''); initResizable()
   <div class="headertitle"><div class="title">Advanced Topics</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md51"></a> </p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md52"></a> </p>
+<h1><a class="anchor" id="autotoc_md53"></a>
 Metaprogramming with Quantities</h1>
 <p>One pitfall for C++ class templates is that each instantiation is a totally independent class at run time with no relation to any other instantiation. Thus <code>si::Length</code> and <code>si::Time</code> are no more related than <code>std::string</code> and <code>double</code>. This is often painful for code that wants to handle these types in a uniform way. To aid with this, Dim provides a macro <code>DIM_IS_QUANTITY</code> that works with the C++ Substitution Failure is not an Error (SFINAE &ndash; this language has the <em>worst</em> jargon). <br  />
  It works like this </p><div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Q, DIM_IS_QUANTITY(Q)&gt;</div>
@@ -107,17 +107,17 @@ Metaprogramming with Quantities</h1>
 <div class="line">    <span class="keywordflow">return</span> o_quant_str;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p> The print_quantity function template is thus only defined for quantity types, where we know <code>q</code> will have a member <code>value</code>.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md54"></a>
 Micro-Optimization for Nondimensionalization</h1>
 <p>If you need to nondimensionalize a quantity say for serialization, you may want to squeeze out all the performance you can while still using the facilities of Dim to catch errors. For example, here are three ways to nondimensionalize a length: </p><div class="fragment"><div class="line">Length L = 2_m;</div>
 <div class="line"><span class="keywordtype">double</span> v1 = dimensionless_cast(L); <span class="comment">// 1</span></div>
 <div class="line"><span class="keywordtype">double</span> v1 = L / meter; <span class="comment">// 2</span></div>
 <div class="line"><span class="keywordtype">double</span> v2 = L / meter_; <span class="comment">// 3</span></div>
 </div><!-- fragment --><p> (1) is an unchecked access and can be unsafe. (2) does just what it says, provide the length of L in meters. However, since <code>meter</code> is itself a Length quantity, this actually performs a floating point division (2.0/1.0). (3) uses the specially defined <em>unit</em> types (these are the same as the quantities but have a trailing underscore). The <code>operator/</code> action here understands that a unit has, well, <em>unit</em> value, so avoids the division. In fact, at runtime, (1) and (3) produce the same machine instructions.</p>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<h1><a class="anchor" id="autotoc_md55"></a>
 Fractional Dimensions</h1>
 <p>Dim does not support fractional dimension like "m^1/2" that are used in some domains. Supporting these really complicates the metaprogramming and makes your program compile slower. You can typically work with e.g. squared quantities to obtain integer dimensions. (If your application has fractal dimensions, why are you using this library at all?) If this is too much of a burden, the <a href="https://www.boost.org/doc/libs/1_80_0/doc/html/boost_units.html">boost::units</a> library provides this feature.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md56"></a>
 Bad Quantities and NaN</h1>
 <p>When <code>__FAST_MATH__</code> is defined, Dim uses an expanded notion of a "bad" floating point number that includes numbers that are Inf, -Inf, and NaN in IEEE 754 floating point. The rationale is that on embedded systems (ARM in particular), you often must compile with <code>-Ofast</code> to obtain access to SIMD instructions. When you do this, <code>std::isnan()</code> always evaluates to false. Dim uses its own <code>is_bad()</code> function to work around this. The trade-off is that algorithms relying on correct behavior with Inf will see values as "bad". But such algorithms are usually limited to specialized scientific codes rather than the more general robotics and engineering codes Dim is intended for.</p>
 <p>Note if <code>__FAST_MATH__</code> isn't defined, then <code>is_bad()</code> is an alias for <code>isnan()</code>. </p>

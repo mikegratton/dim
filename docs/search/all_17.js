@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['understanding_20errors_0',['Understanding Errors',['../md_Basics.html#autotoc_md19',1,'']]],
-  ['unit_1',['unit',['../md_Basics.html#autotoc_md11',1,'NIST SP 811 Standard and the Angle Unit'],['../structdim_1_1unit.html',1,'dim::unit&lt; DIM_ARRAY, System &gt;']]],
+  ['understanding_20errors_0',['Understanding Errors',['../md_Basics.html#autotoc_md20',1,'']]],
+  ['unit_1',['unit',['../md_Basics.html#autotoc_md12',1,'NIST SP 811 Standard and the Angle Unit'],['../structdim_1_1unit.html',1,'dim::unit&lt; DIM_ARRAY, System &gt;']]],
   ['unit_5fdivide_2',['unit_divide',['../structdim_1_1unit__divide.html',1,'dim']]],
   ['unit_5fdivide_5ft_3',['unit_divide_t',['../namespacedim.html#a63e39f71c29ccb34e1bebce5e3497842',1,'dim']]],
   ['unit_5fmultiply_4',['unit_multiply',['../structdim_1_1unit__multiply.html',1,'dim']]],

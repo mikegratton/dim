@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('md_Basics.html',''); initResizable(); 
   <div class="headertitle"><div class="title">Basic Dimensional Analysis</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md10"></a> In the standard low-energy physics model, there are seven dimensions:</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md11"></a> In the standard low-energy physics model, there are seven dimensions:</p>
 <ol type="1">
 <li>Length</li>
 <li>Time</li>
@@ -107,11 +107,11 @@ $(document).ready(function(){initNavTree('md_Basics.html',''); initResizable(); 
 </ol>
 <p>To these Dim adds an eighth: angle, discussed below. For each of these eight dimensions, a quantity may have an integer multiplier. For example, acceleration has dimensions of L/T^2 or one length, minus two time dimensions.</p>
 <p>Dimensional analysis is best understood in analogy to vectors. Just as a vector can be broken down into a magnitude and a direction, a dimensional quantity is the product of a nondimensional scalar and a dimensional unit. The name is suggestive, and it should be: the direction for a vector is itself a vector with unit magnitude. The "direction" of a dimensional quantity is itself a dimensional quantity with a unit scalar &ndash; i.e., a "unit" dimension. Dimensional quantities obey a simple algebra: q1 and q2 can be summed if their units match. The product q1*q2 is s1 * s2 * (u1+u2), where qi has scalar si and unit ui. Here, unit addition obeys vector rules.</p>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md12"></a>
 NIST SP 811 Standard and the Angle Unit</h1>
 <p><a href="https://www.nist.gov/pml/special-publication-811">The National Institute of Standards and Technology Special Publication 811</a> is the most complete guide to SI units. Wherever possible, Dim uses the NIST SP 811 unit names, abbreviations, and so on. Note that in this standard, plurals are generally avoided, so we write "meter" and not "meters."</p>
 <p>There is one major exception: Dim considers Angle to be a fundamental dimension. This choice resolves a lot of ambiguities in the standard system. For instance, the bedevilment caused by wondering if a frequency is Hz or is a <em>rotational frequency</em> is resolved. These have different units: Hz is 1/s while rotational frequency is rad/s. Other notable changes are that the units of torque ang luminous flux. The units of torque are N m / rad, so that if you apply this torque through a full revolution, you see the work done is (N m / rad) * (2 * pi * rad) = 2 * pi * W. Likewise the lumen now has base units of candela * steradian = candela * radian^2.</p>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Types and Templates</h1>
 <p>Dim fundamentally works with a class template of <code>quantity</code>. This in turn depends on three parameters:</p>
 <ol type="1">
@@ -121,16 +121,16 @@ Types and Templates</h1>
 </ol>
 <p>(The system is effectively a tag type to prevent quantities from different systems from being mixed. Dim only ships with the SI system, so this only matters if you are building your own system.)</p>
 <p>The unit is the core of Dim. It is a set of eight short int template parameters representing the seven fundamental dimension of the standard model plus an angle dimension, but these are treated as template parameters, not class members. All operations on the unit are performed at compile time, so a <code>quantity</code> uses exactly as many bytes as its scalar type. The unit type is actually a separate template class that acts like a quantity with scalar value of one, though Dim goes to some length to hide the unit type from you. For the SI system, the fundamental dimensions have unit types defined as <code>meter_</code>, <code>second_</code>, <code>radian_</code>, and so on, while the quantities do not have the trailing underscore.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Defining Custom Quantities</h2>
 <p>You can define new quantities simply by using the C++ decltype operator. For example, suppose we wanted to represent a screw pitch. We could do </p><div class="fragment"><div class="line"><span class="keyword">using </span>Pitch = <span class="keyword">decltype</span>(meter/radian);</div>
 </div><!-- fragment --><p> and then Pitch becomes a convenient alias. See the code <code>example/advanced.cpp</code>. Alternatively, you can work with the template parameters </p><div class="fragment"><div class="line"><span class="keyword">using </span>Pitch = quantity&lt;unit_divide_t&lt;Length::unit, Angle::unit&gt;, <span class="keywordtype">double</span>&gt;;</div>
 </div><!-- fragment --><p> The metafunctions <code>unit_multiply_t</code> and <code>unit_pow_t</code> are defined similarly.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Defining Custom Literal Formatters</h2>
 <p>Dim ships with literal formatters based on the NIST standard. But often other formatters are useful for your domain. Suppose we want angular degrees to have the format <code>_deg</code>. We can define </p><div class="fragment"><div class="line">DIM_MAKE_LITERAL(deg, si::degree)</div>
 </div><!-- fragment --><p> so that <code>1_deg</code> and <code>1.2_deg</code> are both recognized as Angle constexprs. See the code <code>example/advanced.cpp</code>.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Type Definitions Attached to Quantity</h2>
 <p>Every quantity class holds the typedefs</p>
 <ul>
@@ -139,14 +139,14 @@ Type Definitions Attached to Quantity</h2>
 <li><code>type</code> &ndash; the type of this quantity</li>
 <li><code>dimensionless</code> &ndash; the unit in this system that has zero for all dimension powers</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 The &lt;tt&gt;dimensionless_cast&lt;/tt&gt; Escape Hatch</h2>
 <p>Dim allows you to "escape" from the confines of the library at will. The magnitude of a quantity is available via <code>dimensionless_cast()</code>. Accessing the magnitude can be useful when serializing data.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Guard Values, NaN, and &lt;tt&gt;bad_quantity&lt;/tt&gt;</h2>
 <p>Dim uses NaN as a guard value in several places. You can construct a "bad" version of a type via </p><div class="fragment"><div class="line">Length its_bad = Length::bad_quantity();</div>
 </div><!-- fragment --><p> and you can check for badness with <code>is_bad()</code>. See Bad Quantities and NaN for details.</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Math with Quantities</h2>
 <p>Quantities overload the arithemetic operators "+", "-", "*", "/", the assignment operators "=", "+=", "-=", "*=", "/=", and the full set of comparison operators. In short, they behave just like doubles except for the restrictions regarding dimensions. In addition, the following overoads are defined:</p>
 <ul>
@@ -166,13 +166,13 @@ Math with Quantities</h2>
 <li><code>Angle atan2(double const&amp; x, double const&amp; y)</code></li>
 <li><code>template&lt;class Q&gt; Angle atan2(Q const&amp; x, Q const&amp; y)</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Understanding Errors</h2>
 <p>Dim uses static assertions to improve the legibility of most compile errors. As Dim is a template library, there's a lot of "angry template error" messages to wade through, but you should be able to find a more helpful error in the spew, such as </p><div class="fragment"><div class="line">... error: static assertion failed: Length dimensions do not match.</div>
 </div><!-- fragment --><p>In some cases, the compiler will give errors of the form </p><div class="fragment"><div class="line">... error: conversion from ‘quantity&lt;unit&lt;1,[...],[...],[...],[...],[...],[...],[...],[...]&gt;,[...]&gt;’ to non-scalar type ‘quantity&lt;unit&lt;2,[...],[...],[...],[...],[...],[...],[...],[...]&gt;,[...]&gt;’ requested</div>
 <div class="line">    8 |     si::Area A2 = L;</div>
 </div><!-- fragment --><p> To decode this, we've tried to assign a length to an area. You can see in the template that the RHS has a length dimension of 1 while the LHS has a length dimension of 2.</p>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Dynamic Quantities</h2>
 <p>Dim has a second quantity type, the <code>dynamic_quantity</code>. These types store the unit as a <code>dynamic_unit</code> member, not implicitly as part of their type. As such, they require more memory and have worse performance. Dynamic quantities support the same operator overloading as static quantities, but with one different: <code>operator=</code> will change the type of the left-hand side as needed. For example </p><div class="fragment"><div class="line">si::dynamic_quantity q1(5.0_m);</div>
 <div class="line">si::dynamic_quantity q2(12.0 * si::meter/si::second);</div>

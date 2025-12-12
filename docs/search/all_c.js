@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['i_20o_0',['i o',['../md_Serialization.html#autotoc_md22',1,'High-level I/O'],['../md_Serialization.html#autotoc_md25',1,'Low Level I/O']]],
+  ['i_20o_0',['i o',['../md_Serialization.html#autotoc_md23',1,'High-level I/O'],['../md_Serialization.html#autotoc_md26',1,'Low Level I/O']]],
   ['id_1',['id',['../structdim_1_1si_1_1system.html#a0f5f74de05a7135c44fe2c7963947163',1,'dim::si::system::id'],['../classdim_1_1si_1_1facet.html#a9332adf59007021adcc5037608a4b28b',1,'dim::si::facet::id']]],
   ['incommensurable_5fexception_2',['incommensurable_exception',['../classdim_1_1incommensurable__exception.html',1,'dim']]],
   ['index_3',['index',['../namespacedim.html#a8f46d372a7382878d0193c13f4c5a738',1,'dim::index(Q const &amp;)'],['../namespacedim.html#ad0c07902f50f59dafd92c0a28b7400ff',1,'dim::index()'],['../namespacedim.html#a862042e195f66d3e42526368b88b3ee1',1,'dim::index()'],['../classdim_1_1input__format__map.html#a8d1f7cfe3d1dc6b74ecc712914d7109d',1,'dim::input_format_map::index()'],['../classdim_1_1formatter.html#a7dba4335d25fdd68c394d59c2b8a9de5',1,'dim::formatter::index() const']]],
@@ -14,7 +14,7 @@ var searchData=
   ['insert_11',['insert',['../classdim_1_1input__format__map__group.html#a75d35eee214a3bd8a6386abdd24a5d7e',1,'dim::input_format_map_group::insert()'],['../classdim_1_1output__format__map.html#a44e8f9a0f8b0d42957d10ff8b4eb21fe',1,'dim::output_format_map::insert(formatter_type const &amp;i_item)'],['../classdim_1_1output__format__map.html#a27b548ef182dc671a8db2deecf52b761',1,'dim::output_format_map::insert(char const *i_symbol, Q const &amp;i_scale, Q const &amp;i_add=Q(0))'],['../classdim_1_1input__format__map__group.html#a9cdff2719508cbe818cd9840007169f2',1,'dim::input_format_map_group::insert(map_type const &amp;i_whole_map)'],['../classdim_1_1input__format__map__group.html#a07130a5286693304897f0bc58f577308',1,'dim::input_format_map_group::insert(formatter_type const &amp;i_item)'],['../classdim_1_1input__format__map.html#a634089f95278064b74e7c15895892148',1,'dim::input_format_map::insert(formatter_type const &amp;i_item)'],['../classdim_1_1input__format__map.html#aff03113efaa3960457d6b0c97c55e311',1,'dim::input_format_map::insert(char const *i_symbol, Q const &amp;i_scale, Q const &amp;i_add=Q(0))']]],
   ['install_5ffacet_12',['install_facet',['../structdim_1_1si_1_1system.html#a1119c09b65f97c143169be11bffad18b',1,'dim::si::system::install_facet()'],['../namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a',1,'dim::si::install_facet()']]],
   ['inverse_13',['inverse',['../namespacedim.html#a6c2341758ba42285cb3c388a3b53c121',1,'dim']]],
-  ['io_14',['Fallback IO',['../md_Serialization.html#autotoc_md26',1,'']]],
+  ['io_14',['Fallback IO',['../md_Serialization.html#autotoc_md27',1,'']]],
   ['is_5fbad_15',['is_bad',['../classdim_1_1formatted__quantity.html#ae1c827e579a2d875d99b52f68578cef8',1,'dim::formatted_quantity::is_bad()'],['../classdim_1_1quantity.html#a46841186fb12313d8d15f794d67fba82',1,'dim::quantity::is_bad()']]],
   ['isbad_5f_5f_16',['isbad__',['../namespacedim.html#a3c7b17ba20be91b82f5fc40a7974a515',1,'dim']]]
 ];

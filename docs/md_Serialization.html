@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -95,8 +95,8 @@ $(document).ready(function(){initNavTree('md_Serialization.html',''); initResiza
   <div class="headertitle"><div class="title">Input and Output</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md21"></a> In Dim, "input and output" is used to mean deserialization and serialization from text.</p>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md22"></a> In Dim, "input and output" is used to mean deserialization and serialization from text.</p>
+<h1><a class="anchor" id="autotoc_md23"></a>
 High-level I/O</h1>
 <p>Serialization and deserialization can be performed with stream operators, <code>to_string()</code>/<code>from_string()</code>, and <code>std::format()</code>. For example </p><div class="fragment"><div class="line">si::Mass stuff = 2.0 * si::pound_mass;</div>
 <div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;The stuff masses &quot;</span> &lt;&lt; stuff &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>; <span class="comment">// &quot;The stuff masses 4.41_kg&quot;</span></div>
@@ -121,7 +121,7 @@ High-level I/O</h1>
 <div class="ttc" id="aclassdim_1_1formatter_html"><div class="ttname"><a href="classdim_1_1formatter.html">dim::formatter</a></div><div class="ttdoc">Instructions on how to format type Q.</div><div class="ttdef"><b>Definition</b> io.hpp:88</div></div>
 <div class="ttc" id="anamespacedim_1_1si_html"><div class="ttname"><a href="namespacedim_1_1si.html">dim::si</a></div><div class="ttdoc">Namespace for the International System (SI) of units.</div><div class="ttdef"><b>Definition</b> si.hpp:18</div></div>
 </div><!-- fragment --><p> Formatters are discussed below.</p>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Formatters</h1>
 <p>Input/output in Dim rests on the <code>formatter</code> class. The formatter is a simple class that associates a string "symbol" with information on how to nondimensionalize a quantity. For example </p><div class="fragment"><div class="line"><a class="code hl_class" href="classdim_1_1formatter.html">si::formatter</a> degree_formatter(<span class="stringliteral">&quot;deg&quot;</span>, si::degree);</div>
 </div><!-- fragment --><p> will format angles as degrees. The first argument is the symbol string ("deg"), and the second argument gives what you would multiply 1.0 by to obtain a quantity of the indicated symbol (<code>si::degree</code>). There's an optional third argument that is used for temperature conversion as an additive offset: </p><div class="fragment"><div class="line"><a class="code hl_class" href="classdim_1_1formatter.html">si::formatter</a> fahrenheit_format(<span class="stringliteral">&quot;F&quot;</span>, 5./9.*kelvin, 255.37*kelvin);</div>
@@ -129,7 +129,7 @@ Formatters</h1>
 </div><!-- fragment --><p> while output is </p><div class="fragment"><div class="line">si::formatted_quantity&lt;double&gt; fmt = degree_formatter.output(2_rad);</div>
 </div><!-- fragment --><p> The <code>formatted_quantity</code> divides the output into a scalar (double) part <code>value()</code> and a <code>char const*</code> symbol part <code>symbol()</code>. This allows you to do </p><div class="fragment"><div class="line">printf(<span class="stringliteral">&quot;My angle is %g_%s\n&quot;</span>, fmt.value(), fmt.symbol());</div>
 </div><!-- fragment --><p> or put the result into structured XML, etc. An overload for <code>operator&lt;&lt;</code> and <code>std::formatter</code> allows for interaction with <code>ostream</code> and <code>std::format</code>. For example: </p><div class="fragment"><div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;My angle is &quot;</span> &lt;&lt; degree_formatter.output(2_rad) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md24"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
 Format Maps</h2>
 <p>The facet maintains a map from input type to symbol for each quantity type indexed by the symbol string. If the input unit string is an exact match to a map entry, that formatter is used to parse the quantity. This provides a flexible system where you can provide formatters for whatever domain-specific conventions you work with. Dim ships with format maps for many common quantities. These are derived from the NIST suggestions. For instance, here's the default length map: </p><div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> format_map&lt;Length&gt; s_known {</div>
 <div class="line">    {<span class="stringliteral">&quot;in&quot;</span>,   formatter&lt;Length&gt;(<span class="stringliteral">&quot;in&quot;</span>, inch) },</div>
@@ -147,10 +147,10 @@ Format Maps</h2>
 <div class="line">facet-&gt;input_formatter(formatter&lt;Length&gt;(<span class="stringliteral">&quot;feet&quot;</span>, foot));</div>
 <div class="line">facet-&gt;input_formatter(formatter&lt;Length&gt;(<span class="stringliteral">&quot;nm&quot;</span>, nautical_mile));</div>
 <div class="line"><a class="code hl_function" href="namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a">si::install_facet</a>(facet);</div>
-<div class="ttc" id="anamespacedim_1_1si_html_a21fec3766288749907f7d7a42c25682a"><div class="ttname"><a href="namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a">dim::si::install_facet</a></div><div class="ttdeci">void install_facet(si::facet *i_quantity_facet)</div><div class="ttdoc">Install the default quantity facet into the global locale. Imbue cout, cerr, and clog with it.</div><div class="ttdef"><b>Definition</b> si_facet.cpp:24</div></div>
-<div class="ttc" id="anamespacedim_1_1si_html_ae52eeeca6076ffd217997a0b275f1a95"><div class="ttname"><a href="namespacedim_1_1si.html#ae52eeeca6076ffd217997a0b275f1a95">dim::si::make_default_facet</a></div><div class="ttdeci">facet * make_default_facet()</div><div class="ttdoc">Obtain the default quantity_facet for si. You must either pass this pointer to the locale or delete i...</div><div class="ttdef"><b>Definition</b> si_facet.cpp:40</div></div>
+<div class="ttc" id="anamespacedim_1_1si_html_a21fec3766288749907f7d7a42c25682a"><div class="ttname"><a href="namespacedim_1_1si.html#a21fec3766288749907f7d7a42c25682a">dim::si::install_facet</a></div><div class="ttdeci">void install_facet(si::facet *i_quantity_facet)</div><div class="ttdoc">Install the default quantity facet into the global locale. Imbue cout, cerr, and clog with it.</div><div class="ttdef"><b>Definition</b> si_facet.cpp:25</div></div>
+<div class="ttc" id="anamespacedim_1_1si_html_ae52eeeca6076ffd217997a0b275f1a95"><div class="ttname"><a href="namespacedim_1_1si.html#ae52eeeca6076ffd217997a0b275f1a95">dim::si::make_default_facet</a></div><div class="ttdeci">facet * make_default_facet()</div><div class="ttdoc">Obtain the default quantity_facet for si. You must either pass this pointer to the locale or delete i...</div><div class="ttdef"><b>Definition</b> si_facet.cpp:41</div></div>
 </div><!-- fragment --><p> or you can use your map directly as shown below. Because the map is consulted before the fallback parser is called, you've overridden the meaning of "nm" for your program.</p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Low Level I/O</h1>
 <p>Dim provides the functions </p><div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> Q, DIM_IS_QUANTITY(Q)&gt;</div>
 <div class="line"><span class="keywordtype">bool</span> format_quantity(formatted_quantity&lt;typename Q::scalar&gt;&amp; o_formatted, Q <span class="keyword">const</span>&amp; i_q,</div>
@@ -160,16 +160,16 @@ Low Level I/O</h1>
 <div class="line"><span class="keywordtype">bool</span> parse_quantity(Q&amp; o_q, formatted_quantity&lt;typename Q::scalar&gt; const&amp; i_formatted,</div>
 <div class="line">                    input_format_map&lt;typename Q::scalar, typename Q::system&gt; const&amp; i_unit_map = get_default_format&lt;Q&gt;())</div>
 </div><!-- fragment --><p> and related <code>dynamic_quantity</code> versions for fully-customizable formatting. The default <code>i_out_map</code> argument disables the use of the output symbol map, while the <code>i_unit_map</code> default argument obtains the default symbol map for <code>Q</code> provided by Dim. These functions transform quantities into formatted quantitys and vice-versa using collections of formatters called format maps. In fact, the IO facet is really just a convenient storage place for these maps.</p>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Fallback IO</h1>
 <p>What happens if the facet doesn't exist in the locale, or if the facet doesn't have a formatter for our case? Dim provides fallback options in these cases described below.</p>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 Basic Format</h2>
 <p>A symbol is associated with each dimension in a system, so a unit symbol can be reconstructed. This is correct, but it isn't usually very pretty. Thus suppose we had a torque we wanted to print: </p><div class="fragment"><div class="line"><a class="code hl_class" href="classdim_1_1quantity.html">si::Torque</a> T = 3_N * 2_m / 1.2_rad;</div>
 <div class="line">std::cout &lt;&lt; <span class="stringliteral">&quot;Torque is &quot;</span> &lt;&lt; T &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="ttc" id="aclassdim_1_1quantity_html"><div class="ttname"><a href="classdim_1_1quantity.html">dim::quantity</a></div><div class="ttdoc">Combination of a scalar and a unit. Most dim types are typedefs for template instatiations of this.</div><div class="ttdef"><b>Definition</b> quantity.hpp:45</div></div>
+<div class="ttc" id="aclassdim_1_1quantity_html"><div class="ttname"><a href="classdim_1_1quantity.html">dim::quantity</a></div><div class="ttdoc">Combination of a scalar and a unit. Most dim types are typedefs for template instatiations of this.</div><div class="ttdef"><b>Definition</b> quantity.hpp:46</div></div>
 </div><!-- fragment --><p> If there's no output formatter for <code>si::Torque</code>, the output will be "5_rad^-1_kg_m^2_s^-2".</p>
-<h2><a class="anchor" id="autotoc_md28"></a>
+<h2><a class="anchor" id="autotoc_md29"></a>
 Parsing Quantities</h2>
 <p>Input is a different beast. Because Dim is strongly typed, we know the desired quantity type. The task is to verify that the input string can be parsed to a matching dimension, then apply the conversion factor for that dimension to the scalar part.</p>
 <p>When no input formatter matches a symbol, Dim falls back to a parser for SI types. This parser recognizes all of the SI prefixes and (almost all*) symbols defined in NIST SP 811. It recognizes <code>_</code>, <code>*</code> as multiplication, <code>/</code> as division, and <code>^</code> as exponentiation. Units and exponents may be grouped with parentheses. The parser is case-sensitive (this is required by the SI notation). Examples of parsed strings include</p><ul>
@@ -177,9 +177,9 @@ Parsing Quantities</h2>
 <li>(MPa)^2/mol^(3)</li>
 </ul>
 <p>*Dim does not support the symbol "a" for the are unit of area (as in "hectare"). This symbol leads to ambiguities. Forms of the are other than the hectare appear to be rare.</p>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Design of Serialization/Deserialization</h1>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Serialized Quantities</h2>
 <p>A serialized quantity is a string of the form </p><div class="fragment"><div class="line">&lt;serialized scalar&gt;[separator]&lt;serialized unit&gt;</div>
 </div><!-- fragment --><p> Routines in Dim transform quantities and dynamic_quantities into <code>formatted_quantity</code> types. These can then be streamed, turned into strings, or used with <code>std::format</code>. Likewise, deserialization turns input streams (istreams, strings, <code>char const*</code>, ...) back into <code>formatted_quantity</code> types. Parsers then work on the <code>&lt;serialized unit&gt;</code> string to complete the conversion back to <code>quantity</code>/<code>dynamic_quantity</code>.</p>
@@ -199,7 +199,7 @@ Serialized Quantities</h2>
 <p>When deserializing a unit string, Dim first must determine which portion of the input is a unit string. This is done using the following state machine:</p>
 <p><img src="symbol_scanner.svg" alt="Symbol scanner state machine" style="pointer-events: none;" class="inline"/></p>
 <p>A select set of UTF-8 (Greek characters, the degree, degree Fahrenheit, degree Celsius, angstrom, kelvin, and ohm symbols) are also recognized as "alpha" class characters. Parentheses are accepted and are checked for balancing. When encountering other inputs, or when the state machine ends with an unterminated UTF-8 character or unbalanced parentheses, the state becomes <code>kError</code>. Once the string has been found, methods first consult the <code>input_symbol_map</code>. If the string is in the map, then that formatter is used for the conversion. If not, Dim falls back to using the system's parser.</p>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Fallback Parser Symbols</h2>
 <p>Non ASCII symbols in UTF-8 symbols are recognized, including mu, capital omega, the kelvin sign, and the ohm sign. In each of these cases, ASCII equivalents are also accepted as noted below.</p>
 <table class="markdownTable">

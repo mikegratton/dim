@@ -3,10 +3,10 @@ var searchData=
   ['parse_0',['parse',['../classdim_1_1si_1_1detail_1_1quantity__parser__driver.html#a3579d361f1939ab2c97745b63ab1db8b',1,'dim::si::detail::quantity_parser_driver']]],
   ['parse_5fquantity_1',['parse_quantity',['../namespacedim.html#a5117f1510e6499dae91f2e9246aaab4f',1,'dim::parse_quantity(Q &amp;o_q, formatted_quantity&lt; typename Q::scalar &gt; const &amp;i_formatted, input_format_map&lt; typename Q::scalar, typename Q::system &gt; const &amp;i_unit_map=get_default_format&lt; Q &gt;())'],['../namespacedim.html#a7a16f4091405fc28dfa523f9779b741b',1,'dim::parse_quantity(DQ &amp;o_q, formatted_quantity&lt; typename DQ::scalar &gt; const &amp;i_formatted, input_format_map_group&lt; typename DQ::scalar, typename DQ::system &gt; const &amp;i_unit_map)'],['../namespacedim.html#a3164d35ae380e43893d54f9977844e3b',1,'dim::parse_quantity(DQ &amp;o_q, formatted_quantity&lt; typename DQ::scalar &gt; const &amp;i_formatted, input_format_map&lt; typename DQ::scalar, typename DQ::system &gt; const &amp;i_unit_map)']]],
   ['parse_5fscalar_2',['parse_scalar',['../namespacedim.html#abf3a1dea29552e2f1e3e432da94a4831',1,'dim']]],
-  ['parser_20symbols_3',['Fallback Parser Symbols',['../md_Serialization.html#autotoc_md31',1,'']]],
-  ['parsing_20quantities_4',['Parsing Quantities',['../md_Serialization.html#autotoc_md28',1,'']]],
+  ['parser_20symbols_3',['Fallback Parser Symbols',['../md_Serialization.html#autotoc_md32',1,'']]],
+  ['parsing_20quantities_4',['Parsing Quantities',['../md_Serialization.html#autotoc_md29',1,'']]],
   ['pow_5',['pow',['../namespacedim.html#a049c47ec57d99e80b2d696ee111625bc',1,'dim::pow(Q const &amp;q)'],['../namespacedim.html#a11c3e76903a25d36a7f2b6b02c20700c',1,'dim::pow(U const &amp;)']]],
-  ['power_6',['power',['../namespacedim.html#a5542632fcc7d9425c53a11e81c964bf3',1,'dim::power()'],['../md_KnownSymbols.html#autotoc_md42',1,'Power']]],
-  ['pressure_7',['Pressure',['../md_KnownSymbols.html#autotoc_md40',1,'']]],
+  ['power_6',['power',['../namespacedim.html#a5542632fcc7d9425c53a11e81c964bf3',1,'dim::power()'],['../md_KnownSymbols.html#autotoc_md43',1,'Power']]],
+  ['pressure_7',['Pressure',['../md_KnownSymbols.html#autotoc_md41',1,'']]],
   ['print_5funit_8',['print_unit',['../namespacedim.html#aaeec64aea79dd0be3f563515749df4ce',1,'dim::print_unit(char *o_symbol, char *i_end, U const &amp;)'],['../namespacedim.html#ad1808e1f1d5d6c0b4066d8e73e114a54',1,'dim::print_unit(char *o_symbol, char *i_end, dynamic_unit&lt; System &gt; const &amp;i_unit)'],['../namespacedim.html#ae5fe4916e8df429dde001e717c66d972',1,'dim::print_unit(char *o_unit_str, char *i_end, Q const &amp;)'],['../namespacedim.html#a1c9adc962f340d79e0b1dae9fd73c8f4',1,'dim::print_unit(char *o_buf, char *i_end, DQ const &amp;q)']]]
 ];

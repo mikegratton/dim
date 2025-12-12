@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -117,6 +117,12 @@ Overview</h1>
 <h1><a class="anchor" id="autotoc_md2"></a>
 History</h1>
 <h2><a class="anchor" id="autotoc_md3"></a>
+v2.0.1</h2>
+<p>Bug fixes:</p><ul>
+<li>Fixed malformed quantity operators.</li>
+<li>Fixed missing dynamic_quantity operators.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md4"></a>
 v2.0</h2>
 <p>Bug fixes:</p><ul>
 <li>Fixed scale factors with temperature formatters.</li>
@@ -133,7 +139,7 @@ v2.0</h2>
 <li>Added static analysis and sanitizer builds.</li>
 <li>Expanded the unit test suite.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 v1.2</h2>
 <p>Bug fixes:</p><ul>
 <li>Fixed issue stream extraction for non-whitespace separated quantity strings.</li>
@@ -143,7 +149,7 @@ v1.2</h2>
 <p>Features:</p><ul>
 <li>Simplification of templates has reduced compile times slightly</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 v1.1</h2>
 <p>Bug fixes:</p><ul>
 <li>Fixed issue with compilation in C++11 mode</li>
@@ -156,10 +162,10 @@ v1.1</h2>
 <p>Changes:</p><ul>
 <li>Due to the parser changes, the are ("a") and the hectare ("ha") are no longer recognized by the fallback parser. The format map for area types has gained these quantities.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 v1.0</h2>
 <p>Initial release.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 Quickstart</h1>
 <p>Here's a basic annotated program </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;cassert&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -195,13 +201,13 @@ Quickstart</h1>
 <div class="line">../example/quickstart.cpp:8:58: error: could not convert ‘dim::operator*&lt;dim::quantity&lt;dim::unit&lt;1, -1, 0, 0, 0, 0, 0, 0, dim::si::system&gt;, double&gt; &gt;(dim::operator*&lt;dim::quantity&lt;dim::unit&lt;0, 1, 0, 0, 0, 0, 0, 0, dim::si::system&gt;, double&gt; &gt;(dim::operator*(5.0e-1, t), t), v)’ from ‘quantity&lt;unit&lt;[...],1,[...],[...],[...],[...],[...],[...],[...]&gt;,[...]&gt;’ to ‘quantity&lt;unit&lt;[...],0,[...],[...],[...],[...],[...],[...],[...]&gt;,[...]&gt;’</div>
 <div class="line">    8 | Length compute_distance(Time t, Speed v) { return 0.5*t*t*v; }</div>
 </div><!-- fragment --><p> More on what all this template business is is below, but suffice to say that Length does not match the dimensions of Speed * Time * Time.</p>
-<h1><a class="anchor" id="autotoc_md8"></a>
+<h1><a class="anchor" id="autotoc_md9"></a>
 Building Dim</h1>
 <p>Dim supports C++11 and has no dependencies. If C++14 or higher is available, a few extra <code>constexpr</code> features are enabled. If C++17 is available, the <code>from_chars</code>/<code>to_chars</code> functions are used for faster serialization/deserialization. If C++20 is available, <code>std::format</code> support is enabled.</p>
 <p>The easiest way to use Dim is to put the code in a subdirectory of your project and add </p><div class="fragment"><div class="line">add_subdirectory(dim)</div>
 </div><!-- fragment --><p> to your <code>CMakelists.txt</code> file. This will give you a target <code>dim</code> that you can depend on. There isn't much to compile in Dim, so the additional build time should be small.</p>
 <p>Alternatively, you can run the install target to install Dim to a directory per usual cmake practice.</p>
-<h1><a class="anchor" id="autotoc_md9"></a>
+<h1><a class="anchor" id="autotoc_md10"></a>
 CMake Options</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

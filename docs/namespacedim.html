@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Dim<span id="projectnumber">&#160;1.0</span>
+   <div id="projectname">Dim<span id="projectnumber">&#160;2.0.1</span>
    </div>
    <div id="projectbrief">Compile time dimensional analysis</div>
   </td>
@@ -206,6 +206,22 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ada6c2d1dc8e049dc658d4ccf4cd832d0" id="r_ada6c2d1dc8e049dc658d4ccf4cd832d0"><td class="memTemplParams" colspan="2"><a id="ada6c2d1dc8e049dc658d4ccf4cd832d0" name="ada6c2d1dc8e049dc658d4ccf4cd832d0"></a>
+template&lt;class Scalar , class Unit , DIM_IS_SCALAR(Scalar) , DIM_IS_DYNAMIC_UNIT(Unit) &gt; </td></tr>
+<tr class="memitem:ada6c2d1dc8e049dc658d4ccf4cd832d0"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, typename Unit::system &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (Unit const &amp;i_unit, Scalar const &amp;i_scalar)</td></tr>
+<tr class="separator:ada6c2d1dc8e049dc658d4ccf4cd832d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cfa60bb181f67c26337aad823895665" id="r_a0cfa60bb181f67c26337aad823895665"><td class="memTemplParams" colspan="2"><a id="a0cfa60bb181f67c26337aad823895665" name="a0cfa60bb181f67c26337aad823895665"></a>
+template&lt;class Scalar , class Unit , DIM_IS_SCALAR(Scalar) , DIM_IS_DYNAMIC_UNIT(Unit) &gt; </td></tr>
+<tr class="memitem:a0cfa60bb181f67c26337aad823895665"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, typename Unit::system &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (Scalar const &amp;i_scalar, Unit const &amp;i_unit)</td></tr>
+<tr class="separator:a0cfa60bb181f67c26337aad823895665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7b26f248fc27ee62ac732fe90857880" id="r_ae7b26f248fc27ee62ac732fe90857880"><td class="memTemplParams" colspan="2"><a id="ae7b26f248fc27ee62ac732fe90857880" name="ae7b26f248fc27ee62ac732fe90857880"></a>
+template&lt;class Scalar , class Unit , DIM_IS_SCALAR(Scalar) , DIM_IS_DYNAMIC_UNIT(Unit) &gt; </td></tr>
+<tr class="memitem:ae7b26f248fc27ee62ac732fe90857880"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, typename Unit::system &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (Unit const &amp;i_unit, Scalar const &amp;i_scalar)</td></tr>
+<tr class="separator:ae7b26f248fc27ee62ac732fe90857880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24f4b5b2112fcdc6f13674f550350c51" id="r_a24f4b5b2112fcdc6f13674f550350c51"><td class="memTemplParams" colspan="2"><a id="a24f4b5b2112fcdc6f13674f550350c51" name="a24f4b5b2112fcdc6f13674f550350c51"></a>
+template&lt;class Scalar , class Unit , DIM_IS_SCALAR(Scalar) , DIM_IS_DYNAMIC_UNIT(Unit) &gt; </td></tr>
+<tr class="memitem:a24f4b5b2112fcdc6f13674f550350c51"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, typename Unit::system &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (Scalar const &amp;i_scalar, Unit const &amp;i_unit)</td></tr>
+<tr class="separator:a24f4b5b2112fcdc6f13674f550350c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77fc7d3063a13b77bdf2bd78614f9082" id="r_a77fc7d3063a13b77bdf2bd78614f9082"><td class="memTemplParams" colspan="2"><a id="a77fc7d3063a13b77bdf2bd78614f9082" name="a77fc7d3063a13b77bdf2bd78614f9082"></a>
 template&lt;class Scalar , class System &gt; </td></tr>
 <tr class="memitem:a77fc7d3063a13b77bdf2bd78614f9082"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&lt; System &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>index</b> (<a class="el" href="classdim_1_1dynamic__quantity.html">dynamic_quantity</a>&lt; Scalar, System &gt; const &amp;q)</td></tr>
@@ -514,22 +530,22 @@ template&lt;class U , DIM_IS_UNIT(U) &gt; </td></tr>
 template&lt;class System , DIM_IS_SYSTEM(System) &gt; </td></tr>
 <tr class="memitem:ae4c9b20ff3753fece1fe61e9f123c4e2"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&lt; System &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>index</b> (<a class="el" href="classdim_1_1dynamic__unit.html">dynamic_unit</a>&lt; System &gt; const &amp;u)</td></tr>
 <tr class="separator:ae4c9b20ff3753fece1fe61e9f123c4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fbc9eeb308a5f577b45432d55eb794a" id="r_a7fbc9eeb308a5f577b45432d55eb794a"><td class="memTemplParams" colspan="2"><a id="a7fbc9eeb308a5f577b45432d55eb794a" name="a7fbc9eeb308a5f577b45432d55eb794a"></a>
-template&lt;class Other , class System &gt; </td></tr>
-<tr class="memitem:a7fbc9eeb308a5f577b45432d55eb794a"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (Other const &amp;value, typename System::dimensionless_unit const &amp;)</td></tr>
-<tr class="separator:a7fbc9eeb308a5f577b45432d55eb794a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a853776d9aef9f54c994312a008995bfe" id="r_a853776d9aef9f54c994312a008995bfe"><td class="memTemplParams" colspan="2"><a id="a853776d9aef9f54c994312a008995bfe" name="a853776d9aef9f54c994312a008995bfe"></a>
-template&lt;class Other , class System &gt; </td></tr>
-<tr class="memitem:a853776d9aef9f54c994312a008995bfe"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (typename System::dimensionless_unit const &amp;, Other const &amp;value)</td></tr>
-<tr class="separator:a853776d9aef9f54c994312a008995bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac970ebb1f1ecd91ecdca70a82dfc2819" id="r_ac970ebb1f1ecd91ecdca70a82dfc2819"><td class="memTemplParams" colspan="2"><a id="ac970ebb1f1ecd91ecdca70a82dfc2819" name="ac970ebb1f1ecd91ecdca70a82dfc2819"></a>
-template&lt;class Other , class System &gt; </td></tr>
-<tr class="memitem:ac970ebb1f1ecd91ecdca70a82dfc2819"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (Other const &amp;value, typename System::dimensionless_unit const &amp;)</td></tr>
-<tr class="separator:ac970ebb1f1ecd91ecdca70a82dfc2819"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a849b1cda638af2460c62759c65919783" id="r_a849b1cda638af2460c62759c65919783"><td class="memTemplParams" colspan="2"><a id="a849b1cda638af2460c62759c65919783" name="a849b1cda638af2460c62759c65919783"></a>
-template&lt;class Other , class System &gt; </td></tr>
-<tr class="memitem:a849b1cda638af2460c62759c65919783"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (typename System::dimensionless_unit const &amp;, Other const &amp;value)</td></tr>
-<tr class="separator:a849b1cda638af2460c62759c65919783"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e7ebc4b3ac5351f1e438279c49a0688" id="r_a3e7ebc4b3ac5351f1e438279c49a0688"><td class="memTemplParams" colspan="2"><a id="a3e7ebc4b3ac5351f1e438279c49a0688" name="a3e7ebc4b3ac5351f1e438279c49a0688"></a>
+template&lt;class Other , class System , DIM_IS_SYSTEM(System) &gt; </td></tr>
+<tr class="memitem:a3e7ebc4b3ac5351f1e438279c49a0688"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (Other const &amp;value, typename System::dimensionless_unit const &amp;)</td></tr>
+<tr class="separator:a3e7ebc4b3ac5351f1e438279c49a0688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48e4859198c0e83c7aa43e0aa79569bd" id="r_a48e4859198c0e83c7aa43e0aa79569bd"><td class="memTemplParams" colspan="2"><a id="a48e4859198c0e83c7aa43e0aa79569bd" name="a48e4859198c0e83c7aa43e0aa79569bd"></a>
+template&lt;class Other , class System , DIM_IS_SYSTEM(System) &gt; </td></tr>
+<tr class="memitem:a48e4859198c0e83c7aa43e0aa79569bd"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (typename System::dimensionless_unit const &amp;, Other const &amp;value)</td></tr>
+<tr class="separator:a48e4859198c0e83c7aa43e0aa79569bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d65056eda388140da73aa60c9e7102" id="r_a85d65056eda388140da73aa60c9e7102"><td class="memTemplParams" colspan="2"><a id="a85d65056eda388140da73aa60c9e7102" name="a85d65056eda388140da73aa60c9e7102"></a>
+template&lt;class Other , class System , DIM_IS_SYSTEM(System) &gt; </td></tr>
+<tr class="memitem:a85d65056eda388140da73aa60c9e7102"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (Other const &amp;value, typename System::dimensionless_unit const &amp;)</td></tr>
+<tr class="separator:a85d65056eda388140da73aa60c9e7102"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58ae3ac946c463920b4fd4909cbb08b3" id="r_a58ae3ac946c463920b4fd4909cbb08b3"><td class="memTemplParams" colspan="2"><a id="a58ae3ac946c463920b4fd4909cbb08b3" name="a58ae3ac946c463920b4fd4909cbb08b3"></a>
+template&lt;class Other , class System , DIM_IS_SYSTEM(System) &gt; </td></tr>
+<tr class="memitem:a58ae3ac946c463920b4fd4909cbb08b3"><td class="memTemplItemLeft" align="right" valign="top">constexpr Other&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/</b> (typename System::dimensionless_unit const &amp;, Other const &amp;value)</td></tr>
+<tr class="separator:a58ae3ac946c463920b4fd4909cbb08b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b8dc884196cb1f675a3ce090243dd6f" id="r_a9b8dc884196cb1f675a3ce090243dd6f"><td class="memTemplParams" colspan="2"><a id="a9b8dc884196cb1f675a3ce090243dd6f" name="a9b8dc884196cb1f675a3ce090243dd6f"></a>
 template&lt;class U1 , class U2 , DIM_IS_UNIT(U1) , DIM_IS_UNIT(U2) &gt; </td></tr>
 <tr class="memitem:a9b8dc884196cb1f675a3ce090243dd6f"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacedim.html#abdb68cce52f68812d9901ef325b70d9e">unit_multiply_t</a>&lt; U1, U2 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*</b> (U1 const &amp;, U2 const &amp;)</td></tr>
